@@ -2,13 +2,17 @@
     <div
         class="product-item-component"
         :data-product-id="product.tpnc"
-        @click.stop.self="onClick">
+        @click.self="onClick">
 
         <div class="is-checked-container" v-if="hasCheckBox">
-            <CheckBoxComponent :id="`${product.tpnc}-checkbox`" @click="onCheckedClick" />
+            <CheckBoxComponent
+                :id="`${product.tpnc}-checkbox`"
+                v-model="product.isChecked" />
         </div>
         <div class="image-container">
-            <img class="product-image" :src="product.image" v-if="!showPlaceholderImage">
+            <img class="product-image"
+                :src="product.image"
+                v-if="!showPlaceholderImage">
             <div class="placeholder-image-container" v-else>
                 <FoodIcon />
             </div>
@@ -18,6 +22,9 @@
         </div>
         <div class="product-price">
             <span>£{{ product.price.toFixed(2) }}</span>
+            <div v-if="product.quantity > 1" class="quantity-container">
+                <strong>&times;{{ product.quantity }}</strong>
+            </div>
         </div>
     </div>
 </template>
@@ -38,18 +45,17 @@
         },
 
         computed: {
-            showPlaceholderImage: function() {
+            showPlaceholderImage() {
                 return this.product.image === null || this.product.image === '';
             },
         },
 
         methods: {
             onClick() {
-                this.$router.push({ name: 'product-route', params: { product: this.product } });
-            },
-
-            onCheckedClick() {
-                this.product.isChecked = !this.product.isChecked;
+                this.$router.push({
+                    name: 'product-route',
+                    params: { product: this.product },
+                });
             },
         },
     }
@@ -89,6 +95,7 @@
 
         .is-checked-container {
             padding-right: 1rem;
+            pointer-events: all;
         }
 
         .image-container {
@@ -119,8 +126,13 @@
             box-shadow: -2px 0 4px theme(white);
         }
 
+        .quantity-container {
+            text-align: right;
+        }
+
         & > * {
             margin: auto 0;
+            pointer-events: none;
         }
     }
 </style>

@@ -7,10 +7,11 @@
             </div>
             <div class="unchecked-products-container">
                 <ProductItemComponent
-                    v-bind:key="index"
+                    v-bind:key="product.tpnc"
                     v-for="(product, index) in uncheckedProducts"
                     :product="product"
-                    hasCheckBox="true" />
+                    hasCheckBox="true"
+                    :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
             </div>
             <div class="heading-container">
                 <p class="heading-left">Checked Items:</p>
@@ -18,27 +19,23 @@
             </div>
             <div class="unchecked-products-container">
                 <ProductItemComponent
-                    v-bind:key="index"
+                    v-bind:key="product.tpnc"
                     v-for="(product, index) in checkedProducts"
                     :product="product"
                     hasCheckBox="true"
-                    style="animation-duration: 0" />
+                    :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import ShoppingListComponent from '@/component/ShoppingListComponent.vue';
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
-
-    import productStoreService from '@/service/ProductStoreService.js';
 
     export default {
         name: 'ShoppingListView',
 
         components: {
-            ShoppingListComponent,
             ProductItemComponent,
         },
 
@@ -50,22 +47,38 @@
         },
 
         computed: {
-            uncheckedProducts() {
+            shoppingList() {
                 return this.shoppingListOrder
-                    .map(tpnc => this.initialShoppingList[tpnc])
+                    .map(tpnc => this.initialShoppingList[tpnc]);
+            },
+
+            uncheckedProducts() {
+                return this.shoppingList
                     .filter(p => !p.isChecked);
             },
 
             checkedProducts() {
-                return this.shoppingListOrder
-                    .map(tpnc => this.initialShoppingList[tpnc])
+                return this.shoppingList
                     .filter(p => p.isChecked);
+            },
+
+            loadAnimationDuration() {
+                return (index) => {
+                    if (index > 20) {
+                        return 20 * 0.15;
+                    }
+
+                    return (index + 1) * 0.15;
+                }
             },
         },
 
         created() {
             this.initialShoppingList = this.$root.$data.getShoppingList();
             this.shoppingListOrder = this.$root.$data.getShoppingListOrder();
+
+            console.log(this.initialShoppingList);
+            console.log(this.shoppingListOrder);
         },
     }
 </script>

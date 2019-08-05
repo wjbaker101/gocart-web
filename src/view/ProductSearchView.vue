@@ -74,7 +74,7 @@
                 this.searchResult = response.data.result.map(p => ({
                     ...p,
                     quantity: 1,
-                    isChecked: true,
+                    isChecked: false,
                 }));
 
                 console.log(this.searchResult);

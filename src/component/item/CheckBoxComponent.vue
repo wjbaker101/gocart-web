@@ -1,6 +1,6 @@
 <template>
     <div class="checkbox-component">
-        <input ref="checkbox-input" :id="id" type="checkbox" :checked="isChecked">
+        <input ref="checkboxInput" :id="id" type="checkbox" :checked="value" @change="update">
         <label :for="id" class="checkbox-label">{{ label }}</label>
         <span class="check"></span>
     </div>
@@ -10,7 +10,13 @@
     export default {
         name: 'CheckBoxComponent',
 
-        props: ['id', 'label', 'isChecked'],
+        props: ['id', 'label', 'value'],
+
+        methods: {
+            update(event) {
+                this.$emit('input', event.target.checked);
+            },
+        },
     }
 </script>
 
