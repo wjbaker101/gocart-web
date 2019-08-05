@@ -23,6 +23,8 @@
 <style lang="scss">
     .checkbox-component {
         display: table;
+        position: relative;
+        line-height: 1em;
 
         .checkbox-label {
             &::before {
@@ -35,15 +37,21 @@
                 background-color: theme(white);
                 cursor: pointer;
             }
-        }
 
-        .check {
-            display: inline-block;
-            pointer-events: none;
-            opacity: 0;
-            width: 1rem;
-            height: 1rem;
-            background-color: red;
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                pointer-events: none;
+                opacity: 0;
+                width: 6px;
+                height: 10px;
+                border-bottom: 2px solid theme(white);
+                border-right: 2px solid theme(white);
+                transform: rotate(45deg);
+            }
         }
 
         input {
@@ -51,8 +59,14 @@
         }
 
         input:checked  {
-            & + .checkbox-label::before {
-                background-color: theme(primary);
+            & + .checkbox-label {
+                &::before {
+                    background-color: theme(primary);
+                }
+
+                &::after {
+                    opacity: 1;
+                }
             }
 
             & + .check {
