@@ -12,6 +12,8 @@
     import DashboardComponent from '@/component/page/DashboardComponent.vue';
     import ProductComponent from '@/component/ProductComponent.vue';
 
+    import shoppingListService from '@/service/ShoppingListService.js';
+
     export default {
         name: 'App',
 
@@ -38,6 +40,23 @@
                 this.expandedProduct = null;
                 this.isProductExpanded = false;
             },
+
+            async loadCache() {
+                const shoppingList = await shoppingListService.loadShoppingList();
+
+                if (shoppingList === null) {
+                    return;
+                }
+
+                console.log('Loading cached shopping list:');
+                console.log(shoppingList);
+
+                this.$root.$data.addToShoppingList(shoppingList);
+            },
+        },
+
+        async created() {
+            await this.loadCache();
         },
     }
 </script>

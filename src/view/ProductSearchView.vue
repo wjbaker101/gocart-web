@@ -29,7 +29,6 @@
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
 
     import searchResultStoreService from '@/service/SearchResultStoreService.js';
-    import productStoreService from '@/service/ProductStoreService.js';
 
     export default {
         name: 'ProductSearchView',

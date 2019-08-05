@@ -76,9 +76,6 @@
         created() {
             this.initialShoppingList = this.$root.$data.getShoppingList();
             this.shoppingListOrder = this.$root.$data.getShoppingListOrder();
-
-            console.log(this.initialShoppingList);
-            console.log(this.shoppingListOrder);
         },
     }
 </script>

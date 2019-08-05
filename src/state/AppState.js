@@ -1,3 +1,5 @@
+import shoppingListService from '@/service/ShoppingListService.js';
+
 export default {
     debug: true,
 
@@ -29,6 +31,10 @@ export default {
 
         this.state.shoppingListOrder =
             this.state.shoppingListOrder.concat(Object.keys(products));
+
+        (async () => {
+            await shoppingListService.saveShoppingList(this.state.shoppingList);
+        })();
     },
 
     removeFromShoppingList(tpnc) {
