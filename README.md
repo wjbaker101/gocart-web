@@ -15,15 +15,13 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
+### Secret Properties Config
 
-### Lints and fixes files
+`config/secretProperties.json`
 ```
-npm run lint
+{
+    "tescoAPI": {
+        "secretKey": "<secret_key>"
+    }
+}
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
