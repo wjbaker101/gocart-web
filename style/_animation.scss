@@ -1,0 +1,9 @@
+$animations: (
+    duration-short: 0.15s,
+    duration-mid: 0.25s,
+    duration-long: 0.4s,
+);
+
+@function animation($animation) {
+    @return map-get($animations, $animation);
+}

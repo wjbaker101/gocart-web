@@ -1,0 +1,7 @@
+$layouts: (
+    border-radius: 3px,
+);
+
+@function layout($layout) {
+    @return map-get($layouts, $layout);
+}

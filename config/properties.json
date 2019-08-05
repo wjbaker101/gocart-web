@@ -1,0 +1,8 @@
+{
+    "backend": {
+        "port": 8087
+    },
+    "frontend": {
+        "port": 8080
+    }
+}

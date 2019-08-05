@@ -1,0 +1,21 @@
+$colours: (
+    white: #fff,
+
+    black: #222,
+    black-light: #444,
+    black-dark: #000,
+
+    grey: #eee,
+    grey-light: #f8f8f8,
+    grey-dark: #ccc,
+
+    primary: #176bc0,
+    primary-dark: darken(#176bc0, 10%),
+    primary-light: lighten(#176bc0, 10%),
+
+    secondary: #10874C,
+);
+
+@function theme($colour) {
+    @return map-get($colours, $colour);
+}

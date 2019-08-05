@@ -1,0 +1,126 @@
+<template>
+    <div
+        class="product-item-component"
+        :data-product-id="product.tpnc"
+        @click.stop.self="onClick">
+
+        <div class="is-checked-container" v-if="hasCheckBox">
+            <CheckBoxComponent :id="`${product.tpnc}-checkbox`" @click="onCheckedClick" />
+        </div>
+        <div class="image-container">
+            <img class="product-image" :src="product.image" v-if="!showPlaceholderImage">
+            <div class="placeholder-image-container" v-else>
+                <FoodIcon />
+            </div>
+        </div>
+        <div class="product-name">
+            <span>{{ product.name }}</span>
+        </div>
+        <div class="product-price">
+            <span>£{{ product.price.toFixed(2) }}</span>
+        </div>
+    </div>
+</template>
+
+<script>
+    import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
+
+    import FoodIcon from '@/assets/icon/food.svg';
+
+    export default {
+        name: 'ProductItemComponent',
+
+        props: ['product', 'hasCheckBox'],
+
+        components: {
+            CheckBoxComponent,
+            FoodIcon,
+        },
+
+        computed: {
+            showPlaceholderImage: function() {
+                return this.product.image === null || this.product.image === '';
+            },
+        },
+
+        methods: {
+            onClick() {
+                this.$router.push({ name: 'product-route', params: { product: this.product } });
+            },
+
+            onCheckedClick() {
+                this.product.isChecked = !this.product.isChecked;
+            },
+        },
+    }
+</script>
+
+<style lang="scss">
+    .product-item-component {
+        display: flex;
+        margin: 0.5rem 0;
+        padding: 0.5rem 1rem;
+        border-radius: layout(border-radius);
+        background-color: theme(white);
+        cursor: pointer;
+        animation: anim animation(duration-short);
+
+        @keyframes anim {
+            from {
+                opacity: 0;
+                transform: translateX(-1rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        &:hover {
+            background-color: theme(grey-light);
+            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+            .product-price {
+                padding-left: 0.5rem;
+                box-shadow: -2px 0 4px theme(grey-light);
+            }
+        }
+
+        .is-checked-container {
+            padding-right: 1rem;
+        }
+
+        .image-container {
+            height: 64px;
+            margin-right: 0.5rem;
+        }
+
+        .placeholder-image-container {
+            width: 64px;
+            text-align: center;
+            line-height: 64px;
+            color: theme(primary);
+        }
+
+        .product-image {
+            max-height: 64px;
+            border-radius: layout(border-radius);
+        }
+
+        .product-name {
+            overflow-x: hidden;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+
+        .product-price {
+            padding-left: 0.5rem;
+            box-shadow: -2px 0 4px theme(white);
+        }
+
+        & > * {
+            margin: auto 0;
+        }
+    }
+</style>
