@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: 'history',
 
     routes: [
@@ -21,5 +21,11 @@ export default new Router({
             props: true,
             component: () => import('@/view/ProductView.vue'),
         },
+        {
+            path: '/shop',
+            component: () => import('@/view/ShopView.vue'),
+        },
     ],
-})
+});
+
+export default router;

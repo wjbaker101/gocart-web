@@ -30,7 +30,7 @@ module.exports = class TescoProductBuilder {
             contentsMeasureType,
             unitOfSale,
             averageSellingUnitWeight,
-            description: description.join('\n'),
+            description: description ? description.join('\n') : undefined,
             unitQuantity,
             contentsQuantity,
             unitPrice,

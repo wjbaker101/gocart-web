@@ -1,11 +1,19 @@
 <template>
     <div class="product-search-view">
-        <div class="search-input-container">
-            <InputComponent
-                v-model="searchTerm"
-                placeholder="Search for a product"
-                @enter="onSearch" />
-        </div>
+        <HeaderComponent>
+            <template v-slot:below>
+                <div class="search-input-container">
+                    <InputComponent
+                        v-model="searchTerm"
+                        placeholder="Apple Pie"
+                        @enter="onSearch" />
+                </div>
+            </template>
+            <template v-slot:right-side>
+                Sort Results
+                <SortIcon />
+            </template>
+        </HeaderComponent>
         <div class="search-container">
             <p class="text-centered" v-show="!isLoaded && !isLoading">No results yet!</p>
             <p class="text-centered" v-show="isLoading">Searching...</p>
@@ -25,8 +33,11 @@
 <script>
     import API from '@/api/API.js';
 
+    import HeaderComponent from '@/component/page/HeaderComponent.vue';
     import InputComponent from '@/component/item/InputComponent.vue';
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
+
+    import SortIcon from '@/assets/icon/sort.svg';
 
     import searchResultStoreService from '@/service/SearchResultStoreService.js';
 
@@ -34,8 +45,10 @@
         name: 'ProductSearchView',
 
         components: {
+            HeaderComponent,
             InputComponent,
             ProductItemComponent,
+            SortIcon,
         },
 
         data() {
@@ -111,6 +124,8 @@
         },
 
         async created() {
+            this.$emit('viewChange', 'product_search');
+
             this.getCachedSearchResult();
         },
     }
@@ -121,13 +136,7 @@
         position: relative;
 
         .search-input-container {
-            padding: 1rem;
-            padding-top: 0;
-            background-color: theme(primary);
-            border-bottom-right-radius: layout(border-radius);
-            border-bottom-left-radius: layout(border-radius);
-            color: theme(white);
-            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+            padding-top: 1rem;
 
             .search-input {
                 width: 100%;

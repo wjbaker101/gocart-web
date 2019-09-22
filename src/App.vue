@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <ProductComponent :product="expandedProduct" :isVisible="isProductExpanded" />
-        <HeaderComponent />
-        <router-view @expandProduct="onExpandProduct" />
+
+        <router-view @expandProduct="onExpandProduct" @viewChange="onViewChange" />
         <DashboardComponent />
     </div>
 </template>
@@ -27,6 +27,7 @@
             return {
                 expandedProduct: null,
                 isProductExpanded: false,
+                currentView: null,
             }
         },
 
@@ -53,6 +54,10 @@
 
                 this.$root.$data.addToShoppingList(shoppingList);
             },
+
+            onViewChange(view) {
+                this.currentView = view;
+            },
         },
 
         async created() {
@@ -77,7 +82,7 @@
     body {
         margin: 0;
         font-size: 16px;
-        font-family: 'Raleway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Calibri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         letter-spacing: 1px;
         line-height: 1.8em;
         color: theme(black-light);
@@ -103,6 +108,7 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
+        color: theme(black-dark);
         line-height: 1.25em;
     }
 

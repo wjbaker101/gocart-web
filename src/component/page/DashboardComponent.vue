@@ -12,7 +12,7 @@
                 <small>Search</small>
             </div>
         </router-link>
-        <router-link to="/shops">
+        <router-link to="/shop">
             <div class="dashboard-item">
                 <ShopIcon /><br>
                 <small>Shops</small>
