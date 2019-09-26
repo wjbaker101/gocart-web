@@ -42,12 +42,12 @@
                 content: '';
                 display: block;
                 position: absolute;
-                top: 5px;
+                top: 7px;
                 left: 5px;
                 pointer-events: none;
                 opacity: 0;
-                width: 6px;
-                height: 10px;
+                width: 5px;
+                height: 8px;
                 border-bottom: 2px solid theme(white);
                 border-right: 2px solid theme(white);
                 transform: rotate(45deg);

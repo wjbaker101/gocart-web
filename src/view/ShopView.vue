@@ -95,7 +95,7 @@
 
             td {
 
-                border-bottom: 1px solid theme(grey);
+                border-bottom: 1px solid theme(grey-dark);
             }
 
             tr {

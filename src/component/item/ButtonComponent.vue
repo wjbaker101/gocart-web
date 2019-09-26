@@ -46,6 +46,7 @@
         }
 
         &.is-secondary {
+            color: theme(black);
             background-color: theme(secondary);
             border-top-color: theme(secondary);
             border-bottom-color: theme(secondary);

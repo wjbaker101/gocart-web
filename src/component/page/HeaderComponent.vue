@@ -48,9 +48,11 @@
 
 <style lang="scss">
     .header-component {
-        padding: 2rem 1rem;
+        padding: 1rem;
         background-color: theme(primary);
         color: theme(white);
+        border-bottom-right-radius: layout(border-radius);
+        border-bottom-left-radius: layout(border-radius);
         box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
 
         h1, h2, h3, h4, h5, h6 {

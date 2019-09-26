@@ -67,8 +67,10 @@
         margin: 0.5rem 0;
         padding: 0.5rem 1rem;
         border-radius: layout(border-radius);
+        border-left: 4px solid theme(white);
         background-color: theme(white);
         cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         animation: anim animation(duration-short);
 
         @keyframes anim {
@@ -84,12 +86,12 @@
         }
 
         &:hover {
-            background-color: theme(grey-light);
-            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid theme(secondary);
 
             .product-price {
                 padding-left: 0.5rem;
-                box-shadow: -2px 0 4px theme(grey-light);
+                box-shadow: -2px 0 4px theme(white);
             }
         }
 

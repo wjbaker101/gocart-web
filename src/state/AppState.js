@@ -1,7 +1,8 @@
 import shoppingListService from '@/service/ShoppingListService.js';
 
 export default {
-    debug: true,
+
+    debug: process.env.NODE_ENV !== 'production',
 
     state: {
         search: null,
