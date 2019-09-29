@@ -1,3 +1,9 @@
+$primary: #3b2ee7;
+$secondary: #2ecee7;
+$accent: #44006e;
+
+$negative: #e7342e;
+
 $colours: (
     white: #fff,
 
@@ -5,15 +11,25 @@ $colours: (
     black-light: #444,
     black-dark: #000,
 
-    grey: #eee,
-    grey-light: #f8f8f8,
-    grey-dark: #ccc,
+    grey: #ececec,
+    grey-light: #fafafa,
+    grey-dark: #d2d2d2,
 
-    primary: #176bc0,
-    primary-dark: darken(#176bc0, 10%),
-    primary-light: lighten(#176bc0, 10%),
+    primary: $primary,
+    primary-light: lighten($primary, 10%),
+    primary-dark: darken($primary, 10%),
 
-    secondary: #10874C,
+    secondary: $secondary,
+    secondary-light: lighten($secondary, 10%),
+    secondary-dark: darken($secondary, 10%),
+
+    accent: $accent,
+    accent-light: lighten($accent, 10%),
+    accent-dark: darken($accent, 10%),
+
+    negative: $negative,
+    negative-light: lighten($negative, 10%),
+    negative-dark: darken($negative, 10%),
 );
 
 @function theme($colour) {

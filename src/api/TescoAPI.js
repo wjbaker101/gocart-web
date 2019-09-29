@@ -22,5 +22,9 @@ export default {
      */
     async searchProduct(searchTerm, page = 0) {
         return await query(`/search/${searchTerm}/${page}`);
-    }
+    },
+
+    async searchShops(location, services) {
+        return await query(`/shop/search/${location}`);
+    },
 }

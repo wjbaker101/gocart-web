@@ -13,7 +13,7 @@ app.use((request, response, next) => {
 });
 
 const routers = [
-    require('./router/apiRouter.js'),
+    require('./router/tescoShopRouter.js'),
     require('./router/tescoRouter.js'),
 ];
 

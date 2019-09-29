@@ -1,6 +1,6 @@
 <template>
     <div class="product-view" v-if="productExists">
-        <HeaderComponent>
+        <HeaderComponent :hasBackButton="true">
             <template v-slot:below>
                 <div class="product-title-container">
                     <!-- <a @click="$router.go(-1)" class="back-button-container">
@@ -11,7 +11,7 @@
             </template>
         </HeaderComponent>
         <div class="product-container">
-            <img :src="largerImageUrl">
+            <img class="product-image" :src="largerImageUrl">
             <p><strong>£{{ product.price.toFixed(2) }}</strong></p>
             <p>
                 <ButtonComponent
@@ -112,6 +112,11 @@
             h2 {
                 margin-bottom: 0;
             }
+        }
+
+        .product-image {
+            border-radius: layout(border-radius);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         // .product-title-container {

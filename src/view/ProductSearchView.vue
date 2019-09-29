@@ -10,8 +10,17 @@
                 </div>
             </template>
             <template v-slot:right-side>
-                Sort Results
-                <SortIcon />
+                <div class="sort-container" @click="isSortOptionsVisible = ! isSortOptionsVisible">
+                    Sort Results
+                    <SortIcon />
+                    <div class="sort-options-container" :class="{ 'is-visible': isSortOptionsVisible }">
+                        <ul>
+                            <li>Alphabetical</li>
+                            <li>Price</li>
+                            <li>Health</li>
+                        </ul>
+                    </div>
+                </div>
             </template>
         </HeaderComponent>
         <div class="search-container">
@@ -57,6 +66,7 @@
                 isLoaded: false,
                 isLoading: false,
                 searchResult: null,
+                isSortOptionsVisible: false,
             }
         },
 
@@ -135,6 +145,42 @@
     .product-search-view {
         position: relative;
 
+        .sort-container {
+            position: relative;
+            margin-left: auto;
+            display: table;
+            cursor: pointer;
+            user-select: none;
+
+            ul {
+                margin: 0;
+                list-style: none;
+                padding-left: 0;
+            }
+        }
+
+        .sort-options-container {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            pointer-events: none;
+            padding: 1rem;
+            transform: translateY(100%);
+            z-index: 10;
+            text-align: initial;
+            background-color: theme(white);
+            color: theme(black);
+            border-left: 3px solid theme(secondary);
+            border-radius: layout(border-radius);
+            box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+
+            &.is-visible {
+                opacity: 1;
+                pointer-events: all;
+            }
+        }
+
         .search-input-container {
             padding-top: 1rem;
 
@@ -145,7 +191,7 @@
         }
 
         .search-container {
-            padding: 1rem 0;
+            padding: 1rem;
         }
     }
 </style>

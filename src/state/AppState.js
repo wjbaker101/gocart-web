@@ -1,12 +1,15 @@
 import shoppingListService from '@/service/ShoppingListService.js';
 
 export default {
-    debug: true,
+
+    debug: process.env.NODE_ENV !== 'production',
 
     state: {
         search: null,
         shoppingList: {},
         shoppingListOrder: [],
+        shopSearch: null,
+        shop: null,
     },
 
     log(message) {
@@ -21,6 +24,28 @@ export default {
 
     getSearchResult() {
         return this.state.search;
+    },
+
+    setShopSearchResult(shopSearchResult) {
+        this.log(`Setting shop search result:`);
+        this.log(shopSearchResult);
+
+        this.state.shopSearch = shopSearchResult;
+    },
+
+    getShopSearchResult() {
+        return this.state.shopSearch;
+    },
+
+    setSelectedShop(shop) {
+        this.log(`Setting selected shop:`);
+        this.log(shop);
+
+        this.state.shop = shop;
+    },
+
+    getSelectedShop() {
+        return this.state.shop;
     },
 
     addToShoppingList(products) {

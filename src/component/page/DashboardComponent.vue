@@ -53,14 +53,38 @@
         }
 
         .dashboard-item {
-            padding: 1rem;
+            position: relative;
+            padding: 0.5rem;
             text-align: center;
             cursor: pointer;
-            transition: all animation(duration-mid);
+            transition: color animation(duration-mid), text-shadow animation(duration-mid);
 
             &:hover {
-                background-color: theme(primary-light);
                 color: theme(white);
+                font-weight: bold;
+
+                &::before {
+                    opacity: 1;
+                }
+            }
+
+            /*
+                Use pseudo-elements to add a background to the button, due to
+                the "background" not being transitionable. Add the hover
+                background style to a pseudo-element and change it's opacity
+                when the button is hovered.
+            */
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background: linear-gradient(-5deg, theme(secondary-light), theme(primary-light));
+                z-index: -1;
+                opacity: 0;
+                transition: opacity animation(duration-mid);
             }
         }
     }

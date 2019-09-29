@@ -30,8 +30,8 @@
             &::before {
                 content: '';
                 display: inline-block;
-                width: 1rem;
-                height: 1rem;
+                width: 1.25rem;
+                height: 1.25rem;
                 border: 2px solid theme(primary);
                 border-radius: layout(border-radius);
                 background-color: theme(white);
@@ -43,13 +43,14 @@
                 display: block;
                 position: absolute;
                 top: 5px;
-                left: 5px;
+                left: 7px;
                 pointer-events: none;
                 opacity: 0;
                 width: 6px;
-                height: 10px;
+                height: 11px;
                 border-bottom: 2px solid theme(white);
                 border-right: 2px solid theme(white);
+                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
                 transform: rotate(45deg);
             }
         }
