@@ -42,21 +42,12 @@
                 content: '';
                 display: block;
                 position: absolute;
-<<<<<<< HEAD
                 top: 5px;
                 left: 7px;
                 pointer-events: none;
                 opacity: 0;
                 width: 6px;
                 height: 11px;
-=======
-                top: 7px;
-                left: 5px;
-                pointer-events: none;
-                opacity: 0;
-                width: 5px;
-                height: 8px;
->>>>>>> f4fea87bde5b437d7ca7cfa60744ac0ac99063f6
                 border-bottom: 2px solid theme(white);
                 border-right: 2px solid theme(white);
                 box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
