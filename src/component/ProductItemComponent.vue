@@ -67,6 +67,7 @@
         margin: 0.5rem 0;
         padding: 0.5rem 1rem;
         border-radius: layout(border-radius);
+        border-left: 4px solid theme(white);
         background-color: theme(white);
         cursor: pointer;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);

@@ -69,7 +69,12 @@
         }
 
         &.is-secondary {
+<<<<<<< HEAD
             color: theme(white);
+=======
+            color: theme(black);
+            background-color: theme(secondary);
+>>>>>>> f4fea87bde5b437d7ca7cfa60744ac0ac99063f6
             border-top-color: theme(secondary);
             border-bottom-color: theme(secondary);
 
