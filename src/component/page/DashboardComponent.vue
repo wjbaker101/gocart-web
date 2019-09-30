@@ -44,6 +44,9 @@
         position: fixed;
         bottom: 0;
         left: 0;
+        overflow: hidden;
+        border-top-right-radius: layout(border-radius);
+        border-top-left-radius: layout(border-radius);
         background-color: theme(white);
         box-shadow: 1px -2px 4px rgba(0, 0, 0, 0.25);
         z-index: 1;
