@@ -9,7 +9,7 @@
         <div class="shopping-list-container">
             <div class="heading-container">
                 <p class="heading-left">Shopping List:</p>
-                <p class="heading-right">({{ uncheckedProducts.length }})</p>
+                <p class="heading-right"><span class="counter-number">{{ uncheckedProducts.length }}</span></p>
             </div>
             <div class="unchecked-products-container">
                 <ProductItemComponent
@@ -19,11 +19,20 @@
                     hasCheckBox="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
             </div>
-            <div class="heading-container">
-                <p class="heading-left">Checked Items:</p>
-                <p class="heading-right">({{ checkedProducts.length }})</p>
+            <div class="heading-container checked-items-container" :class="{ 'is-hidden': isCheckedHidden }">
+                <p class="heading-left">
+                    <span>Checked Items: </span>
+                    <em v-if="isCheckedHidden">(Hidden)</em>
+                </p>
+                <p class="heading-right">
+                    <span class="show-hide-checked-container" @click="isCheckedHidden = !isCheckedHidden">
+                        <UpChevronIcon class="hide-checked" />
+                        <DownChevronIcon class="show-checked" />
+                    </span>
+                    <span class="counter-number">{{ checkedProducts.length }}</span>
+                </p>
             </div>
-            <div class="unchecked-products-container">
+            <div class="unchecked-products-container" v-if="!isCheckedHidden">
                 <ProductItemComponent
                     v-bind:key="product.tpnc"
                     v-for="(product, index) in checkedProducts"
@@ -40,6 +49,8 @@
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
 
     import BasketIcon from '@/assets/icon/basket.svg';
+    import UpChevronIcon from '@/assets/icon/chevron-up.svg';
+    import DownChevronIcon from '@/assets/icon/chevron-down.svg';
 
     export default {
         name: 'ShoppingListView',
@@ -48,12 +59,15 @@
             HeaderComponent,
             ProductItemComponent,
             BasketIcon,
+            UpChevronIcon,
+            DownChevronIcon,
         },
 
         data() {
             return {
                 initialShoppingList: {},
                 shoppingListOrder: [],
+                isCheckedHidden: false,
             }
         },
 
@@ -97,18 +111,9 @@
             },
         },
 
-        created() {
-            this.$emit('viewChange', 'shopping_list');
-
-            this.initialShoppingList = this.$root.$data.getShoppingList();
-            this.shoppingListOrder = this.$root.$data.getShoppingListOrder();
-        },
-
-        watch: {
-            uncheckedProducts(to, from) {
-                this.$emit('viewChange', 'shopping_list');
-                console.log('change');
-            },
+        async created() {
+            this.initialShoppingList = await this.$root.$data.getShoppingList();
+            this.shoppingListOrder = await this.$root.$data.getShoppingListOrder();
         },
     }
 </script>
@@ -124,6 +129,14 @@
             padding: 1rem;
         }
 
+        .counter-number {
+            background-color: theme(secondary);
+            border-radius: layout(border-radius);
+            padding: 0.25rem 0.5rem;
+            color: theme(black);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        }
+
         .heading-container {
             display: flex;
             font-weight: bold;
@@ -131,6 +144,25 @@
             .heading-right {
                 flex: 1;
                 text-align: right;
+            }
+        }
+
+        .checked-items-container.is-hidden {
+            .show-checked {
+                display: initial;
+            }
+
+            .hide-checked {
+                display: none;
+            }
+        }
+
+        .show-hide-checked-container {
+            margin-right: 0.5rem;
+            cursor: pointer;
+
+            .show-checked {
+                display: none;
             }
         }
     }

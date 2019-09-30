@@ -1,4 +1,5 @@
-import shoppingListService from '@/service/ShoppingListService.js';
+import TescoShopCacheService from '@/service/TescoShopCacheService.js';
+import ShoppingListCacheService from '@/service/ShoppingListCacheService.js';
 
 export default {
 
@@ -42,9 +43,21 @@ export default {
         this.log(shop);
 
         this.state.shop = shop;
+
+        (async () => {
+            await TescoShopCacheService.storeSelectedShop(this.state.shop);
+        })();
     },
 
-    getSelectedShop() {
+    async getSelectedShop() {
+        if (this.state.shop === null) {
+            const shop = await TescoShopCacheService.getSelectedShop();
+            this.log(`Querying for cached Tesco shop. Found Tesco shop:`);
+            this.log(shop);
+
+            this.state.shop = shop;
+        }
+
         return this.state.shop;
     },
 
@@ -58,7 +71,9 @@ export default {
             this.state.shoppingListOrder.concat(Object.keys(products));
 
         (async () => {
-            await shoppingListService.saveShoppingList(this.state.shoppingList);
+            await ShoppingListCacheService.storeListAndOrder(
+                this.state.shoppingList,
+                this.state.shoppingListOrder);
         })();
     },
 
@@ -69,13 +84,35 @@ export default {
 
         this.state.shoppingListOrder =
             this.state.shoppingListOrder.filter(p => p !== String(tpnc));
+
+        (async () => {
+            await ShoppingListCacheService.storeListAndOrder(
+                this.state.shoppingList,
+                this.state.shoppingListOrder);
+        })();
     },
 
-    getShoppingList() {
+    async getShoppingList() {
+        if (this.state.shoppingListOrder.length === 0) {
+            const list = await ShoppingListCacheService.getList();
+
+            if (list !== null) {
+                this.state.shoppingList = list;
+            }
+        }
+
         return this.state.shoppingList;
     },
 
-    getShoppingListOrder() {
+    async getShoppingListOrder() {
+        if (this.state.shoppingListOrder.length === 0) {
+            const order = await ShoppingListCacheService.getOrder();
+
+            if (order !== null) {
+                this.state.shoppingListOrder = order;
+            }
+        }
+
         return this.state.shoppingListOrder;
     }
 }

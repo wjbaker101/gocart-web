@@ -92,8 +92,8 @@
             },
         },
 
-        created() {
-            const cachedShop = this.$root.$data.getSelectedShop();
+        async created() {
+            const cachedShop = await this.$root.$data.getSelectedShop();
 
             if (cachedShop && cachedShop !== null) {
                 this.shop = cachedShop;
