@@ -1,7 +1,5 @@
 <template>
     <div id="app">
-        <ProductComponent :product="expandedProduct" :isVisible="isProductExpanded" />
-
         <router-view @expandProduct="onExpandProduct" @viewChange="onViewChange" />
         <DashboardComponent />
     </div>
@@ -20,28 +18,9 @@
         components: {
             HeaderComponent,
             DashboardComponent,
-            ProductComponent,
-        },
-
-        data() {
-            return {
-                expandedProduct: null,
-                isProductExpanded: false,
-                currentView: null,
-            }
         },
 
         methods: {
-            onExpandProduct(product) {
-                this.expandedProduct = product;
-                this.isProductExpanded = true;
-            },
-
-            hideProduct() {
-                this.expandedProduct = null;
-                this.isProductExpanded = false;
-            },
-
             async loadCache() {
                 const shoppingList = await shoppingListService.loadShoppingList();
 
@@ -53,10 +32,6 @@
                 console.log(shoppingList);
 
                 this.$root.$data.addToShoppingList(shoppingList);
-            },
-
-            onViewChange(view) {
-                this.currentView = view;
             },
         },
 
@@ -82,16 +57,17 @@
     body {
         margin: 0;
         font-size: 16px;
-        font-family: 'Calibri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         letter-spacing: 1px;
         line-height: 1.8em;
         color: theme(black-light);
         background-color: theme(grey);
         overflow: hidden;
+        padding-bottom: 77px;
     }
 
     #app {
-        max-height: calc(100vh - 92px);
+        height: 100%;
         overflow: auto;
     }
 
