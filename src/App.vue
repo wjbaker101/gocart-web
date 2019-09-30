@@ -19,25 +19,6 @@
             HeaderComponent,
             DashboardComponent,
         },
-
-        methods: {
-            async loadCache() {
-                const shoppingList = await shoppingListService.loadShoppingList();
-
-                if (shoppingList === null) {
-                    return;
-                }
-
-                console.log('Loading cached shopping list:');
-                console.log(shoppingList);
-
-                this.$root.$data.addToShoppingList(shoppingList);
-            },
-        },
-
-        async created() {
-            await this.loadCache();
-        },
     }
 </script>
 
