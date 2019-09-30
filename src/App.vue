@@ -69,14 +69,6 @@
         line-height: 1.25em;
     }
 
-    // .card {
-    //     display: flex;
-    //     padding: 1rem;
-    //     background-color: theme(white);
-    //     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-    //     border-radius: layout(border-radius);
-    // }
-
     .flex-container {
         display: flex;
         margin: 1rem 0;
