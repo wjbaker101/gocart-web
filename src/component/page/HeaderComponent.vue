@@ -21,39 +21,15 @@
     export default {
         name: 'HeaderComponent',
 
-        props: ['currentView', 'hasBackButton'],
+        props: ['hasBackButton'],
 
         components: {
             LeftArrowIcon,
         },
 
-        data() {
-            return {
-                shoppingListTotalPrice: null,
-            }
-        },
-
         methods: {
-            onViewChange(view) {
-                if (view === 'shopping_list') {
-                    const shoppingList = this.$root.$data.getShoppingList();
-
-                    const totalPrice = Object.values(shoppingList)
-                        .map(p => p.price * p.quantity)
-                        .reduce((total, p) => total + p);
-
-                    this.shoppingListTotalPrice = totalPrice.toFixed(2);
-                }
-            },
-
             onBackClick() {
                 this.$router.go(-1);
-            },
-        },
-
-        watch: {
-            currentView(to, from) {
-                this.onViewChange(to);
             },
         },
     }

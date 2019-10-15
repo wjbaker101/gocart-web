@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view @expandProduct="onExpandProduct" @viewChange="onViewChange" />
+        <router-view />
         <DashboardComponent />
     </div>
 </template>

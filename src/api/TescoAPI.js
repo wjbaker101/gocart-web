@@ -27,4 +27,12 @@ export default {
     async searchShops(location, services) {
         return await query(`/shop/search/${location}`);
     },
+
+    async getProductFromBarcode(productCode) {
+        return await query(`/barcode/${productCode}`);
+    },
+
+    async getProduct(tpnc) {
+        return await query(`/product/${tpnc}`);
+    },
 }

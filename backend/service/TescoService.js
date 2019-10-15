@@ -21,7 +21,23 @@ class TescoService {
     }
 
     async getProduct(tpnc) {
-        const response = await tescoClient.getProduct(tpnc);
+        const response = await tescoClient.getProducts({ tpnc: [tpnc] });
+
+        return {
+            result: response.products[0],
+        }
+    }
+
+    async getProductFromBarcode(gtin) {
+        const response = await tescoClient.getProducts({
+            gtin: [gtin],
+        });
+
+        if (response.products.length === 0) {
+            return {
+                result: null,
+            }
+        }
 
         return {
             result: response.products[0],

@@ -27,4 +27,11 @@ tescoRouter.get('/tesco/product/:tpnc', async (req, res) => {
     res.send(response);
 });
 
+tescoRouter.get('/tesco/barcode/:gtin', async (req, res) => {
+    const { gtin } = req.params;
+    const response = await tescoService.getProductFromBarcode(gtin);
+
+    res.send(response);
+});
+
 module.exports = tescoRouter;
