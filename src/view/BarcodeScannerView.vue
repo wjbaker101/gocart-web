@@ -4,10 +4,10 @@
         </HeaderComponent>
         <div class="barcode-scanner-container">
             <h1>Scan a Barcode</h1>
-            <p>
-                <input ref="fileInput" type="file" @change="onDecodeImageChange">
-            </p>
             <div class="scanning-container" ref="scanningContainer"></div>
+            <FileInputComponent @change="onDecodeImageChange" class="file-input-button">
+                <UploadIcon />
+            </FileInputComponent>
         </div>
     </div>
 </template>
@@ -18,6 +18,9 @@
 
     import HeaderComponent from '@/component/page/HeaderComponent.vue';
     import ButtonComponent from '@/component/item/ButtonComponent.vue';
+    import FileInputComponent from '@/component/item/FileInputComponent.vue';
+
+    import UploadIcon from '@/assets/icon/upload.svg';
 
     export default {
         name: 'BarcodeScannerView',
@@ -25,6 +28,8 @@
         components: {
             HeaderComponent,
             ButtonComponent,
+            FileInputComponent,
+            UploadIcon,
         },
 
         async mounted() {
@@ -73,12 +78,12 @@
                 }
             },
 
-            async onDecodeImageChange() {
-                if (this.$refs.fileInput.files.length === 0) {
+            async onDecodeImageChange(event, fileInput) {
+                if (fileInput.files.length === 0) {
                     return;
                 }
 
-                const file = this.$refs.fileInput.files[0];
+                const file = fileInput.files[0];
                 const data = URL.createObjectURL(file);
 
                 try {
@@ -115,6 +120,17 @@
             video {
                 width: 100%;
                 height: 100%;
+            }
+        }
+
+        .file-input-button {
+            border-radius: 50%;
+            position: fixed;
+            right: 1rem;
+            bottom: calc(75.8px + 1rem);
+
+            .button-component {
+                border-radius: inherit;
             }
         }
     }

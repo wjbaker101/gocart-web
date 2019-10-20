@@ -50,7 +50,7 @@
             right: 0;
             bottom: 0;
             left: 0;
-            border-radius: layout(border-radius);
+            border-radius: inherit;
             background: linear-gradient(-15deg, theme(secondary), theme(primary));
             z-index: -1;
             transition: opacity animation(duration-short);
