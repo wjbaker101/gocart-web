@@ -1,10 +1,32 @@
 <template>
     <div class="barcode-scanner-view">
         <HeaderComponent>
+            <template v-slot:below>
+                <div class="scan-title-container">
+                    <h2>Scan a Barcode</h2>
+                </div>
+            </template>
         </HeaderComponent>
         <div class="barcode-scanner-container">
-            <h1>Scan a Barcode</h1>
-            <div class="scanning-container" ref="scanningContainer"></div>
+            <div class="scanning-container" ref="scanningContainer">
+                <div class="blank-scan-container">
+                    <div v-if="isError">
+                        <p>I was unable to scan that barcode.</p>
+                        <p>
+                            <ButtonComponent>Try Again</ButtonComponent>
+                        </p>
+                    </div>
+                    <p v-else>
+                        <strong>Black screen?</strong>
+                        <br>
+                        Please enable permissions to allow for video.
+                        <br>
+                        <strong>or</strong>
+                        <br>
+                        Use an image of a barcode by tapping the button below.
+                    </p>
+                </div>
+            </div>
             <FileInputComponent @change="onDecodeImageChange" class="file-input-button">
                 <UploadIcon />
             </FileInputComponent>
@@ -30,6 +52,12 @@
             ButtonComponent,
             FileInputComponent,
             UploadIcon,
+        },
+
+        data() {
+            return {
+                isError: false,
+            }
         },
 
         async mounted() {
@@ -92,7 +120,7 @@
                     this.handleBarcodeScan(result);
                 }
                 catch (error) {
-                    console.log('Unable to decode barcode.');
+                    this.isError = true;
                 }
             },
         },
@@ -102,7 +130,31 @@
 <style lang="scss">
     .barcode-scanner-view {
         .barcode-scanner-container {
-            padding: 0 1rem;
+            padding: 1rem;
+        }
+
+        .scan-title-container {
+            text-align: center;
+
+            h2 {
+                margin-bottom: 0;
+            }
+        }
+
+        .blank-scan-container {
+            padding: 1rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            text-align: center;
+            color: theme(grey-light);
+
+            & > * {
+                margin: auto;
+            }
         }
 
         .barcode-button {
@@ -112,6 +164,7 @@
         .scanning-container {
             width: 100%;
             height: 50vh;
+            position: relative;
             border-radius: layout(border-radius);
             box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
             background-color: theme(black);
