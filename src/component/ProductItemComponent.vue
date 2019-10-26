@@ -11,7 +11,7 @@
         </div>
         <div class="image-container">
             <img class="product-image"
-                :src="product.image"
+                :src="productImage"
                 v-if="!showPlaceholderImage">
             <div class="placeholder-image-container" v-else>
                 <FoodIcon />
@@ -47,6 +47,10 @@
         computed: {
             showPlaceholderImage() {
                 return this.product.image === null || this.product.image === '';
+            },
+
+            productImage() {
+                return this.product.image.replace('http://', 'https://');
             },
         },
 

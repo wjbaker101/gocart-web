@@ -53,7 +53,9 @@
 
         computed: {
             largerImageUrl() {
-                return this.product.image.replace('90x90', '225x225');
+                return this.product.image
+                    .replace('90x90', '225x225')
+                    .replace('http://', 'https://');
             },
 
             description() {
