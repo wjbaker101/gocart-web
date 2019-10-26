@@ -16,7 +16,7 @@ export default {
                 src: data,
             },
             (result) => {
-                if (!result.codeResult) {
+                if (!result || !result.codeResult) {
                     return reject();
                 }
 
