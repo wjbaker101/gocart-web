@@ -13,7 +13,9 @@
                     <div v-if="isError">
                         <p>I was unable to scan that barcode.</p>
                         <p>
-                            <ButtonComponent>Try Again</ButtonComponent>
+                            <ButtonComponent @click="onTryAgainClick">
+                                Try Again
+                            </ButtonComponent>
                         </p>
                     </div>
                     <p v-else>
@@ -61,25 +63,40 @@
         },
 
         async mounted() {
-            const result = await BarcodeService.decodeStream(this.$refs.scanningContainer);
-
-            this.handleBarcodeScan(result);
+            this.doBarcodeStream();
         },
 
         methods: {
+            async onTryAgainClick() {
+                this.doBarcodeStream();
+                this.isError = false;
+            },
+
+            async doBarcodeStream() {
+                const result = await BarcodeService.decodeStream(this.$refs.scanningContainer);
+
+                this.handleBarcodeScan(result);
+            },
+
             async handleBarcodeScan(result) {
                 const barcode = result.codeResult.code;
 
-                const product = await this.getProductFromBarcode(barcode);
+                try {
+                    const product = await this.getProductFromBarcode(barcode);
 
-                if (product === null) {
-                    return;
+                    if (product === null) {
+                        this.isError = true;
+                        return;
+                    }
+
+                    this.$router.push({
+                        name: 'product-route',
+                        params: { product },
+                    });
                 }
-
-                this.$router.push({
-                    name: 'product-route',
-                    params: { product },
-                });
+                catch (error) {
+                    this.isError = true;
+                }
             },
 
             async getProductFromBarcode(barcode) {
@@ -169,10 +186,12 @@
             box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
             background-color: theme(black);
             background: linear-gradient(-15deg, theme(black-dark), theme(black));
+            overflow: hidden;
 
             video {
                 width: 100%;
                 height: 100%;
+                background: linear-gradient(-15deg, theme(black-dark), theme(black));
             }
         }
 
