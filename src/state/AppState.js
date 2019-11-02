@@ -50,14 +50,6 @@ export default {
     },
 
     async getSelectedShop() {
-        if (this.state.shop === null) {
-            const shop = await TescoShopCacheService.getSelectedShop();
-            this.log(`Querying for cached Tesco shop. Found Tesco shop:`);
-            this.log(shop);
-
-            this.state.shop = shop;
-        }
-
         return this.state.shop;
     },
 
@@ -93,26 +85,33 @@ export default {
     },
 
     async getShoppingList() {
-        if (this.state.shoppingListOrder.length === 0) {
-            const list = await ShoppingListCacheService.getList();
-
-            if (list !== null) {
-                this.state.shoppingList = list;
-            }
-        }
-
         return this.state.shoppingList;
     },
 
     async getShoppingListOrder() {
-        if (this.state.shoppingListOrder.length === 0) {
-            const order = await ShoppingListCacheService.getOrder();
-
-            if (order !== null) {
-                this.state.shoppingListOrder = order;
-            }
-        }
-
         return this.state.shoppingListOrder;
-    }
+    },
+
+    async init() {
+        const initShoppingList = async () => {
+            const list = await ShoppingListCacheService.getList();
+            this.state.shoppingList = list;
+        };
+
+        const initShoppingListOrder = async () => {
+            const order = await ShoppingListCacheService.getOrder();
+            this.state.shoppingListOrder = order;
+        };
+
+        const initShop = async () => {
+            const shop = await TescoShopCacheService.getSelectedShop();
+            this.state.shop = shop;
+        };
+
+        await Promise.all([
+            initShoppingList(),
+            initShoppingListOrder(),
+            initShop(),
+        ]);
+    },
 }

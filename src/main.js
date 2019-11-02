@@ -3,13 +3,17 @@ import App from '@/App.vue';
 
 import appRouter from '@/router/appRouter.js';
 
-import AppState from '@/state/AppState.js';
+import appState from '@/state/appState.js';
 
-Vue.config.productionTip = false;
+(async () => {
+    await appState.init();
 
-new Vue({
-    router: appRouter,
-    render: h => h(App),
-    data: AppState,
-})
-.$mount('#app');
+    Vue.config.productionTip = false;
+
+    new Vue({
+        router: appRouter,
+        render: h => h(App),
+        data: appState,
+    })
+    .$mount('#app');
+})();

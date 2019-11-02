@@ -10,8 +10,6 @@
     import DashboardComponent from '@/component/page/DashboardComponent.vue';
     import ProductComponent from '@/component/ProductComponent.vue';
 
-    import shoppingListService from '@/service/ShoppingListService.js';
-
     export default {
         name: 'App',
 
