@@ -25,11 +25,11 @@
                     <em v-if="isCheckedHidden">(Hidden)</em>
                 </p>
                 <p class="heading-right">
+                    <span class="counter-number">{{ checkedProducts.length }}</span>
                     <span class="show-hide-checked-container" @click="isCheckedHidden = !isCheckedHidden">
                         <UpChevronIcon class="hide-checked" />
                         <DownChevronIcon class="show-checked" />
                     </span>
-                    <span class="counter-number">{{ checkedProducts.length }}</span>
                 </p>
             </div>
             <div class="unchecked-products-container" v-if="!isCheckedHidden">
@@ -129,14 +129,6 @@
             padding: 1rem;
         }
 
-        .counter-number {
-            background-color: theme(secondary);
-            border-radius: layout(border-radius);
-            padding: 0.25rem 0.5rem;
-            color: theme(black);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-        }
-
         .heading-container {
             display: flex;
             font-weight: bold;
@@ -158,7 +150,7 @@
         }
 
         .show-hide-checked-container {
-            margin-right: 0.5rem;
+            margin-left: 0.5rem;
             cursor: pointer;
 
             .show-checked {

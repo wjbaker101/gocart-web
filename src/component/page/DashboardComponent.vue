@@ -75,12 +75,14 @@
         position: fixed;
         bottom: 0;
         left: 0;
-        border-top-right-radius: layout(border-radius);
-        border-top-left-radius: layout(border-radius);
         background-color: theme(white);
-        box-shadow: 1px -2px 4px rgba(0, 0, 0, 0.25);
+        background: linear-gradient(-15deg, theme(grey-light), theme(white));
         z-index: 1;
         user-select: none;
+
+        box-shadow:
+            1px -2px 4px rgba(0, 0, 0, 0.25),
+            -2px -2px 12px rgba(0, 0, 0, 0.1) inset;
 
         &.is-menu-open {
             border-top-right-radius: 0;
@@ -101,12 +103,13 @@
             overflow: hidden;
             pointer-events: none;
             clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-            border-top-right-radius: layout(border-radius);
-            border-top-left-radius: layout(border-radius);
             background-color: theme(white);
             border-bottom: 2px solid theme(grey);
-            box-shadow: 1px -2px 4px rgba(0, 0, 0, 0.25);
             transition: clip-path animation(duration-short);
+
+            box-shadow:
+                1px -2px 4px rgba(0, 0, 0, 0.25),
+                -2px -2px 12px rgba(0, 0, 0, 0.1) inset;
 
             ul {
                 list-style: none;
@@ -118,7 +121,8 @@
                     cursor: pointer;
 
                     &:hover {
-                        background-color: theme(secondary);
+                        background-color: theme(primary-light);
+                        color: theme(white);
                     }
                 }
 
@@ -165,10 +169,12 @@
                 right: 0;
                 bottom: 0;
                 left: 0;
-                background: linear-gradient(-5deg, theme(secondary-light), theme(primary-light));
+                background: linear-gradient(-15deg, theme(primary), theme(primary-light));
+                box-shadow: -2px -2px 12px rgba(0, 0, 0, 0.2) inset;
                 z-index: -1;
                 opacity: 0;
                 transition: opacity animation(duration-mid);
+
             }
         }
     }

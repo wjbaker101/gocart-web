@@ -74,8 +74,10 @@
         border-left: 4px solid theme(white);
         background-color: theme(white);
         cursor: pointer;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        transition: box-shadow animation(duration-mid);
         animation: anim animation(duration-short);
+
+        @include box-shadow-small;
 
         @keyframes anim {
             from {
@@ -90,7 +92,7 @@
         }
 
         &:hover {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2);
+            @include box-shadow-small-hover;
 
             .product-price {
                 padding-left: 0.5rem;

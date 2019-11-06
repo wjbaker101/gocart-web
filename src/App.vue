@@ -40,7 +40,7 @@
         letter-spacing: 1px;
         line-height: 1.8em;
         color: theme(black-light);
-        background-color: theme(grey);
+        background-color: theme(grey-light);
         overflow: hidden;
         padding-bottom: 77px;
     }

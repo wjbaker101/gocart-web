@@ -42,13 +42,16 @@
         letter-spacing: inherit;
         background-color: theme(white);
         border: 0;
-        border-top: 3px solid transparent;
-        border-bottom: 3px solid transparent;
+        border: 2px solid transparent;
         border-radius: layout(border-radius);
         transition: border-color animation(duration-mid);
 
+        box-shadow:
+            1px -2px 4px rgba(0, 0, 0, 0.25),
+            -2px -2px 12px rgba(0, 0, 0, 0.1) inset;
+
         &:focus {
-            border-bottom-color: theme(secondary);
+            border-color: theme(accent);
         }
     }
 </style>

@@ -3,7 +3,7 @@
         <HeaderComponent>
             <template v-slot:below>
                 <div class="scan-title-container">
-                    <h2>Scan a Barcode</h2>
+                    <h2>Barcode Scanner</h2>
                 </div>
             </template>
         </HeaderComponent>

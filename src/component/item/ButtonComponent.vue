@@ -32,9 +32,10 @@
         border: 0;
         color: theme(white);
         cursor: pointer;
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.25);
         z-index: 1;
         transition: all animation(duration-mid);
+
+        @include box-shadow-small;
 
         /*
             Use pseudo-elements to add a background to the button, due to the
@@ -51,18 +52,20 @@
             bottom: 0;
             left: 0;
             border-radius: inherit;
-            background: linear-gradient(-15deg, theme(secondary), theme(primary));
+            background-color: theme(primary);
+            background: linear-gradient(-15deg, theme(primary-dark), theme(primary));
             z-index: -1;
             transition: opacity animation(duration-short);
         }
 
         &::after {
             opacity: 0;
-            box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(-15deg, theme(secondary-dark), theme(primary-dark));
+            background: linear-gradient(-15deg, theme(primary-dark), theme(primary-dark));
         }
 
         &:hover {
+            @include box-shadow-small-hover;
+
             &::after {
                 opacity: 1;
             }

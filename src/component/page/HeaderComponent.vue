@@ -39,16 +39,12 @@
     .header-component {
         padding: 1rem;
         background-color: theme(primary);
-        background: linear-gradient(-15deg, theme(secondary), theme(primary));
+        background: linear-gradient(-15deg, theme(primary-dark), theme(primary));
         color: theme(white);
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
-        border-bottom-right-radius: layout(border-radius);
-        border-bottom-left-radius: layout(border-radius);
-        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
 
-        svg {
-            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.7));
-        }
+        box-shadow:
+            1px 2px 4px rgba(0, 0, 0, 0.25),
+            -2px -2px 12px rgba(0, 0, 0, 0.2) inset;
 
         h1, h2, h3, h4, h5, h6 {
             color: inherit;
