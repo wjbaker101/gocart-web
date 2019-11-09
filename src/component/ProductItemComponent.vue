@@ -7,7 +7,8 @@
         <div class="is-checked-container" v-if="hasCheckBox">
             <CheckBoxComponent
                 :id="`${product.tpnc}-checkbox`"
-                v-model="product.isChecked" />
+                v-model="product.isChecked"
+                @input="onCheckUpdate" />
         </div>
         <div class="image-container">
             <img class="product-image"
@@ -61,6 +62,19 @@
                     params: { product: this.product },
                 });
             },
+
+            onCheckUpdate(isChecked) {
+                if (isChecked) {
+                    this.$root.$data.removeFromUncheckedShoppingList(this.product.tpnc);
+                    this.$root.$data.addToCheckedShoppingList(this.product);
+                }
+                else {
+                    this.product.timesAddedToShoppingList += 1;
+
+                    this.$root.$data.removeFromCheckedShoppingList(this.product.tpnc);
+                    this.$root.$data.addToUncheckedShoppingList(this.product);
+                }
+            },
         },
     }
 </script>
@@ -71,13 +85,18 @@
         margin: 0.5rem 0;
         padding: 0.5rem 1rem;
         border-radius: layout(border-radius);
-        border-left: 4px solid theme(white);
+        border: 2px solid transparent;
         background-color: theme(white);
         cursor: pointer;
+        user-select: none;
         transition: box-shadow animation(duration-mid);
         animation: anim animation(duration-short);
 
         @include box-shadow-small;
+
+        &.is-dragged {
+            border-color: theme(accent);
+        }
 
         @keyframes anim {
             from {

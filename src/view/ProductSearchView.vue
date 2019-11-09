@@ -97,9 +97,8 @@
                     ...p,
                     quantity: 1,
                     isChecked: false,
+                    timesAddedToShoppingList: 0,
                 }));
-
-                console.log(this.searchResult);
 
                 this.$root.$data.setSearchResult({
                     searchTerm: this.searchTerm,

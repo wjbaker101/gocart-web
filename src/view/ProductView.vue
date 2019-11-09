@@ -1,5 +1,5 @@
 <template>
-    <div class="product-view" v-if="productExists">
+    <div class="product-view" v-if="product">
         <HeaderComponent :hasBackButton="true">
             <template v-slot:below>
                 <div class="product-title-container">
@@ -69,20 +69,20 @@
 
                 return 'Add to List';
             },
-
-            productExists() {
-                return this.product && this.product !== null;
-            },
         },
 
         async created() {
-            if (!this.productExists) {
+            if (!this.product) {
                 return;
             }
 
-            const shoppingList = await this.$root.$data.getShoppingList();
+            const fullShoppingList = {
+                ...this.$root.$data.getUncheckedShoppingList(),
+                ...this.$root.$data.getCheckedShoppingList(),
+            };
 
-            this.isProductInShoppingList = this.product.tpnc in shoppingList;
+            this.isProductInShoppingList =
+                `id-${this.product.tpnc}` in fullShoppingList;
         },
 
         methods: {
@@ -90,12 +90,11 @@
                 this.isProductInShoppingList = !this.isProductInShoppingList;
 
                 if (this.isProductInShoppingList) {
-                    this.$root.$data.addToShoppingList({
-                        [this.product.tpnc]: this.product,
-                    });
+                    this.$root.$data.addToUncheckedShoppingList(this.product);
                 }
                 else {
-                    this.$root.$data.removeFromShoppingList(this.product.tpnc);
+                    this.$root.$data.removeFromUncheckedShoppingList(this.product.tpnc);
+                    this.$root.$data.removeFromCheckedShoppingList(this.product.tpnc);
                 }
             },
         },

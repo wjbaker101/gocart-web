@@ -9,33 +9,39 @@
         <div class="shopping-list-container">
             <div class="heading-container">
                 <p class="heading-left">Shopping List:</p>
-                <p class="heading-right"><span class="counter-number">{{ uncheckedProducts.length }}</span></p>
+                <p class="heading-right"><span class="counter-number">{{ uncheckedShoppingList.length }}</span></p>
             </div>
-            <div class="unchecked-products-container">
-                <ProductItemComponent
-                    v-bind:key="product.tpnc"
-                    v-for="(product, index) in uncheckedProducts"
-                    :product="product"
-                    hasCheckBox="true"
-                    :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
-            </div>
+            <draggable
+                class="unchecked-products-container"
+                tag="div"
+                v-model="uncheckedShoppingList"
+                v-bind="draggableOptions">
+                <transition-group type="transition" name="flip-list">
+                    <ProductItemComponent
+                        :key="product.tpnc"
+                        v-for="(product, index) in uncheckedShoppingList"
+                        :product="product"
+                        hasCheckBox="true"
+                        :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
+                </transition-group>
+            </draggable>
             <div class="heading-container checked-items-container" :class="{ 'is-hidden': isCheckedHidden }">
                 <p class="heading-left">
                     <span>Checked Items: </span>
                     <em v-if="isCheckedHidden">(Hidden)</em>
                 </p>
                 <p class="heading-right">
-                    <span class="counter-number">{{ checkedProducts.length }}</span>
+                    <span class="counter-number">{{ checkedShoppingList.length }}</span>
                     <span class="show-hide-checked-container" @click="isCheckedHidden = !isCheckedHidden">
                         <UpChevronIcon class="hide-checked" />
                         <DownChevronIcon class="show-checked" />
                     </span>
                 </p>
             </div>
-            <div class="unchecked-products-container" v-if="!isCheckedHidden">
+            <div class="checked-products-container" v-if="!isCheckedHidden">
                 <ProductItemComponent
-                    v-bind:key="product.tpnc"
-                    v-for="(product, index) in checkedProducts"
+                    :key="product.tpnc"
+                    v-for="(product, index) in checkedShoppingList"
                     :product="product"
                     hasCheckBox="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
@@ -45,6 +51,8 @@
 </template>
 
 <script>
+    import draggable from "vuedraggable";
+
     import HeaderComponent from '@/component/page/HeaderComponent.vue';
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
 
@@ -56,6 +64,8 @@
         name: 'ShoppingListView',
 
         components: {
+            draggable,
+
             HeaderComponent,
             ProductItemComponent,
             BasketIcon,
@@ -65,26 +75,35 @@
 
         data() {
             return {
-                initialShoppingList: {},
-                shoppingListOrder: [],
                 isCheckedHidden: false,
+
+                draggableOptions: {
+                    animation: 0,
+                    disabled: false,
+                    ghostClass: 'is-dragged',
+                },
             }
         },
 
         computed: {
-            shoppingList() {
-                return this.shoppingListOrder
-                    .map(tpnc => this.initialShoppingList[tpnc]);
+            uncheckedShoppingList: {
+                get() {
+                    return Object.values(this.$root.$data.getUncheckedShoppingList());
+                },
+
+                set(list) {
+                    const newList = list.reduce((total, product) => ({
+                        ...total,
+                        [`id-${product.tpnc}`]: product,
+                    }), {});
+
+                    this.$root.$data.setUncheckedShoppingList(newList);
+                },
             },
 
-            uncheckedProducts() {
-                return this.shoppingList
-                    .filter(p => !p.isChecked);
-            },
-
-            checkedProducts() {
-                return this.shoppingList
-                    .filter(p => p.isChecked);
+            checkedShoppingList() {
+                return Object.values(this.$root.$data.getCheckedShoppingList())
+                    .sort((a, b) => b.timesAddedToShoppingList - a.timesAddedToShoppingList);
             },
 
             loadAnimationDuration() {
@@ -98,22 +117,17 @@
             },
 
             totalPrice() {
-                if (this.uncheckedProducts.length === 0) {
+                if (this.uncheckedShoppingList.length === 0) {
                     return 'Empty!';
                 }
 
-                const total = this.uncheckedProducts
+                const total = this.uncheckedShoppingList
                     .map(p => p.price * p.quantity)
                     .reduce((total, p) => total + p)
                     .toFixed(2);
 
                 return `£${total}`;
             },
-        },
-
-        async created() {
-            this.initialShoppingList = await this.$root.$data.getShoppingList();
-            this.shoppingListOrder = await this.$root.$data.getShoppingListOrder();
         },
     }
 </script>
