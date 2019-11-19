@@ -30,8 +30,6 @@ $colours: (
     negative: $negative,
     negative-light: lighten($negative, 10%),
     negative-dark: darken($negative, 10%),
-
-
 );
 
 @function theme($colour) {

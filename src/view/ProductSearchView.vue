@@ -7,6 +7,9 @@
                         v-model="searchTerm"
                         placeholder="Apple Pie"
                         @enter="onSearch" />
+                    <ButtonComponent class="search-button" @click="onSearch">
+                        <SearchIcon />
+                    </ButtonComponent>
                 </div>
             </template>
             <template v-slot:right-side>
@@ -45,8 +48,10 @@
     import HeaderComponent from '@/component/page/HeaderComponent.vue';
     import InputComponent from '@/component/item/InputComponent.vue';
     import ProductItemComponent from '@/component/ProductItemComponent.vue';
+    import ButtonComponent from '@/component/item/ButtonComponent.vue';
 
     import SortIcon from '@/assets/icon/sort.svg';
+    import SearchIcon from '@/assets/icon/search.svg';
 
     import searchResultStoreService from '@/service/SearchResultStoreService.js';
 
@@ -57,7 +62,9 @@
             HeaderComponent,
             InputComponent,
             ProductItemComponent,
+            ButtonComponent,
             SortIcon,
+            SearchIcon,
         },
 
         data() {
@@ -133,8 +140,6 @@
         },
 
         async created() {
-            this.$emit('viewChange', 'product_search');
-
             this.getCachedSearchResult();
         },
     }
@@ -182,10 +187,16 @@
 
         .search-input-container {
             padding-top: 1rem;
+            display: flex;
 
             .search-input {
-                width: 100%;
+                flex: 1;
                 border-radius: layout(border-radius);
+            }
+
+            .search-button {
+                flex: 0 0 auto;
+                margin-left: 0.5rem;
             }
         }
 
