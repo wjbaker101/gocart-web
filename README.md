@@ -17,11 +17,14 @@ npm run build
 
 ### Secret Properties Config
 
-`config/secretProperties.json`
+`common/config-secret.json`
 ```
 {
     "tescoAPI": {
         "secretKey": "<secret_key>"
+    },
+    "backend": {
+        "apiKey": "<api_key>"
     }
 }
 ```

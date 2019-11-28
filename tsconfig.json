@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "paths": {
+            "@backend/*": [ "src/backend/*" ],
+            "@common/*": [ "src/common/*" ],
+            "@frontend/*": [ "src/frontend/*" ],
+            "@/*": [ "src/frontend/*" ]
+        },
+    },
+    "include": [
+        "src/**/*.*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

@@ -1,11 +1,23 @@
-const properties = require('./config/properties.json');
+const config = require('./src/common/config/config.json');
 
 module.exports = {
-    outputDir: './backend/public',
+    outputDir: './build/frontend',
     assetsDir: 'static',
 
-    chainWebpack: config => {
+    chainWebpack(config) {
         config.module.rules.delete('svg');
+
+        config.plugin('fork-ts-checker')
+            .tap(args => {
+                args[0].tsconfig = './tsconfig.frontend.json';
+                return args;
+            });
+
+        config.plugin('html')
+            .tap(args => {
+                args[0].template = './src/frontend/public/index.html';
+                return args;
+            });
     },
 
     configureWebpack: {
@@ -16,15 +28,22 @@ module.exports = {
                     loader: 'vue-svg-loader',
                 },
             ],
-        }
+        },
+        resolve: {
+            alias: {
+                '@common': __dirname + '/src/common',
+                '@frontend': __dirname + '/src/frontend',
+            },
+        },
+        entry: {
+            app: './src/frontend/main.ts',
+        },
     },
 
     devServer: {
-        port: properties.frontend.port,
-
         proxy: {
             '/api': {
-                target: `http://localhost:${properties.backend.port}`,
+                target: `http://localhost:${config.backend.port}`,
                 ws: true,
                 changeOrigin: true,
             }
@@ -35,7 +54,7 @@ module.exports = {
         loaderOptions: {
             sass: {
                 data: `
-                    @import 'style/webstyle.scss';
+                    @import 'src/frontend/style/webstyle.scss';
                 `,
             },
         },
