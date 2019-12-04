@@ -2,11 +2,11 @@ import { ImmortalDB } from 'immortal-db';
 
 class DataStoreService {
 
-    async storeData(key, data) {
+    async storeData(key: string, data: any) {
         await ImmortalDB.set(key, JSON.stringify(data));
     }
 
-    async getData(key) {
+    async getData(key: string) {
         const data = await ImmortalDB.get(key, null);
 
         if (data === null) {

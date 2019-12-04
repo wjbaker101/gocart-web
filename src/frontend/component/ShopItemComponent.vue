@@ -31,7 +31,7 @@
         },
 
         computed: {
-            distance() {
+            distance(): string {
                 const distanceFrom = this.shop.distanceFrom;
 
                 return `${distanceFrom.value.toFixed(1)} ${distanceFrom.unit} away`;
@@ -39,7 +39,7 @@
         },
 
         methods: {
-            onSelectClick() {
+            onSelectClick(): void {
                 this.$root.$data.setSelectedShop(this.shop);
                 this.$router.push({ path: '/shop' });
             },

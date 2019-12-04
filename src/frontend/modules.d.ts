@@ -9,3 +9,4 @@ declare module '*.svg' {
 }
 
 declare module 'vuedraggable';
+declare module 'quagga';

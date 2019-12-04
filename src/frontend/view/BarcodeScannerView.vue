@@ -39,11 +39,12 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import API from '@frontend/api/API';
     import TescoClient from '@frontend/api/TescoClient';
     import BarcodeService from '@frontend/service/BarcodeService';
 
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
+    import { IBarcodeResult } from '@frontend/interface/IBarcodeResult';
+    import { IGrocerySearchResponseResult } from '@common/interface/response/IGrocerySearchResponse';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
@@ -78,12 +79,13 @@
             },
 
             async doBarcodeStream(): Promise<void> {
-                const result = await BarcodeService.decodeStream(this.$refs.scanningContainer);
+                const element = this.$refs.scanningContainer as HTMLElement;
+                const result = await BarcodeService.decodeStream(element);
 
                 this.handleBarcodeScan(result);
             },
 
-            async handleBarcodeScan(result): Promise<void> {
+            async handleBarcodeScan(result: IBarcodeResult): Promise<void> {
                 const barcode = result.codeResult.code;
 
                 try {
@@ -94,10 +96,8 @@
                         return;
                     }
 
-                    this.$router.push({
-                        name: 'product-route',
-                        params: { product },
-                    });
+                    this.$root.$data.setCurrentProduct(product);
+                    this.$router.push({ path: '/product' });
                 }
                 catch (error) {
                     this.isError = true;
@@ -108,20 +108,37 @@
             async getProductFromBarcode(barcode: string):
                     Promise<ITescoProduct | null> {
 
-                const productData = await TescoClient.getProductDataByGTIN(barcode);
+                const productData
+                        = await TescoClient.getProductDataByGTIN(barcode);
 
-                const { description, tpnc: tpncToFind } = productData.result[0];
+                if (productData instanceof Error) {
+                    return null;
+                }
 
-                const products = await TescoClient.getGrocerySearch(description);
+                const { description, tpnc: tpncToFind }
+                        = productData.result.products[0];
+
+                const products
+                        = await TescoClient.getGrocerySearch(description);
+
+                if (products instanceof Error) {
+                    return null;
+                }
 
                 const product = products.result
-                        .filter((p: ITescoProduct) => String(p.id) === tpncToFind);
+                        .filter((p: IGrocerySearchResponseResult) => String(p.id) === tpncToFind);
 
                 if (product.length === 0) {
                     return null;
                 }
 
-                return product[0];
+                return {
+                    ...product[0],
+                    description: product[0].description ? product[0].description.join('<br>') : '',
+                    quantity: 1,
+                    isChecked: false,
+                    timesAddedToShoppingList: 0,
+                };
             },
 
             async onDecodeImageChange(event: any, fileInput: HTMLInputElement): Promise<void> {

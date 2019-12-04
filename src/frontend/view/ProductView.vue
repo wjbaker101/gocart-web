@@ -40,12 +40,6 @@
     export default Vue.extend({
         name: 'ProductView',
 
-        props: {
-            product: {
-                type: Object as () => ITescoProduct,
-            },
-        },
-
         components: {
             LeftArrowIcon,
             HeaderComponent,
@@ -55,12 +49,15 @@
 
         data() {
             return {
+                product: null as (ITescoProduct | null),
                 isProductInShoppingList: false,
             }
         },
 
         computed: {
             largerImageUrl(): string {
+                if (!this.product) return '';
+
                 return this.product.image
                     .replace('90x90', '225x225')
                     .replace('http://', 'https://');
@@ -76,6 +73,8 @@
         },
 
         async created(): Promise<void> {
+            this.product = this.$root.$data.getCurrentProduct();
+
             if (!this.product) {
                 return;
             }
@@ -90,7 +89,11 @@
         },
 
         methods: {
-            onAddClick() {
+            onAddClick(): void {
+                if (!this.product) {
+                    return;
+                }
+
                 this.isProductInShoppingList = !this.isProductInShoppingList;
 
                 if (this.isProductInShoppingList) {

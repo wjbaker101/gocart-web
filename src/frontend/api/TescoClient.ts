@@ -3,7 +3,7 @@ import axios from 'axios';
 import configSecret from '@common/config/config-secret.json';
 
 import { IResponseEntity } from '@common/interface/IResponseEntity';
-import { IStoreLocationResponse } from '@common/interface/response/IStoreLocationResponse';
+import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
 import { IGrocerySearchResponseResult } from '@common/interface/response/IGrocerySearchResponse';
 import { IProductDataResponse } from '@common/interface/response/IProductDataResponse';
 
@@ -31,7 +31,7 @@ class TescoClient {
     }
 
     async getNearbyShops(searchTerm: string):
-            Promise<IResponseEntity<IStoreLocationResponse> | Error> {
+            Promise<IResponseEntity<IStoreLocationResponseResult[]> | Error> {
 
         try {
             const response = await tescoAPI.get(`/shop/search/${searchTerm}`);

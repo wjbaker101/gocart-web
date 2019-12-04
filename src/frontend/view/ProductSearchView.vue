@@ -42,8 +42,6 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import API from '@frontend/api/API';
-
     import TescoClient from '@frontend/api/TescoClient';
     import { IResponseEntity } from '@common/interface/IResponseEntity';
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
@@ -56,8 +54,6 @@
 
     import SortIcon from '@frontend/assets/icon/sort.svg';
     import SearchIcon from '@frontend/assets/icon/search.svg';
-
-    import searchResultStoreService from '@frontend/service/SearchResultStoreService';
 
     export default Vue.extend({
         name: 'ProductSearchView',

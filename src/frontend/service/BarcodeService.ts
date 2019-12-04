@@ -1,5 +1,7 @@
 import Quagga from 'quagga';
 
+import { IBarcodeResult } from '@frontend/interface/IBarcodeResult';
+
 export default {
 
     options: {
@@ -9,13 +11,13 @@ export default {
         },
     },
 
-    async decode(data) {
+    async decode(data: string): Promise<IBarcodeResult> {
         return await new Promise((resolve, reject) => {
             Quagga.decodeSingle({
                 ...this.options,
                 src: data,
             },
-            (result) => {
+            (result: IBarcodeResult) => {
                 if (!result || !result.codeResult) {
                     return reject();
                 }
@@ -25,7 +27,7 @@ export default {
         });
     },
 
-    async decodeStream(targetElement) {
+    async decodeStream(targetElement: HTMLElement): Promise<IBarcodeResult> {
         return await new Promise((resolve, reject) => {
             if (!this.userHasCapabilities()) {
                 reject('User does not have video capabilities.');
@@ -39,14 +41,14 @@ export default {
                     target: targetElement,
                 },
             },
-            (error) => {
+            (error: any) => {
                 if (error) {
-                    return reject(error);
+                    return reject('Sorry, an error occured when trying to decode the barcode.');
                 }
 
                 Quagga.start();
 
-                Quagga.onDetected((result) => {
+                Quagga.onDetected((result: IBarcodeResult) => {
                     Quagga.stop();
                     return resolve(result);
                 });
@@ -54,7 +56,7 @@ export default {
         });
     },
 
-    userHasCapabilities() {
+    userHasCapabilities(): boolean {
         return navigator.mediaDevices
                 && typeof navigator.mediaDevices.getUserMedia === 'function';
     },

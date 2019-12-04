@@ -105,7 +105,7 @@
             },
 
             checkedShoppingList(): ITescoProduct[] {
-                return Object.values(this.$root.$data.getCheckedShoppingList())
+                return Object.values<ITescoProduct>(this.$root.$data.getCheckedShoppingList())
                     .sort((a, b) => b.timesAddedToShoppingList - a.timesAddedToShoppingList);
             },
 

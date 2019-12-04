@@ -34,6 +34,11 @@
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import InputComponent from '@frontend/component/item/InputComponent.vue';
     import ShopItemComponent from '@frontend/component/ShopItemComponent.vue';
+    import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
+
+    interface IStoreLocationExpandable extends IStoreLocationResponseResult {
+        isExpanded: boolean,
+    }
 
     export default Vue.extend({
         name: 'ShopSearchView',
@@ -46,18 +51,18 @@
 
         data() {
             return {
+                searchResult: null as (IStoreLocationExpandable[] | null),
                 searchTerm: '',
                 isLoaded: false,
                 isLoading: false,
-                searchResult: null,
                 isSortOptionsVisible: false,
-                expandedShop: null,
+                expandedShop: null as (IStoreLocationExpandable | null),
             }
         },
 
         computed: {
-            loadAnimationDuration() {
-                return (index) => {
+            loadAnimationDuration(): (index: number) => number {
+                return (index: number) => {
                     if (index > 20) {
                         return 20 * 0.15;
                     }
@@ -68,7 +73,7 @@
         },
 
         methods: {
-            async onSearch() {
+            async onSearch(): Promise<void> {
                 if (this.searchTerm.length === 0) {
                     return;
                 }
@@ -87,27 +92,14 @@
                     isExpanded: false,
                 }));
 
-                // this.searchResult = response.data.result.map(p => ({
-                //     ...p,
-                //     quantity: 1,
-                //     isChecked: false,
-                // }));
-
-                // console.log(this.searchResult);
-
-                // this.$root.$data.setSearchResult({
-                //     searchTerm: this.searchTerm,
-                //     searchResult: this.searchResult,
-                // });
-
                 this.isLoaded = true;
                 this.isLoading = false;
             },
 
-            expandShop(shop) {
+            expandShop(shop: IStoreLocationExpandable): void {
                 const expanded = shop.isExpanded;
 
-                if (this.expandedShop !== null) {
+                if (this.expandedShop) {
                     this.expandedShop.isExpanded = false;
                 }
 

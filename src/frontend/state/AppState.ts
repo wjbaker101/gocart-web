@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import { ITescoProduct } from '@frontend/interface/ITescoProduct';
+import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
 
 import TescoShopCacheService from '@frontend/service/TescoShopCacheService';
 import ShoppingListCacheService from '@frontend/service/ShoppingListCacheService';
@@ -13,13 +14,14 @@ class AppState {
         uncheckedShoppingList: {} as Record<string, ITescoProduct>,
         checkedShoppingList: {} as Record<string, ITescoProduct>,
 
-        search: null,
+        search: null as (ITescoProduct[] | null),
 
-        shopSearch: null,
-        shop: null,
+        shop: null as (IStoreLocationResponseResult | null),
+
+        currentProduct: null as (ITescoProduct | null),
     };
 
-    log(message: string) {
+    log(message: any): void {
         if (this.debug) {
             console.log(message);
         }
@@ -29,14 +31,14 @@ class AppState {
         return this.state.uncheckedShoppingList;
     }
 
-    setUncheckedShoppingList(list: Record<string, ITescoProduct>) {
+    setUncheckedShoppingList(list: Record<string, ITescoProduct>): void {
         this.log(`Setting unchecked shopping list.`);
         this.state.uncheckedShoppingList = list;
 
         this.updateUncheckedShoppingListInCache();
     }
 
-    addToUncheckedShoppingList(product) {
+    addToUncheckedShoppingList(product: ITescoProduct): void {
         this.log(`Adding a product to unchecked shopping list with tpnc=${product.id}.`);
 
         Vue.set(this.state.uncheckedShoppingList, `id-${product.id}`, product);
@@ -44,7 +46,7 @@ class AppState {
         this.updateUncheckedShoppingListInCache();
     }
 
-    removeFromUncheckedShoppingList(tpnc) {
+    removeFromUncheckedShoppingList(tpnc: string): void {
         this.log(`Removing a product from unchecked shopping list with tpnc=${tpnc}.`);
 
         Vue.delete(this.state.uncheckedShoppingList, `id-${tpnc}`);
@@ -52,7 +54,7 @@ class AppState {
         this.updateUncheckedShoppingListInCache();
     }
 
-    updateUncheckedShoppingListInCache() {
+    updateUncheckedShoppingListInCache(): void {
         (async () => {
             await ShoppingListCacheService.storeUncheckedList(this.state.uncheckedShoppingList);
         })();
@@ -62,13 +64,13 @@ class AppState {
         return this.state.checkedShoppingList;
     }
 
-    setCheckedShoppingList(list: Record<string, ITescoProduct>) {
+    setCheckedShoppingList(list: Record<string, ITescoProduct>): void {
         this.state.checkedShoppingList = list;
 
         this.updateCheckedShoppingListInCache();
     }
 
-    addToCheckedShoppingList(product: string) {
+    addToCheckedShoppingList(product: ITescoProduct): void {
         this.log(`Adding a product to checked shopping list with tpnc=${product.id}.`);
 
         Vue.set(this.state.checkedShoppingList, `id-${product.id}`, product);
@@ -76,7 +78,7 @@ class AppState {
         this.updateCheckedShoppingListInCache();
     }
 
-    removeFromCheckedShoppingList(tpnc: string) {
+    removeFromCheckedShoppingList(tpnc: string): void {
         this.log(`Removing a product from checked shopping list with tpnc=${tpnc}.`);
 
         Vue.delete(this.state.checkedShoppingList, `id-${tpnc}`);
@@ -84,13 +86,13 @@ class AppState {
         this.updateCheckedShoppingListInCache();
     }
 
-    updateCheckedShoppingListInCache() {
+    updateCheckedShoppingListInCache(): void {
         (async () => {
             await ShoppingListCacheService.storeCheckedList(this.state.checkedShoppingList);
         })();
     }
 
-    setSearchResult(searchResult) {
+    setSearchResult(searchResult: ITescoProduct[]): void {
         this.state.search = searchResult;
     }
 
@@ -98,25 +100,14 @@ class AppState {
         return this.state.search;
     }
 
-    setShopSearchResult(shopSearchResult) {
-        this.log(`Setting shop search result:`);
-        this.log(shopSearchResult);
-
-        this.state.shopSearch = shopSearchResult;
-    }
-
-    getShopSearchResult() {
-        return this.state.shopSearch;
-    }
-
-    setSelectedShop(shop) {
+    setSelectedShop(shop: IStoreLocationResponseResult): void {
         this.log(`Setting selected shop:`);
         this.log(shop);
 
         this.state.shop = shop;
 
         (async () => {
-            await TescoShopCacheService.storeSelectedShop(this.state.shop);
+            await TescoShopCacheService.storeSelectedShop(this.state.shop as IStoreLocationResponseResult);
         })();
     }
 
@@ -146,6 +137,14 @@ class AppState {
 
             initShop(),
         ]);
+    }
+
+    getCurrentProduct(): ITescoProduct | null {
+        return this.state.currentProduct;
+    }
+
+    setCurrentProduct(product: ITescoProduct): void {
+        this.state.currentProduct = product;
     }
 }
 

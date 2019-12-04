@@ -57,14 +57,14 @@
         },
 
         methods: {
-            onClick() {
+            onClick(): void {
                 this.$router.push({
                     name: 'product-route',
                     params: { product: this.product },
                 });
             },
 
-            onCheckUpdate(isChecked) {
+            onCheckUpdate(isChecked: boolean): void {
                 if (isChecked) {
                     this.$root.$data.removeFromUncheckedShoppingList(String(this.product.id));
                     this.$root.$data.addToCheckedShoppingList(this.product);

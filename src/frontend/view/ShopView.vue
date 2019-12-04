@@ -70,6 +70,8 @@
 <script lang="ts">
     import Vue from 'vue';
 
+    import { IStoreLocationResponseResult, IStoreLocationResponseOpeningHour, IStoreLocationResponseOpeningHours } from '@common/interface/response/IStoreLocationResponse';
+
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
 
     import EditIcon from '@frontend/assets/icon/edit.svg';
@@ -84,17 +86,19 @@
 
         data() {
             return {
-                shop: null,
+                shop: null as (IStoreLocationResponseResult | null),
             }
         },
 
         computed: {
-            openingHours() {
-                return this.shop.location.openingHours[0].standardOpeningHours;
+            openingHours(): IStoreLocationResponseOpeningHours | null {
+                if (!this.shop) return null;
+
+                return this.shop.openingHours[0];
             },
         },
 
-        async created() {
+        async created(): Promise<void> {
             const cachedShop = await this.$root.$data.getSelectedShop();
 
             if (cachedShop && cachedShop !== null) {
@@ -103,7 +107,7 @@
         },
 
         methods: {
-            getOpeningHour(openingHour) {
+            getOpeningHour(openingHour: IStoreLocationResponseOpeningHour): string {
                 if (!openingHour.isOpen) {
                     return 'Closed';
                 }
@@ -120,7 +124,7 @@
                 return `${open} - ${close}`;
             },
 
-            formatOpeningHour(openingHour) {
+            formatOpeningHour(openingHour: string): string {
                 const hour = Number(`${openingHour[0]}${openingHour[1]}`);
                 const minutes = Number(`${openingHour[2]}${openingHour[3]}`);
 
