@@ -2,6 +2,7 @@ import path from 'path';
 
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
+import history from 'connect-history-api-fallback';
 
 import LoggingUtils from './util/LoggingUtils';
 import config from '../common/config/config.json';
@@ -16,6 +17,7 @@ app.use(LogRouter);
 
 app.use(config.backend.prefix, BackendAuth.authenticate);
 app.use(bodyParser.json());
+app.use(history());
 
 const routers: Router[] = [
     TescoRouter,
