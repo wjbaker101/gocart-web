@@ -10,6 +10,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
+    import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
     export default Vue.extend({
         name: 'SearchSortComponent',
@@ -17,9 +18,9 @@
         props: ['isVisible'],
 
         methods: {
-            onSortChange(type) {
-                const options = {
-                    alphabetical(a, b) {
+            onSortChange(type: string): void {
+                const options: Record<string, Function> = {
+                    alphabetical(a: ITescoProduct, b: ITescoProduct) {
                         console.log('Sorting by name alphabetically.');
 
                         if(a.name < b.name) {
@@ -33,17 +34,17 @@
                         return 0;
                     },
 
-                    price(a, b) {
+                    price(a: ITescoProduct, b: ITescoProduct) {
                         console.log('Sorting by price.');
 
                         return b.price - a.price;
                     },
 
-                    health(a, b) {
-                        console.log('Sorting by healthScore.');
+                    // health(a: ITescoProduct, b: ITescoProduct) {
+                    //     console.log('Sorting by healthScore.');
 
-                        return b.healthScore - a.healthScore;
-                    },
+                    //     return b.healthScore - a.healthScore;
+                    // },
                 };
 
                 this.$emit('sortChange', options[type]);

@@ -15,8 +15,14 @@
         props: ['id', 'label', 'value'],
 
         methods: {
-            update(event) {
-                this.$emit('input', event.target.checked);
+            update(event: Event) {
+                if (!event || !event.target) {
+                    return;
+                }
+
+                const input = event.target as HTMLInputElement;
+
+                this.$emit('input', input.checked);
             },
         },
     })

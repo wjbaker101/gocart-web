@@ -20,11 +20,23 @@ export default {
     },
 
     async getUncheckedList(): Promise<Record<string, ITescoProduct>> {
-        return await CacheService.getData(KEY_LIST_UNCHECKED);
+        const cache = await CacheService.getData(KEY_LIST_UNCHECKED);
+
+        if (cache === null) {
+            return {};
+        }
+
+        return cache;
     },
 
     async getCheckedList(): Promise<Record<string, ITescoProduct>> {
-        return await CacheService.getData(KEY_LIST_CHECKED);
+        const cache = await CacheService.getData(KEY_LIST_CHECKED);
+
+        if (cache === null) {
+            return {};
+        }
+
+        return cache;
     },
 
     async storeLists(

@@ -19,7 +19,9 @@
 
         methods: {
             update() {
-                this.$emit('input', this.$refs.numberInput.value);
+                const input = this.$refs.numberInput as HTMLInputElement;
+
+                this.$emit('input', input.value);
             },
         },
     })

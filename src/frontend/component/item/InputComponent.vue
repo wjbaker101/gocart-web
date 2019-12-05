@@ -25,11 +25,21 @@
 
         methods: {
             onInputChange() {
-                this.$emit('input', this.$refs.inputElement.value);
+                const input = this.$refs.inputElement as HTMLInputElement;
+
+                this.$emit('input', input.value);
             },
 
             onEnter() {
-                this.$emit('enter', this.$refs.inputElement.value);
+                const input = this.$refs.inputElement as HTMLInputElement;
+
+                this.$emit('enter', input.value);
+            },
+
+            focus() {
+                const input = this.$refs.inputElement as HTMLInputElement;
+
+                input.focus();
             },
         },
     })

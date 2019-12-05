@@ -58,9 +58,9 @@
 
         methods: {
             onClick(): void {
+                this.$root.$data.setCurrentProduct(this.product);
                 this.$router.push({
                     name: 'product-route',
-                    params: { product: this.product },
                 });
             },
 

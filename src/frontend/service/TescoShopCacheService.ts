@@ -10,7 +10,7 @@ export default {
         await CacheService.storeData(KEY_SELECTED_SHOP, shop);
     },
 
-    async getSelectedShop(): Promise<IStoreLocationResponseResult> {
-        return await CacheService.getData(KEY_SELECTED_SHOP);
+    async getSelectedShop(): Promise<IStoreLocationResponseResult | null> {
+        return await CacheService.getData<IStoreLocationResponseResult>(KEY_SELECTED_SHOP);
     },
 }

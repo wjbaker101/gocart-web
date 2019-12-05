@@ -14,13 +14,13 @@
         name: 'FileInputComponent',
 
         computed: {
-            id() {
-                return `file-input-${this._uid}`;
+            id(): string {
+                return `file-input-${Math.random()}`;
             },
         },
 
         methods: {
-            onChange(event) {
+            onChange(event: Event): void {
                 this.$emit('change', event, this.$refs.fileInput);
             },
         },

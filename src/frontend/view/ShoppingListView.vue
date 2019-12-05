@@ -125,8 +125,8 @@
                 }
 
                 const total = this.uncheckedShoppingList
-                    .map(p => p.price * p.quantity)
-                    .reduce((total, p) => total + p)
+                    .map((p: ITescoProduct) => p.price * p.quantity)
+                    .reduce((total: number, p: number) => total + p)
                     .toFixed(2);
 
                 return `£${total}`;

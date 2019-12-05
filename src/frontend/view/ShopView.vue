@@ -70,7 +70,12 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import { IStoreLocationResponseResult, IStoreLocationResponseOpeningHour, IStoreLocationResponseOpeningHours } from '@common/interface/response/IStoreLocationResponse';
+    import {
+        IStoreLocationResponseResult,
+        IStoreLocationResponseOpeningHour,
+        IStoreLocationResponseOpeningHours,
+    }
+    from '@common/interface/response/IStoreLocationResponse';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
 
@@ -78,7 +83,6 @@
 
     export default Vue.extend({
         name: 'ShopView',
-
         components: {
             HeaderComponent,
             EditIcon,
@@ -91,10 +95,10 @@
         },
 
         computed: {
-            openingHours(): IStoreLocationResponseOpeningHours | null {
+            openingHours(): Record<string, IStoreLocationResponseOpeningHour> | null {
                 if (!this.shop) return null;
 
-                return this.shop.openingHours[0];
+                return this.shop.location.openingHours[0].standardOpeningHours;
             },
         },
 

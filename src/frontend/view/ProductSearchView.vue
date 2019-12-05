@@ -3,11 +3,10 @@
         <HeaderComponent>
             <template v-slot:below>
                 <div class="search-input-container">
-                    <InputComponent
-                        ref="searchInput"
-                        v-model="searchTerm"
-                        placeholder="Apple Pie"
-                        @enter="onSearch" />
+                    <input ref="productSearchInput"
+                            v-model="searchTerm"
+                            placeholder="Apple Pie"
+                            @keypress.enter="onSearch" >
                     <ButtonComponent class="search-button" @click="onSearch">
                         <SearchIcon />
                     </ButtonComponent>
@@ -93,10 +92,7 @@
         methods: {
             async onSearch(): Promise<void> {
                 if (this.searchTerm.length === 0) {
-                    const searchInput =
-                            this.$refs.searchInput as HTMLInputElement;
-
-                    searchInput.focus();
+                    (this.$refs.productSearchInput as HTMLInputElement).focus();
 
                     return;
                 }
