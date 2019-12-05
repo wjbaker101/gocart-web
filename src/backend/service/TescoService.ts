@@ -1,8 +1,8 @@
-import TescoClient from '@backend/client/TescoClient';
+import TescoClient from '../client/TescoClient';
 
-import { IGrocerySearchResponseResult } from '@common/interface/response/IGrocerySearchResponse';
-import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
-import { IProductDataResponseResult } from '@common/interface/response/IProductDataResponse';
+import { IGrocerySearchResponseResult } from '../../common/interface/response/IGrocerySearchResponse';
+import { IStoreLocationResponseResult } from '../../common/interface/response/IStoreLocationResponse';
+import { IProductDataResponseResult } from '../../common/interface/response/IProductDataResponse';
 
 const defaults = {
     page: 0,

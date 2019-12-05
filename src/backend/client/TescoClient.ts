@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-import config from '@common/config/config-secret.json';
+import config from '../../common/config/config-secret.json';
 
-import IStoreLocationRequest from '@backend/interface/request/IStoreLocationRequest';
-import IGrocerySearchRequest from '@backend/interface/request/IGrocerySearchRequest';
-import IProductDataRequest from '@backend/interface/request/IProductDataRequest';
+import IStoreLocationRequest from '../interface/request/IStoreLocationRequest';
+import IGrocerySearchRequest from '../interface/request/IGrocerySearchRequest';
+import IProductDataRequest from '../interface/request/IProductDataRequest';
 
-import { IGrocerySearchResponse } from '@common/interface/response/IGrocerySearchResponse';
-import { IStoreLocationResponse } from '@common/interface/response/IStoreLocationResponse';
-import { IProductDataResponse } from '@common/interface/response/IProductDataResponse';
+import { IGrocerySearchResponse } from '../../common/interface/response/IGrocerySearchResponse';
+import { IStoreLocationResponse } from '../../common/interface/response/IStoreLocationResponse';
+import { IProductDataResponse } from '../../common/interface/response/IProductDataResponse';
 
 const tescoAPI = axios.create({
     baseURL: 'https://dev.tescolabs.com',

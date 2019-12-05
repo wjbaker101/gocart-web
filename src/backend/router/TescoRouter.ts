@@ -1,6 +1,6 @@
 import express from 'express';
 
-import TescoController from '@backend/controller/TescoController';
+import TescoController from '../controller/TescoController';
 
 const tescoRouter = express.Router();
 

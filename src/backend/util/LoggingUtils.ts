@@ -1,4 +1,4 @@
-import config from '@common/config/config.json';
+import config from '../../common/config/config.json';
 import dateformat from 'dateformat';
 
 const DATE_FORMAT = 'ddd dS mmm yyyy, HH:MM:ss:l';

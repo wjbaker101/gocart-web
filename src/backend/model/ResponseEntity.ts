@@ -1,4 +1,4 @@
-import { IResponseEntity } from '@common/interface/IResponseEntity';
+import { IResponseEntity } from '../../common/interface/IResponseEntity';
 
 class ResponseEntity {
 

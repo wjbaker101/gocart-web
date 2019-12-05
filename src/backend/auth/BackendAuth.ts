@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
-import configSecret from '@common/config/config-secret.json';
-import LoggingUtils from '@backend/util/LoggingUtils';
-import ResponseHelper from '@backend/helper/ResponseHelper';
+import configSecret from '../../common/config/config-secret.json';
+import LoggingUtils from '../util/LoggingUtils';
+import ResponseHelper from '../helper/ResponseHelper';
 
 const MESSAGE_ERROR_AUTH = 'Sorry, you are not authenticated to make this request.';
 

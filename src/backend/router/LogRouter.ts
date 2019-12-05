@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
-import LoggingUtils from '@backend/util/LoggingUtils';
-import BackendAuth from '@backend/auth/BackendAuth';
+import LoggingUtils from '../util/LoggingUtils';
+import BackendAuth from '../auth/BackendAuth';
 
 const router = express.Router();
 

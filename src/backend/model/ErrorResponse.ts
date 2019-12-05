@@ -1,4 +1,4 @@
-import IErrorResponse from '@backend/interface/IErrorResponse';
+import IErrorResponse from '../interface/IErrorResponse';
 
 class ErrorResponse {
 

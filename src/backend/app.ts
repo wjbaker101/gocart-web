@@ -1,18 +1,20 @@
+import path from 'path';
+
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 
-import LoggingUtils from '@backend/util/LoggingUtils';
-import config from '@common/config/config.json';
-import BackendAuth from '@backend/auth/BackendAuth';
+import LoggingUtils from './util/LoggingUtils';
+import config from '../common/config/config.json';
+import BackendAuth from './auth/BackendAuth';
 
-import TescoRouter from '@backend/router/TescoRouter';
-import LogRouter from '@backend/router/LogRouter';
+import TescoRouter from './router/TescoRouter';
+import LogRouter from './router/LogRouter';
 
 const app = express();
 
 app.use(LogRouter);
 
-app.use(BackendAuth.authenticate);
+app.use(config.backend.prefix, BackendAuth.authenticate);
 app.use(bodyParser.json());
 
 const routers: Router[] = [
@@ -27,5 +29,9 @@ routers.forEach(router => {
             .map(r => r.route.path)
             .forEach(p => LoggingUtils.log(`Exposing endpoint: ${config.backend.prefix}${p}`));
 });
+
+app.use(express.static(path.join(__dirname, '../../src/frontend')));
+
+console.log(path.join(__dirname, '../../src/frontend'));
 
 export default app;

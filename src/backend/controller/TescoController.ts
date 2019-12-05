@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import TescoService from '@backend/service/TescoService';
-import ResponseHelper from '@backend/helper/ResponseHelper';
-import LoggingUtils from '@backend/util/LoggingUtils';
+import TescoService from '../service/TescoService';
+import ResponseHelper from '../helper/ResponseHelper';
+import LoggingUtils from '../util/LoggingUtils';
 
 const MESSAGE_ERROR_GROCERY_SEARCH = 'Sorry, we were not able to search for groceries.';
 const MESSAGE_ERROR_NEARBY_SHOPS = 'Sorry, we were not able to search for nearby shops.';

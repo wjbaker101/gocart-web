@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
-import ErrorResponse from '@backend/model/ErrorResponse';
-import ResponseEntity from '@backend/model/ResponseEntity';
+import ErrorResponse from '../model/ErrorResponse';
+import ResponseEntity from '../model/ResponseEntity';
 
 export default (response: Response) => ({
 
