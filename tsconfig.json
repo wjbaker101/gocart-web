@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
-        "strict": true,
+        "importHelpers": true,
+        "strict": false,
         "noImplicitAny": true,
-        "noImplicitThis": true,
+        "noImplicitThis": false,
         "strictNullChecks": true,
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,

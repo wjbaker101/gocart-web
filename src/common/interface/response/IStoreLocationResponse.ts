@@ -41,45 +41,47 @@ export interface IStoreLocationResponseFacility {
 }
 
 export interface IStoreLocationResponseResult {
-    id: string,
-    name: string,
-    altIds: {
-        branchNumber: number,
-    },
-    region: {
-        isoCountryCode: string,
-        isoSubdivision: string,
-    },
-    contact: {
-        address: {
-            lines: IStoreLocationResponseContactAddressLine[],
-            town: string,
-            postcode: string,
+    location: {
+        id: string,
+        name: string,
+        altIds: {
+            branchNumber: number,
         },
-        phoneNumbers: IStoreLocationResponsePhoneNumber[],
-        communityChampion: {
-            emal: string,
+        region: {
+            isoCountryCode: string,
+            isoSubdivision: string,
         },
-    },
-    geo: {
-        coordinates: {
-            longitude: number,
-            latitude:number,
+        contact: {
+            address: {
+                lines: IStoreLocationResponseContactAddressLine[],
+                town: string,
+                postcode: string,
+            },
+            phoneNumbers: IStoreLocationResponsePhoneNumber[],
+            communityChampion: {
+                emal: string,
+            },
         },
+        geo: {
+            coordinates: {
+                longitude: number,
+                latitude:number,
+            },
+        },
+        classification: {
+            type: string,
+            category: string,
+        },
+        status: {
+            currentStatus: string,
+        },
+        openingHours: IStoreLocationResponseOpeningHours[],
+        facilities: IStoreLocationResponseFacility[],
     },
-    classification: {
-        type: string,
-        category: string,
-    },
-    status: {
-        currentStatus: string,
-    },
-    openingHours: IStoreLocationResponseOpeningHours[],
-    facilities: IStoreLocationResponseFacility[],
     distanceFrom: {
         unit: string,
         value: number,
-    }
+    },
 }
 
 export interface IStoreLocationResponse {

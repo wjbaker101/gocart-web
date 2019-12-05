@@ -8,7 +8,6 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import DashboardComponent from '@frontend/component/page/DashboardComponent.vue';
     import ProductComponent from '@frontend/component/ProductComponent.vue';
 
@@ -16,7 +15,6 @@
         name: 'App',
 
         components: {
-            HeaderComponent,
             DashboardComponent,
         },
     })
@@ -77,4 +75,6 @@
             flex: 1;
         }
     }
+
+    @import './style/components/input.scss';
 </style>

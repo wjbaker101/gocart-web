@@ -1,7 +1,7 @@
 const config = require('./src/common/config/config.json');
 
 module.exports = {
-    outputDir: './build/frontend',
+    outputDir: './build/src/frontend',
     assetsDir: 'static',
 
     chainWebpack(config) {
@@ -62,7 +62,6 @@ module.exports = {
 
     pwa: {
         name: 'GoCart',
-        manifestPath: './src/frontend/public/manifest.json',
         themeColor: '#176bc0',
         msTileColor: '#176bc0',
         appleMobileWebAppCapable: 'yes',

@@ -4,6 +4,8 @@ import App from '@frontend/App.vue';
 import appRouter from '@frontend/router/appRouter';
 import appState from '@frontend/state/AppState';
 
+import '@frontend/registerServiceWorker';
+
 (async () => {
     await appState.init();
 

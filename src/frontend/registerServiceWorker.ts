@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { register } from 'register-service-worker';
 
 if (process.env.NODE_ENV === 'production') {
@@ -31,5 +29,5 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 else {
-    console.log('Development mode!');
+    console.log('Development mode! So service worker is disabled.');
 }

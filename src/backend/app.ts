@@ -32,6 +32,4 @@ routers.forEach(router => {
 
 app.use(express.static(path.join(__dirname, '../../src/frontend')));
 
-console.log(path.join(__dirname, '../../src/frontend'));
-
 export default app;
