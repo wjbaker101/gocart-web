@@ -1,8 +1,8 @@
 const config = require('./src/common/config/config.json');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     outputDir: './build/src/frontend',
-    assetsDir: 'static',
 
     chainWebpack(config) {
         config.module.rules.delete('svg');
@@ -38,6 +38,12 @@ module.exports = {
         entry: {
             app: './src/frontend/main.ts',
         },
+        plugins: [
+            new CopyWebpackPlugin([{
+                from: 'src/frontend/public/',
+                to: '',
+            }]),
+        ],
     },
 
     devServer: {
