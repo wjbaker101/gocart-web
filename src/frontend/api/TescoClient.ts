@@ -5,7 +5,7 @@ import configSecret from '@common/config/config-secret.json';
 import { IResponseEntity } from '@common/interface/IResponseEntity';
 import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
 import { IGrocerySearchResponseResult } from '@common/interface/response/IGrocerySearchResponse';
-import { IProductDataResponse } from '@common/interface/response/IProductDataResponse';
+import { IProductDataResponseResult } from '@common/interface/response/IProductDataResponse';
 
 const tescoAPI = axios.create({
     baseURL: '/api',
@@ -44,7 +44,7 @@ class TescoClient {
     }
 
     async getProductDataByTPNC(tpnc: number | string):
-            Promise<IResponseEntity<IProductDataResponse> | Error> {
+            Promise<IResponseEntity<IProductDataResponseResult[]> | Error> {
 
         try {
             const response = await tescoAPI.get(`/product/tpnc/${tpnc}`);
@@ -57,7 +57,7 @@ class TescoClient {
     }
 
     async getProductDataByGTIN(gtin: number | string):
-            Promise<IResponseEntity<IProductDataResponse> | Error> {
+            Promise<IResponseEntity<IProductDataResponseResult[]> | Error> {
 
         try {
             const response = await tescoAPI.get(`/product/gtin/${gtin}`);

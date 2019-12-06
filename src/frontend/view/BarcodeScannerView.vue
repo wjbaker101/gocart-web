@@ -115,8 +115,7 @@
                     return null;
                 }
 
-                const { description, tpnc: tpncToFind }
-                        = productData.result.products[0];
+                const { description, tpnc: tpncToFind } = productData.result[0];
 
                 const products
                         = await TescoClient.getGrocerySearch(description);
