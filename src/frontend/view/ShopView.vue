@@ -56,11 +56,9 @@
                 </table>
             </div>
             <div class="services-section">
-                <h3>Services Provided</h3>
+                <h3>Facilities Provided</h3>
                 <ul>
-                    <li>Cafe</li>
-                    <li>Tesco Mobile</li>
-                    <li>Car Wash</li>
+                    <li v-for="(facility, index) in facilities" :key="index">{{ facility.description }}</li>
                 </ul>
             </div>
         </div>
@@ -74,6 +72,7 @@
         IStoreLocationResponseResult,
         IStoreLocationResponseOpeningHour,
         IStoreLocationResponseOpeningHours,
+        IStoreLocationResponseFacility,
     }
     from '@common/interface/response/IStoreLocationResponse';
 
@@ -83,6 +82,7 @@
 
     export default Vue.extend({
         name: 'ShopView',
+
         components: {
             HeaderComponent,
             EditIcon,
@@ -100,6 +100,23 @@
 
                 return this.shop.location.openingHours[0].standardOpeningHours;
             },
+
+            facilities() {
+                return this.shop.location.facilities.sort((
+                        a: IStoreLocationResponseFacility,
+                        b: IStoreLocationResponseFacility) => {
+
+                    if(a.description < b.description) {
+                        return -1;
+                    }
+
+                    if(a.description > b.description) {
+                        return 1;
+                    }
+
+                    return 0;
+                });
+            },
         },
 
         async created(): Promise<void> {
@@ -108,6 +125,8 @@
             if (cachedShop && cachedShop !== null) {
                 this.shop = cachedShop;
             }
+
+            console.log(this.shop);
         },
 
         methods: {
