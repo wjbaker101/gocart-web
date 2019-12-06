@@ -81,6 +81,7 @@
                 isCheckedHidden: false,
 
                 draggableOptions: {
+                    delay: 300,
                     animation: 0,
                     disabled: false,
                     ghostClass: 'is-dragged',

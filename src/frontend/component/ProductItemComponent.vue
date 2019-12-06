@@ -95,7 +95,8 @@
 
         @include box-shadow-small;
 
-        &.is-dragged {
+        &.is-dragged,
+        &.sortable-chosen {
             border-color: theme(accent);
         }
 
