@@ -53,7 +53,8 @@ module.exports = {
                 ws: true,
                 changeOrigin: true,
             }
-        }
+        },
+        disableHostCheck: true,
     },
 
     css: {
