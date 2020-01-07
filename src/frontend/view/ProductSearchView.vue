@@ -6,7 +6,8 @@
                     <input ref="productSearchInput"
                             v-model="searchTerm"
                             placeholder="Apple Pie"
-                            @keypress.enter="onSearch" >
+                            @keypress.enter="onSearch"
+                            type="search">
                     <ButtonComponent class="search-button" @click="onSearch">
                         <SearchIcon />
                     </ButtonComponent>
@@ -89,8 +90,11 @@
 
         methods: {
             async onSearch(): Promise<void> {
+                const productSearchInput: HTMLInputElement
+                        = this.$refs.productSearchInput;
+
                 if (this.searchTerm.length === 0) {
-                    (this.$refs.productSearchInput as HTMLInputElement).focus();
+                    productSearchInput.focus();
 
                     return;
                 }
@@ -98,11 +102,18 @@
                 this.isLoaded = false;
                 this.isLoading = true;
 
+                productSearchInput.blur();
+
                 const response =
                         await TescoClient.getGrocerySearch(this.searchTerm);
 
                 if (response instanceof Error) {
+                    productSearchInput.focus();
                     return;
+                }
+
+                if (response.result.length === 0) {
+                    productSearchInput.focus();
                 }
 
                 this.searchResult = response.result.map(product => ({
