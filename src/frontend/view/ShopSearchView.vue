@@ -3,10 +3,15 @@
         <HeaderComponent :hasBackButton="true">
             <template v-slot:below>
                 <div class="search-input-container">
-                    <InputComponent
+                    <input
+                        ref="shopSearchInput"
                         v-model="searchTerm"
                         placeholder="London"
-                        @enter="onSearch" />
+                        @keypress.enter="onSearch"
+                        type="search">
+                    <ButtonComponent class="search-button" @click="onSearch">
+                        <SearchIcon />
+                    </ButtonComponent>
                 </div>
             </template>
         </HeaderComponent>
@@ -32,8 +37,11 @@
     import TescoClient from '@frontend/api/TescoClient';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
-    import InputComponent from '@frontend/component/item/InputComponent.vue';
+    import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
     import ShopItemComponent from '@frontend/component/ShopItemComponent.vue';
+
+    import SearchIcon from '@frontend/assets/icon/search.svg';
+
     import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
 
     interface IStoreLocationExpandable extends IStoreLocationResponseResult {
@@ -45,8 +53,9 @@
 
         components: {
             HeaderComponent,
-            InputComponent,
+            ButtonComponent,
             ShopItemComponent,
+            SearchIcon,
         },
 
         data() {
@@ -74,17 +83,29 @@
 
         methods: {
             async onSearch(): Promise<void> {
+                const shopSearchInput: HTMLInputElement
+                        = this.$refs.shopSearchInput;
+
                 if (this.searchTerm.length === 0) {
+                    shopSearchInput.focus();
+
                     return;
                 }
 
                 this.isLoaded = false;
                 this.isLoading = true;
 
+                shopSearchInput.blur();
+
                 const response = await TescoClient.getNearbyShops(this.searchTerm);
 
                 if (response instanceof Error) {
+                    shopSearchInput.focus();
                     return;
+                }
+
+                if (response.result.length === 0) {
+                    shopSearchInput.focus();
                 }
 
                 this.searchResult = response.result.map(s => ({
@@ -119,10 +140,16 @@
 
         .search-input-container {
             padding-top: 1rem;
+            display: flex;
 
             .search-input {
-                width: 100%;
+                flex: 1;
                 border-radius: layout(border-radius);
+            }
+
+            .search-button {
+                flex: 0 0 auto;
+                margin-left: 0.5rem;
             }
         }
 
