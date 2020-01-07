@@ -46,7 +46,6 @@
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
-    import InputComponent from '@frontend/component/item/InputComponent.vue';
     import ProductItemComponent from '@frontend/component/ProductItemComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
     import SearchSortComponent from '@frontend/component/search-view/SearchSortComponent.vue';
@@ -59,7 +58,6 @@
 
         components: {
             HeaderComponent,
-            InputComponent,
             ProductItemComponent,
             ButtonComponent,
             SearchSortComponent,

@@ -31,8 +31,6 @@
 
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
-    import LeftArrowIcon from '@frontend/assets/icon/arrow-left.svg';
-
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
     import NumberInputComponent from '@frontend/component/item/NumberInputComponent.vue';
@@ -41,7 +39,6 @@
         name: 'ProductView',
 
         components: {
-            LeftArrowIcon,
             HeaderComponent,
             ButtonComponent,
             NumberInputComponent,

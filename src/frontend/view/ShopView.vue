@@ -101,21 +101,10 @@
                 return this.shop.location.openingHours[0].standardOpeningHours;
             },
 
-            facilities() {
-                return this.shop.location.facilities.sort((
-                        a: IStoreLocationResponseFacility,
-                        b: IStoreLocationResponseFacility) => {
-
-                    if(a.description < b.description) {
-                        return -1;
-                    }
-
-                    if(a.description > b.description) {
-                        return 1;
-                    }
-
-                    return 0;
-                });
+            facilities(): IStoreLocationResponseFacility[] {
+                return this.shop.location.facilities
+                        .slice()
+                        .sort(this.sortByFacilityDescription);
             },
         },
 
@@ -125,8 +114,6 @@
             if (cachedShop && cachedShop !== null) {
                 this.shop = cachedShop;
             }
-
-            console.log(this.shop);
         },
 
         methods: {
@@ -165,6 +152,21 @@
                 }
 
                 return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
+            },
+
+            sortByFacilityDescription(
+                    a: IStoreLocationResponseFacility,
+                    b: IStoreLocationResponseFacility): number {
+
+                if(a.description < b.description) {
+                    return -1;
+                }
+
+                if(a.description > b.description) {
+                    return 1;
+                }
+
+                return 0;
             },
         },
     })
