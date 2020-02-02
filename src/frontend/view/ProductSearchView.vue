@@ -163,8 +163,6 @@
                 }
 
                 this.searchResult = this.searchResult.sort(sort);
-
-                console.log(this.searchResult)
             },
         },
 

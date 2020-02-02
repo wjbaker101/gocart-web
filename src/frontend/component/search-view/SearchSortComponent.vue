@@ -21,8 +21,6 @@
             onSortChange(type: string): void {
                 const options: Record<string, Function> = {
                     alphabetical(a: ITescoProduct, b: ITescoProduct) {
-                        console.log('Sorting by name alphabetically.');
-
                         if(a.name < b.name) {
                             return -1;
                         }
@@ -35,8 +33,6 @@
                     },
 
                     price(a: ITescoProduct, b: ITescoProduct) {
-                        console.log('Sorting by price.');
-
                         return b.price - a.price;
                     },
 
