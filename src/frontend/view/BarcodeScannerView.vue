@@ -18,17 +18,17 @@
                             </ButtonComponent>
                         </p>
                     </div>
-                    <p v-else>
-                        <strong>Black screen?</strong>
-                        <br>
-                        Please enable permissions to allow for video.
-                        <br>
-                        <strong>or</strong>
-                        <br>
-                        Use an image of a barcode by tapping the button below.
-                    </p>
                 </div>
             </div>
+            <p>
+                <strong>Black screen?</strong>
+                <br>
+                Please enable permissions to allow for video.
+                <br>
+                <strong>or</strong>
+                <br>
+                Use an image of a barcode by tapping the button below.
+            </p>
             <FileInputComponent @change="onDecodeImageChange" class="file-input-button">
                 <UploadIcon />
             </FileInputComponent>
