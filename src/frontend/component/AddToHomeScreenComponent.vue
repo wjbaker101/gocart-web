@@ -1,54 +1,65 @@
 <template>
     <div class="add-to-home-screen-component"
-            @click="onClick"
+            @click="showPrompt"
             :class="{ 'is-visible': showButton }">
-        <HomeIcon class="home-icon" />
+        <span class="home-icon">
+            <DownloadIcon />
+        </span>
         <span>Install App</span>
+        <span class="close-icon" @click="hidePrompt">
+            <CloseIcon />
+        </span>
     </div>
 </template>
 
 <script lang="ts">
+    /* eslint-disable no-console */
+
     import Vue from 'vue';
 
-    import HomeIcon from '@frontend/assets/icon/home.svg';
+    import { VueInstallMixin, BeforeInstallPromptEvent } from 'vue-pwa-install';
+
+    import CloseIcon from '@frontend/assets/icon/times.svg';
+    import DownloadIcon from '@frontend/assets/icon/download.svg';
 
     export default Vue.extend({
         name: 'AddToHomeScreenComponent',
 
+        mixins: [
+            VueInstallMixin,
+        ],
+
         components: {
-            HomeIcon,
+            CloseIcon,
+            DownloadIcon,
         },
 
         data() {
             return {
                 showButton: false,
-                beforeInstallPrompEvent: null,
+                promptEvent: null as BeforeInstallPromptEvent | null,
             }
         },
 
         created() {
-            window.addEventListener('beforeinstallprompt', this.onBeforeInstallPrompt);
+            this.$on('canInstall', (event: BeforeInstallPromptEvent) => {
+                event.preventDefault();
+
+                this.deferredPrompt = event;
+                this.showButton = true;
+                console.log('asd');
+            });
         },
 
         methods: {
-            onBeforeInstallPrompt(event: BeforeInstallPromptEvent) {
-                event.preventDefault();
-
-                this.beforeInstallPrompEvent = event;
-
-                this.showButton = true;
-            },
-
-            async onClick() {
-                if (this.beforeInstallPrompEvent === null) {
+            async showPrompt() {
+                if (this.promptEvent === null) {
                     return;
                 }
 
-                this.showButton = false;
+                this.promptEvent.prompt();
 
-                this.beforeInstallPrompEvent.prompt();
-
-                const userChoice = await this.beforeInstallPrompEvent.userChoice;
+                const userChoice = await this.promptEvent.userChoice;
 
                 if (userChoice.outcome === 'accepted') {
                     console.log('accepted');
@@ -57,7 +68,11 @@
                     console.log('dismissed');
                 }
 
-                this.beforeInstallPrompEvent = null;
+                this.promptEvent = null;
+            },
+
+            hidePrompt() {
+                this.showButton = false;
             },
         },
     })
@@ -67,25 +82,38 @@
     .add-to-home-screen-component {
         position: fixed;
         bottom: 5.5rem;
-        left: 50%;
+        left: 1rem;
+        right: 1rem;
         display: none;
-        padding: 0.25rem 1rem;
-        transform: translateX(-50%);
         border-radius: layout(border-radius);
         background-color: theme(secondary);
         color: theme(black);
+        font-weight: bold;
         cursor: pointer;
 
         &.is-visible {
-            display: initial;
+            display: flex;
+            align-items: center;
         }
 
         &:hover {
             @include box-shadow-small-hover;
         }
 
+        & > * {
+            flex: 1;
+        }
+
         .home-icon {
-            margin-right: 1rem;
+            flex: 0 0 auto;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+        }
+
+        .close-icon {
+            flex: 0 0 auto;
+            display: inline-block;
+            padding: 0.5rem 1rem 0.5rem 2rem;
         }
 
         @include box-shadow-small;

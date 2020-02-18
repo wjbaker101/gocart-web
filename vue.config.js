@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const config = require('./src/common/config/config.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
