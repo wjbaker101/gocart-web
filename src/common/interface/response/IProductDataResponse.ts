@@ -10,6 +10,12 @@ export interface IProductDataResponsePackageDimension {
     volumeUom: string,
 }
 
+export interface IProductDataResponseNutrient {
+    name: string,
+    valuePer100: number,
+    valuePerServing: number,
+}
+
 export interface IProductDataResponseResult {
     gtin: string,
     tpnb: string,
@@ -34,6 +40,12 @@ export interface IProductDataResponseResult {
         totalAlcoholUnits: number,
     },
     pkgDimensions: IProductDataResponsePackageDimension[],
+    ingredients?: string[],
+    calcNutrition?: {
+        per100Header: string,
+        perServingHeader: string,
+        calcNutrients: IProductDataResponseNutrient[],
+    },
 }
 
 export interface IProductDataResponse {

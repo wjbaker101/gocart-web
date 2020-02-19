@@ -77,4 +77,6 @@
     }
 
     @import './style/components/input.scss';
+    @import './style/components/table.scss';
+    @import './style/components/view.scss';
 </style>

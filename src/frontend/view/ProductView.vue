@@ -7,21 +7,51 @@
                 </div>
             </template>
         </HeaderComponent>
-        <div class="product-container">
-            <img class="product-image" :src="largerImageUrl">
-            <p><strong>£{{ product.price.toFixed(2) }}</strong></p>
-            <p>
+        <div class="view-content product-content">
+            <section class="image">
+                <img :src="largerImageUrl">
+            </section>
+            <section>
                 <ButtonComponent
+                    class="add-remove-button"
                     :isSecondary="isProductInShoppingList"
                     @click.native="onAddClick">
 
                     {{ addButtonText }}
                 </ButtonComponent>
-            </p>
-            <div class="flex-container">
-                <label class="form-label">Quantity:</label>
+            </section>
+            <section>
+                <label>Quantity:</label>
+                <br>
                 <NumberInputComponent label="Quantity" v-model="product.quantity" :min="1" :max="1000" />
-            </div>
+            </section>
+            <h2 v-if="productData && productData.ingredients">
+                <span>Ingredients</span>
+            </h2>
+            <section v-if="productData && productData.ingredients">
+                <p class="ingredients" v-html="productData.ingredients"></p>
+            </section>
+            <h2 v-if="productData && productData.nutritionalValue">
+                <span>Nutritional Value</span>
+            </h2>
+            <section v-if="productData && productData.nutritionalValue">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>{{ productData.nutritionalValue.header.per100g }}</th>
+                            <th>{{ productData.nutritionalValue.header.perServing }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(nutrient, index) in productData.nutritionalValue.values" :key="`nutrient-${index}`">
+                            <td>{{ nutrient.name }}</td>
+                            <td class="numerical">{{ nutrient.per100g }}</td>
+                            <td class="numerical">{{ nutrient.perServing }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
 </template>
@@ -29,7 +59,12 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import { ITescoProduct } from '@frontend/interface/ITescoProduct';
+    import TescoClient from '../api/TescoClient';
+
+    import {
+        ITescoProduct,
+        ITescoProductData,
+    } from '@frontend/interface/ITescoProduct';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
@@ -47,6 +82,7 @@
         data() {
             return {
                 product: null as (ITescoProduct | null),
+                productData: null,
                 isProductInShoppingList: false,
             }
         },
@@ -85,6 +121,16 @@
                 `id-${this.product.id}` in fullShoppingList;
         },
 
+        async mounted() {
+            console.log(this.product)
+            if (!this.product.productData) {
+                this.getProductData();
+            }
+            else {
+                this.productData = this.product.productData;
+            }
+        },
+
         methods: {
             onAddClick(): void {
                 if (!this.product) {
@@ -101,6 +147,34 @@
                     this.$root.$data.removeFromCheckedShoppingList(this.product.id);
                 }
             },
+
+            async getProductData(): Promise<void> {
+                const response =
+                    await TescoClient.getProductDataByTPNC(this.product.id);
+
+                if (response instanceof Error) return;
+
+                const result = response.result[0];
+
+                const productData: ITescoProductData = {
+                    barcodeID: result.gtin,
+                    ingredients: result.ingredients?.join(', '),
+                    nutritionalValue: result.calcNutrition ? {
+                        header: {
+                            per100g: result.calcNutrition.per100Header,
+                            perServing: result.calcNutrition.perServingHeader,
+                        },
+                        values: result.calcNutrition.calcNutrients.map(n => ({
+                            name: n.name,
+                            per100g: n.valuePer100,
+                            perServing: n.valuePerServing,
+                        })),
+                    } : undefined,
+                };
+
+                this.productData = productData;
+                this.product.productData = productData;
+            },
         },
     })
 </script>
@@ -116,21 +190,24 @@
             }
         }
 
-        .product-image {
-            border-radius: layout(border-radius);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
+        .product-content {
 
-        .product-container {
-            max-width: 720px;
-            margin: auto;
-            padding: 1rem;
-            text-align: center;
+            .image {
+                text-align: center;
 
-            .form-label {
-                margin: auto;
-                font-weight: bold;
-                text-align: initial;
+                img {
+                    border-radius: layout(border-radius);
+
+                    @include box-shadow-small;
+                }
+            }
+
+            .add-remove-button {
+                width: 100%;
+            }
+
+            .ingredients * {
+                vertical-align: baseline;
             }
         }
     }
