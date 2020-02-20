@@ -9,6 +9,7 @@ import config from '../common/config/config.json';
 import BackendAuth from './auth/BackendAuth';
 
 import TescoRouter from './router/TescoRouter';
+import OFFRouter from './router/OFFRouter';
 import LogRouter from './router/LogRouter';
 
 const app = express();
@@ -21,10 +22,11 @@ app.use(history());
 
 const routers: Router[] = [
     TescoRouter,
+    OFFRouter,
 ];
 
 routers.forEach(router => {
-    app.use(config.backend.prefix, TescoRouter);
+    app.use(config.backend.prefix, router);
 
     router.stack
             .filter(r => r && r.route && r.route.path)

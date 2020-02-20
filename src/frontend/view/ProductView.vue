@@ -10,6 +10,7 @@
         <div class="view-content product-content">
             <section class="image">
                 <img :src="largerImageUrl">
+                <p><strong>£{{ product.price.toFixed(2) }}</strong></p>
             </section>
             <section>
                 <ButtonComponent
@@ -59,7 +60,8 @@
 <script lang="ts">
     import Vue from 'vue';
 
-    import TescoClient from '../api/TescoClient';
+    import TescoClient from '@frontend/api/TescoClient';
+    import { OFFClient } from '@frontend/api/OFFClient';
 
     import {
         ITescoProduct,
@@ -122,9 +124,25 @@
         },
 
         async mounted() {
-            console.log(this.product)
             if (!this.product.productData) {
-                this.getProductData();
+                await this.getProductData();
+
+                if (this.productData && !this.productData.ingredients) {
+                    const moreProductData = await OFFClient.getProductData(this.productData.barcodeID);
+
+                    if (moreProductData instanceof Error) return;
+
+                    this.productData.ingredients = moreProductData.result.ingredients;
+                    this.productData.nutritionalValue = {
+                        header: {
+                            per100g: 'Per 100g',
+                            perServing: 'Per Serving',
+                        },
+                        values: moreProductData.result.nutrientValues,
+                    };
+
+                    this.product.productData = this.productData;
+                }
             }
             else {
                 this.productData = this.product.productData;
@@ -206,8 +224,15 @@
                 width: 100%;
             }
 
-            .ingredients * {
-                vertical-align: baseline;
+            .ingredients {
+
+                * {
+                    vertical-align: baseline;
+                }
+
+                .allergen {
+                    font-weight: bold;
+                }
             }
         }
     }
