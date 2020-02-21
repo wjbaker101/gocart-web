@@ -47,8 +47,8 @@
                     <tbody>
                         <tr v-for="(nutrient, index) in productData.nutritionalValue.values" :key="`nutrient-${index}`">
                             <td>{{ nutrient.name }}</td>
-                            <td class="numerical">{{ nutrient.per100g.toFixed(1) }}</td>
-                            <td class="numerical">{{ nutrient.perServing.toFixed(1) }}</td>
+                            <td class="numerical">{{ getNumericalValue(nutrient.per100g) }}</td>
+                            <td class="numerical">{{ getNumericalValue(nutrient.perServing) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -194,6 +194,10 @@
 
                 this.productData = productData;
                 this.product.productData = productData;
+            },
+
+            getNumericalValue(value: string | number): string {
+                return Number(value).toFixed(1);
             },
         },
     })
