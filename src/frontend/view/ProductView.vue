@@ -47,8 +47,8 @@
                     <tbody>
                         <tr v-for="(nutrient, index) in productData.nutritionalValue.values" :key="`nutrient-${index}`">
                             <td>{{ nutrient.name }}</td>
-                            <td class="numerical">{{ nutrient.per100g }}</td>
-                            <td class="numerical">{{ nutrient.perServing }}</td>
+                            <td class="numerical">{{ nutrient.per100g.toFixed(1) }}</td>
+                            <td class="numerical">{{ nutrient.perServing.toFixed(1) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -131,6 +131,8 @@
                     const moreProductData = await OFFClient.getProductData(this.productData.barcodeID);
 
                     if (moreProductData instanceof Error) return;
+
+                    console.log(moreProductData);
 
                     this.productData.ingredients = moreProductData.result.ingredients;
                     this.productData.nutritionalValue = {
