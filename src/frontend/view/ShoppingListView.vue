@@ -6,7 +6,30 @@
                 <span class="total-price">{{ totalPrice }}</span>
             </template>
         </HeaderComponent>
-        <div class="shopping-list-container">
+        <div class="zerostate-shopping-view view-content" v-if="isShoppingListEmpty" :class="{ 'is-expanded': showZeroStateContent }">
+            <section class="text-centered">
+                <BasketIcon class="zerostate-shopping-basket icon-xlarge" />
+                <p><strong>Your shopping list is empty!</strong></p>
+                <p class="show-content-link" @click="showZeroStateContent = !showZeroStateContent">
+                    <InfoIcon class="info" />
+                    <span>What Now?</span>
+                    <UpChevronIcon class="up-arrow" />
+                    <DownChevronIcon class="down-arrow" />
+                </p>
+            </section>
+            <div class="zerostate-expanded-content">
+                <h2>Step 1</h2>
+                <section>
+                    <p>Search for the products you want and add them to your list.</p>
+                </section>
+                <h2>Step 2</h2>
+                <section>
+                    <p>During a shop, tap the checkbox of a product in order to move it to the "checked list".</p>
+                    <p>This way, you'll know what products to buy next!</p>
+                </section>
+            </div>
+        </div>
+        <div class="shopping-list-container" v-else>
             <div class="heading-container">
                 <p class="heading-left">Shopping List:</p>
                 <p class="heading-right"><span class="counter-number">{{ uncheckedShoppingList.length }}</span></p>
@@ -62,6 +85,7 @@
     import BasketIcon from '@frontend/assets/icon/basket.svg';
     import UpChevronIcon from '@frontend/assets/icon/chevron-up.svg';
     import DownChevronIcon from '@frontend/assets/icon/chevron-down.svg';
+    import InfoIcon from '@frontend/assets/icon/info.svg';
 
     export default Vue.extend({
         name: 'ShoppingListView',
@@ -74,6 +98,7 @@
             BasketIcon,
             UpChevronIcon,
             DownChevronIcon,
+            InfoIcon,
         },
 
         data() {
@@ -86,6 +111,8 @@
                     disabled: false,
                     ghostClass: 'is-dragged',
                 },
+
+                showZeroStateContent: false,
             }
         },
 
@@ -108,6 +135,11 @@
             checkedShoppingList(): ITescoProduct[] {
                 return Object.values<ITescoProduct>(this.$root.$data.getCheckedShoppingList())
                     .sort((a, b) => b.timesAddedToShoppingList - a.timesAddedToShoppingList);
+            },
+
+            isShoppingListEmpty(): boolean {
+                return this.uncheckedShoppingList.length === 0
+                        && this.checkedShoppingList.length === 0;
             },
 
             loadAnimationDuration(): (index: number) => number {
@@ -174,6 +206,54 @@
             .show-checked {
                 display: none;
             }
+        }
+
+        .zerostate-shopping-view {
+            padding-top: 25vh;
+            transition: padding-top animation(duration-short);
+
+            .show-content-link {
+                cursor: pointer;
+            }
+
+            &.is-expanded {
+                padding-top: 15vh;
+
+                .zerostate-expanded-content {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+                }
+
+                .up-arrow {
+                    display: initial;
+                }
+
+                .down-arrow {
+                    display: none;
+                }
+            }
+
+            .zerostate-expanded-content {
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: clip-path animation(duration-mid);
+            }
+
+            .info {
+                color: theme(primary);
+                margin-right: 0.5rem;
+            }
+
+            .up-arrow,
+            .down-arrow {
+                margin-left: 0.5rem;
+            }
+
+            .up-arrow {
+                display: none;
+            }
+        }
+
+        .zerostate-shopping-basket {
+            color: theme(primary);
         }
     }
 </style>
