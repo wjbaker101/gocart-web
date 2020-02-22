@@ -28,6 +28,17 @@ export const NutrimentsParser = {
             parsedNutrients.add(baseName);
         }
 
+        const nutrientKJ = nutrients.find(n => n.name === 'energy-kj');
+
+        if (nutrientKJ && !nutrients.find(n => n.name === 'energy-kcal')) {
+            nutrients.push({
+                sortingOrder: 0,
+                name: 'energy-kcal',
+                per100g: nutrientKJ.per100g / 4.184,
+                perServing: nutrientKJ.perServing / 4.184,
+            });
+        }
+
         return nutrients
                 .map(this.mapNutrient)
                 .filter(n => n !== null)
