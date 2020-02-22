@@ -20,30 +20,12 @@ export const NutrimentsParser = {
 
             nutrients[nutrients.length] = {
                 sortingOrder: 0,
-                name: baseName,
+                name: this.parseBaseName(baseName, nutriments),
                 per100g: Number(nutriments[`${baseName}_100g`]),
                 perServing: Number(nutriments[`${baseName}_serving`]),
             };
 
             parsedNutrients.add(baseName);
-        }
-
-        if ('energy-kcal_100g' in nutriments) {
-            nutrients.push({
-                sortingOrder: 0,
-                name: 'energy-kj',
-                per100g: Number(nutriments['energy-kcal_100g']) * 4.184,
-                perServing: Number(nutriments['energy-kcal_serving']) * 4.184,
-            });
-        }
-
-        if ('energy-kj_100g' in nutriments) {
-            nutrients.push({
-                sortingOrder: 0,
-                name: 'energy-kcal',
-                per100g: Number(nutriments['energy-kj_100g']) / 4.184,
-                perServing: Number(nutriments['energy-kj_serving']) / 4.184,
-            });
         }
 
         return nutrients
@@ -78,5 +60,21 @@ export const NutrimentsParser = {
 
     sortNutrient(a: INutrient, b: INutrient): number {
         return a.sortingOrder - b.sortingOrder;
+    },
+
+    parseBaseName(baseName: string, nutriments: Record<string, string | number>): string {
+        if (baseName === 'energy-kcal' && !nutriments['energy-kj']) {
+            return 'energy-kj';
+        }
+
+        if (baseName === 'energy-kcal_100g' && !nutriments['energy-kj_100g']) {
+            return 'energy-kj_100g';
+        }
+
+        if (baseName === 'energy-kcal_serving' && !nutriments['energy-kj_serving']) {
+            return 'energy-kj_serving';
+        }
+
+        return baseName;
     },
 }
