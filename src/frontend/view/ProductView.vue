@@ -132,8 +132,6 @@
 
                     if (moreProductData instanceof Error) return;
 
-                    console.log(moreProductData);
-
                     this.productData.ingredients = moreProductData.result.ingredients;
                     this.productData.nutritionalValue = {
                         header: {
