@@ -12,20 +12,20 @@
                 </div>
             </template>
         </HeaderComponent>
-        <div class="select-shop-container text-centered" v-if="!shop">
-            <p>
-                <strong>Choose a shop</strong>
-                <span>, it'll appear here!</span>
-            </p>
+        <div class="view-content zerostate-shop-view" v-if="!shop">
+            <section class="text-centered">
+                <ShopIcon class="zerostate-shop-icon icon-xlarge" />
+                <p><strong>No shop selected!</strong></p>
+                <p>Choose a shop, and it'll appear here.</p>
+            </section>
         </div>
-        <div class="selected-shop-container" v-if="shop">
-            <div class="opening-hours-section">
-                <h3>Opening Hours</h3>
+        <div class="view-content" v-if="shop">
+            <h2>Opening Hours</h2>
+            <section>
                 <table class="opening-hours-table">
                     <tbody>
                         <tr>
                             <td>Mon</td>
-                            <!-- <td>6am - 12pm</td> -->
                             <td>{{ getOpeningHour(openingHours.mo) }}</td>
                         </tr>
                         <tr>
@@ -54,13 +54,13 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="services-section">
-                <h3>Facilities Provided</h3>
+            </section>
+            <h2>Facilities Provided</h2>
+            <section>
                 <ul>
                     <li v-for="(facility, index) in facilities" :key="index">{{ facility.description }}</li>
                 </ul>
-            </div>
+            </section>
         </div>
     </div>
 </template>
@@ -79,6 +79,7 @@
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
 
     import EditIcon from '@frontend/assets/icon/edit.svg';
+    import ShopIcon from '@frontend/assets/icon/shop.svg';
 
     export default Vue.extend({
         name: 'ShopView',
@@ -86,6 +87,7 @@
         components: {
             HeaderComponent,
             EditIcon,
+            ShopIcon,
         },
 
         data() {
@@ -175,20 +177,12 @@
 <style lang="scss">
     .shop-view {
 
-        .select-shop-container {
-            padding: 1rem;
-        }
-
         .shop-title-container {
             text-align: center;
 
             h2 {
                 margin-bottom: 0;
             }
-        }
-
-        .selected-shop-container {
-            padding: 1rem;
         }
 
         .opening-hours-table {
@@ -208,6 +202,14 @@
                     font-weight: bold;
                     padding-right: 1rem;
                 }
+            }
+        }
+
+        .zerostate-shop-view {
+            padding-top: 25vh;
+
+            .zerostate-shop-icon {
+                color: theme(primary);
             }
         }
     }
