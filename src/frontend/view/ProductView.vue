@@ -63,6 +63,8 @@
     import TescoClient from '@frontend/api/TescoClient';
     import { OFFClient } from '@frontend/api/OFFClient';
 
+    import { TescoProductService } from '@frontend/service/TescoProductService';
+
     import {
         ITescoProduct,
         ITescoProductData,
@@ -174,24 +176,9 @@
 
                 const result = response.result[0];
 
-                const productData: ITescoProductData = {
-                    barcodeID: result.gtin,
-                    ingredients: result.ingredients?.join(', '),
-                    nutritionalValue: result.calcNutrition ? {
-                        header: {
-                            per100g: result.calcNutrition.per100Header,
-                            perServing: result.calcNutrition.perServingHeader,
-                        },
-                        values: result.calcNutrition.calcNutrients.map(n => ({
-                            name: n.name,
-                            per100g: n.valuePer100,
-                            perServing: n.valuePerServing,
-                        })),
-                    } : undefined,
-                };
+                TescoProductService.addDataToExistingProduct(this.product, result);
 
-                this.productData = productData;
-                this.product.productData = productData;
+                this.productData = this.product.productData;
             },
 
             getNumericalValue(value: string | number): string {

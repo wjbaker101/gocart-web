@@ -2,6 +2,7 @@
     <div id="app">
         <router-view />
         <DashboardComponent />
+        <PopupComponent />
     </div>
 </template>
 
@@ -9,13 +10,14 @@
     import Vue from 'vue';
 
     import DashboardComponent from '@frontend/component/page/DashboardComponent.vue';
-    import ProductComponent from '@frontend/component/ProductComponent.vue';
+    import PopupComponent from '@frontend/component/PopupComponent.vue';
 
     export default Vue.extend({
         name: 'App',
 
         components: {
             DashboardComponent,
+            PopupComponent,
         },
     })
 </script>

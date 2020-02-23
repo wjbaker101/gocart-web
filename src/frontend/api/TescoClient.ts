@@ -56,6 +56,14 @@ class TescoClient {
         }
     }
 
+    async getMultiProductDataByTPNC(tpnc: string[] | number[]):
+            Promise<IResponseEntity<IProductDataResponseResult[]> | Error> {
+
+        const list = tpnc.join(',');
+
+        return await this.getProductDataByTPNC(list);
+    }
+
     async getProductDataByGTIN(gtin: number | string):
             Promise<IResponseEntity<IProductDataResponseResult[]> | Error> {
 

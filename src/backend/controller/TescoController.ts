@@ -50,9 +50,12 @@ class TescoController {
 
         const { tpnc } = request.params;
 
-        LoggingUtils.log(`TescoController.getProductDataByTPNC with tpnc=${tpnc}`);
+        const list = tpnc.split(',');
+        const tpncList = list.length > 0 ? list : tpnc;
 
-        const result = await TescoService.getProductDataByTPNC(tpnc);
+        LoggingUtils.log(`TescoController.getProductDataByTPNC with tpnc=${tpncList}`);
+
+        const result = await TescoService.getProductDataByTPNC(tpncList);
 
         if (result instanceof Error) {
             ResponseHelper(response).sendError(400, MESSAGE_ERROR_PRODUCT_DATA);

@@ -10,6 +10,9 @@
 
 <script lang="ts">
     import Vue from 'vue';
+
+    import { EventService, Events } from '@frontend/service/EventService';
+
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
     export default Vue.extend({
@@ -19,31 +22,46 @@
 
         methods: {
             onSortChange(type: string): void {
-                const options: Record<string, Function> = {
-                    alphabetical(a: ITescoProduct, b: ITescoProduct) {
-                        if(a.name < b.name) {
-                            return -1;
-                        }
+                const options: Record<string, any> = {
+                    alphabetical: {
+                        func(a: ITescoProduct, b: ITescoProduct): number {
+                            if(a.name < b.name) {
+                                return -1;
+                            }
 
-                        if(a.name > b.name) {
-                            return 1;
-                        }
+                            if(a.name > b.name) {
+                                return 1;
+                            }
 
-                        return 0;
+                            return 0;
+                        },
+                        message: '<span>Sorted in</span> <strong>alphabetical</strong> <span>order!</span>',
                     },
 
-                    price(a: ITescoProduct, b: ITescoProduct) {
-                        return b.price - a.price;
+                    price: {
+                        func(a: ITescoProduct, b: ITescoProduct): number {
+                            return a.price - b.price;
+                        },
+                        message: '<span>Sorted in</span> <strong>price</strong> <span>order!</span>',
                     },
 
-                    // health(a: ITescoProduct, b: ITescoProduct) {
-                    //     console.log('Sorting by healthScore.');
+                    health: {
+                        func(a: ITescoProduct, b: ITescoProduct): number {
+                            if (!a.productData || !b.productData) {
+                                return 0;
+                            }
 
-                    //     return b.healthScore - a.healthScore;
-                    // },
+                            return b.productData.healthScore - a.productData.healthScore;
+                        },
+                        message: '<span>Sorted in</span> <strong>health</strong> <span>order!</span>',
+                    },
                 };
 
-                this.$emit('sortChange', options[type]);
+                const option = options[type];
+
+                EventService.$emit(Events.EVENT_POPUP_SHOW, option.message);
+
+                this.$emit('sortChange', option.func);
             },
         },
     })

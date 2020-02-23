@@ -43,6 +43,8 @@
     import Vue from 'vue';
 
     import TescoClient from '@frontend/api/TescoClient';
+    import { TescoProductService } from '@frontend/service/TescoProductService';
+
     import { IResponseEntity } from '@common/interface/IResponseEntity';
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
@@ -131,10 +133,35 @@
 
                 this.isLoaded = true;
                 this.isLoading = false;
+
+                await this.getProductData();
             },
 
             onExpandProduct(product: ITescoProduct): void {
                 this.$emit('expandProduct', product);
+            },
+
+            async getProductData(): Promise<void> {
+                const tpncList = this.searchResult
+                        .map((r: ITescoProduct) => r.id);
+
+                const productDataResult =
+                        await TescoClient.getMultiProductDataByTPNC(tpncList);
+
+                if (productDataResult instanceof Error) {
+                    return;
+                }
+
+                this.searchResult.forEach((searchResult: ITescoProduct) => {
+                    const product = productDataResult.result
+                            .find(p => Number(p.tpnc) === searchResult.id);
+
+                    if (product) {
+                        TescoProductService.addDataToExistingProduct(
+                                searchResult,
+                                product);
+                    }
+                });
             },
 
             getCachedSearchResult(): void {

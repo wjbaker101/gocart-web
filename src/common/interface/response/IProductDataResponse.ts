@@ -38,6 +38,7 @@ export interface IProductDataResponseResult {
         isAnalgesic: boolean,
         containsLoperamide: boolean,
         totalAlcoholUnits: number,
+        healthScore: number,
     },
     pkgDimensions: IProductDataResponsePackageDimension[],
     ingredients?: string[],

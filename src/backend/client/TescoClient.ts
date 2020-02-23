@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 import config from '../../common/config/config-secret.json';
 
@@ -14,7 +15,10 @@ const tescoAPI = axios.create({
     baseURL: 'https://dev.tescolabs.com',
     headers: {
         'Ocp-Apim-Subscription-Key': config.tescoAPI.apiKey,
-    }
+    },
+    paramsSerializer(params: any): string {
+        return qs.stringify(params, { indices: false });
+    },
 });
 
 class TescoClient {
@@ -87,6 +91,7 @@ class TescoClient {
             return await response.data;
         }
         catch (error) {
+            console.log(error);
             return new Error(error);
         }
     }

@@ -14,6 +14,7 @@ export interface ITescoProductData {
         },
         values: ITescoProductNutritionalValue[],
     },
+    healthScore: number,
 }
 
 export interface ITescoProduct {
