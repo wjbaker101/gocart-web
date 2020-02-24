@@ -8,8 +8,9 @@ import LoggingUtils from './util/LoggingUtils';
 import config from '../common/config/config.json';
 import BackendAuth from './auth/BackendAuth';
 
-import TescoRouter from './router/TescoRouter';
+import LocationRouter from './router/LocationRouter';
 import OFFRouter from './router/OFFRouter';
+import TescoRouter from './router/TescoRouter';
 import LogRouter from './router/LogRouter';
 
 const app = express();
@@ -21,8 +22,9 @@ app.use(bodyParser.json());
 app.use(history());
 
 const routers: Router[] = [
-    TescoRouter,
+    LocationRouter,
     OFFRouter,
+    TescoRouter,
 ];
 
 routers.forEach(router => {

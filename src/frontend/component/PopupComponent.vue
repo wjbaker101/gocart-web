@@ -1,7 +1,6 @@
 <template>
     <div class="popup-component" :class="{ 'is-visible': isVisible }">
         <div class="popup-content">
-            <SortIcon />
             <span v-html="message"></span>
         </div>
     </div>
@@ -12,14 +11,8 @@
 
     import { EventService, Events } from '@frontend/service/EventService';
 
-    import SortIcon from '@frontend/assets/icon/sort-amounts.svg';
-
     export default Vue.extend({
         name: 'PopupComponent',
-
-        components: {
-            SortIcon,
-        },
 
         data() {
             return {
@@ -84,10 +77,6 @@
             border-radius: layout(border-radius);
 
             @include box-shadow-small;
-
-            .icon {
-                margin-right: 0.5rem;
-            }
         }
     }
 </style>

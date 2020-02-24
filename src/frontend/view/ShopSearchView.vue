@@ -35,6 +35,7 @@
     import Vue from 'vue';
 
     import TescoClient from '@frontend/api/TescoClient';
+    import { LocationClient } from '@frontend/api/LocationClient';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
@@ -43,6 +44,7 @@
     import SearchIcon from '@frontend/assets/icon/search.svg';
 
     import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
+import { EventService, Events } from '../service/EventService';
 
     interface IStoreLocationExpandable extends IStoreLocationResponseResult {
         isExpanded: boolean,
@@ -127,10 +129,41 @@
                 shop.isExpanded = !expanded;
                 this.expandedShop = shop;
             },
+
+            requestLocation() {
+                if (!navigator.geolocation) {
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                        this.onLocationSuccess,
+                        this.onLocationFailure);
+            },
+
+            async onLocationSuccess(location: Position): Promise<void> {
+                const { latitude, longitude } = location.coords;
+
+                const response =
+                        await LocationClient.getPostcode(latitude, longitude);
+
+                this.searchTerm = response.result;
+
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Using your current location!');
+
+                await this.onSearch();
+            },
+
+            onLocationFailure(error: PositionError): void {
+
+            },
         },
 
         async created() {
             this.$emit('viewChange', 'shop_search');
+        },
+
+        async mounted() {
+            await this.requestLocation();
         },
     })
 </script>
