@@ -154,7 +154,7 @@ import { EventService, Events } from '../service/EventService';
             },
 
             onLocationFailure(error: PositionError): void {
-
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Unable to use your location.');
             },
         },
 
