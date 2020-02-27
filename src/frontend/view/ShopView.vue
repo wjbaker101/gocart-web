@@ -112,6 +112,10 @@
                     'Tesco Pay+': 'Tesco Pay+',
                     'Toilets': 'Toilets',
                     'Wifi': 'Wifi',
+                    'Collect+': 'Collect+',
+                    'Self-Service Instant Photo Printing': 'Self-Service Instant Photo Printing',
+                    'Pharmacy': 'Pharmacy',
+                    'Timpson': 'Timpson',
                 },
             }
         },
