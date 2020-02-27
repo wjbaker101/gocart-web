@@ -33,6 +33,10 @@ const router = new Router({
             path: '/scan',
             component: () => import('@frontend/view/BarcodeScannerView.vue'),
         },
+        {
+            path: '/help',
+            component: () => import('@frontend/view/HelpView.vue'),
+        },
     ],
 });
 

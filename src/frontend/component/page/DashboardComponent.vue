@@ -8,6 +8,12 @@
                         <span>Barcode Scanner</span>
                     </li>
                 </router-link>
+                <router-link to="/help">
+                    <li @click="closeMenu">
+                        <InfoIcon />
+                        <span>Help</span>
+                    </li>
+                </router-link>
             </ul>
         </div>
         <div class="links-container">
@@ -45,6 +51,7 @@
     import ListIcon from '@frontend/assets/icon/list.svg';
     import SearchIcon from '@frontend/assets/icon/search.svg';
     import ShopIcon from '@frontend/assets/icon/shop.svg';
+    import InfoIcon from '@frontend/assets/icon/info.svg';
 
     export default Vue.extend({
         name: 'DashboardComponent',
@@ -55,6 +62,7 @@
             ListIcon,
             SearchIcon,
             ShopIcon,
+            InfoIcon,
         },
 
         data() {

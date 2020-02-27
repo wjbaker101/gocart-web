@@ -80,6 +80,7 @@
 
     @import './style/components/icon.scss';
     @import './style/components/input.scss';
+    @import './style/components/link.scss';
     @import './style/components/table.scss';
     @import './style/components/view.scss';
 </style>
