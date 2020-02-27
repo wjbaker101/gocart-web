@@ -58,7 +58,7 @@
             <h2>Facilities Provided</h2>
             <section>
                 <ul>
-                    <li v-for="(facility, index) in facilities" :key="index">{{ facility.description }}</li>
+                    <li v-for="(facility, index) in facilities" :key="index">{{ facility }}</li>
                 </ul>
             </section>
         </div>
@@ -93,6 +93,26 @@
         data() {
             return {
                 shop: null as (IStoreLocationResponseResult | null),
+
+                allowedFacilities: {
+                    'ATM': 'ATM',
+                    'Cafe': 'Cafe',
+                    'Clothing Range': 'Clothing Range',
+                    'Customer Recycling Point': 'Recycling Point',
+                    'Disabled parking facilities are available': 'Disabled Parking',
+                    'Facilities are available for people who are visually impaired. Including large print and braille.': 'Visually Impaired Facilities',
+                    'Facilities are available for people with hearing impairments.': 'Hearing Impaired Facilities',
+                    'Facilities are available for people with mobility impairment.': 'Mobility Impaired Facilities',
+                    'Jet Wash': 'Jet Wash',
+                    'Hand Car Wash': 'Hand Car Wash',
+                    'Petrol': 'Petrol',
+                    'Photo Booth - Digital Passport Enabled': 'Photo Booth',
+                    'Scan as you Shop': 'Scan as you Shop',
+                    'Tesco Mobile Shop': 'Tesco Mobile Shop',
+                    'Tesco Pay+': 'Tesco Pay+',
+                    'Toilets': 'Toilets',
+                    'Wifi': 'Wifi',
+                },
             }
         },
 
@@ -106,6 +126,8 @@
             facilities(): IStoreLocationResponseFacility[] {
                 return this.shop.location.facilities
                         .slice()
+                        .filter((f: IStoreLocationResponseFacility) => (f.description in this.allowedFacilities))
+                        .map((f: IStoreLocationResponseFacility) => this.allowedFacilities[f.description])
                         .sort(this.sortByFacilityDescription);
             },
         },
@@ -156,18 +178,9 @@
                 return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
             },
 
-            sortByFacilityDescription(
-                    a: IStoreLocationResponseFacility,
-                    b: IStoreLocationResponseFacility): number {
-
-                if(a.description < b.description) {
-                    return -1;
-                }
-
-                if(a.description > b.description) {
-                    return 1;
-                }
-
+            sortByFacilityDescription(a: string, b: string): number {
+                if(a < b) return -1;
+                if(a > b) return 1;
                 return 0;
             },
         },
