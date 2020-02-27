@@ -30,11 +30,13 @@
 
 <style lang="scss">
     .checkbox-component {
-        display: table;
-        position: relative;
-        line-height: 1em;
 
         .checkbox-label {
+            position: relative;
+            padding: 0.5rem;
+            margin: 0.5rem;
+            margin-left: -0.5rem;
+
             &::before {
                 content: '';
                 display: inline-block;
@@ -50,8 +52,8 @@
                 content: '';
                 display: block;
                 position: absolute;
-                top: 3px;
-                left: 7px;
+                top: 13px;
+                left: 15px;
                 pointer-events: none;
                 opacity: 0;
                 width: 6px;

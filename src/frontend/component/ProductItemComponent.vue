@@ -122,8 +122,8 @@
         }
 
         .is-checked-container {
-            padding-right: 1rem;
             pointer-events: all;
+            flex: 0 0 auto;
         }
 
         .image-container {
