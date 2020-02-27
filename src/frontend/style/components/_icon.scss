@@ -1,3 +1,12 @@
+@mixin width-and-height($size) {
+    width: $size * 1rem;
+    height: $size * 1rem;
+}
+
+.icon-small {
+    @include width-and-height(0.5);
+}
+
 .icon-large {
     width: 2rem;
     height: 2rem;

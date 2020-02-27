@@ -2,8 +2,11 @@
     <div class="shopping-list-view">
         <HeaderComponent>
             <template v-slot:right-side>
-                <BasketIcon />
-                <span class="total-price">{{ totalPrice }}</span>
+                <div @click="setLocked(!isLocked)">
+                    <BasketIcon />
+                    <LockIcon class="lock-icon icon-small" :class="{ 'is-locked': isLocked }" />
+                    <span class="total-price">{{ displayPrice }}</span>
+                </div>
             </template>
         </HeaderComponent>
         <div class="zerostate-shopping-view view-content" v-if="isShoppingListEmpty" :class="{ 'is-expanded': showZeroStateContent }">
@@ -86,6 +89,7 @@
     import UpChevronIcon from '@frontend/assets/icon/chevron-up.svg';
     import DownChevronIcon from '@frontend/assets/icon/chevron-down.svg';
     import InfoIcon from '@frontend/assets/icon/info.svg';
+    import LockIcon from '@frontend/assets/icon/lock.svg';
 
     export default Vue.extend({
         name: 'ShoppingListView',
@@ -99,6 +103,7 @@
             UpChevronIcon,
             DownChevronIcon,
             InfoIcon,
+            LockIcon,
         },
 
         data() {
@@ -113,6 +118,9 @@
                 },
 
                 showZeroStateContent: false,
+
+                isLocked: false,
+                savedTotalPrice: 0,
             }
         },
 
@@ -164,6 +172,24 @@
 
                 return `£${total}`;
             },
+
+            displayPrice(): string {
+                if (this.isLocked) {
+                    return this.savedTotalPrice;
+                }
+
+                return this.totalPrice;
+            },
+        },
+
+        methods: {
+            setLocked(isLocked: boolean): void {
+                this.isLocked = isLocked;
+
+                if (this.isLocked) {
+                    this.savedTotalPrice = this.totalPrice;
+                }
+            },
         },
     })
 </script>
@@ -171,8 +197,24 @@
 <style lang="scss">
     .shopping-list-view {
 
+        .right-side {
+            flex: 0 0 auto;
+            cursor: pointer;
+        }
+
+        .lock-icon {
+            opacity: 0;
+            vertical-align: top;
+            color: theme(secondary);
+            transition: opacity animation(duration-short);
+
+            &.is-locked {
+                opacity: 1;
+            }
+        }
+
         .total-price {
-            margin-left: 0.5rem;
+            margin-left: 0.25rem;
         }
 
         .shopping-list-container {
