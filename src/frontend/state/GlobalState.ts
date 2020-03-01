@@ -21,6 +21,7 @@ export const state = {
     currentSearchResult: null as (ISearchResult | null),
     uncheckedShoppingList: {} as Record<string, ITescoProduct>,
     checkedShoppingList: {} as Record<string, ITescoProduct>,
+    isTotalPriceLocked: false as boolean,
 };
 
 export default {
@@ -29,10 +30,12 @@ export default {
         const selectedShop = await TescoShopCacheService.getSelectedShop();
         const uncheckedShoppingList = await ShoppingListCacheService.getUncheckedList();
         const checkedShoppingList = await ShoppingListCacheService.getCheckedList();
+        const isTotalPriceLocked = await ShoppingListCacheService.getIsTotalPriceLocked();
 
         this.selectedShop.set(selectedShop);
         this.uncheckedShoppingList.set(uncheckedShoppingList);
         this.checkedShoppingList.set(checkedShoppingList);
+        this.isTotalPriceLocked.set(isTotalPriceLocked);
     },
 
     selectedShop: {

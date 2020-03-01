@@ -4,6 +4,7 @@ import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
 const KEY_LIST_UNCHECKED = 'shopping-list-unchecked';
 const KEY_LIST_CHECKED = 'shopping-list-checked';
+const KEY_TOTAL_PRICE_IS_LOCKED = 'total-price-is-locked';
 
 export default {
 
@@ -47,5 +48,22 @@ export default {
             this.storeUncheckedList(uncheckedList),
             this.storeCheckedList(checkedList),
         ]);
+    },
+
+    async setIsTotalPriceLocked(isLocked: { locked: boolean, totalValue: string, }): Promise<void> {
+        await CacheService.storeData(KEY_TOTAL_PRICE_IS_LOCKED, isLocked);
+    },
+
+    async getIsTotalPriceLocked(): Promise<{ locked: boolean, totalValue: string, }> {
+        const cache = await CacheService.getData(KEY_TOTAL_PRICE_IS_LOCKED);
+
+        if (cache === null) {
+            return {
+                locked: false,
+                totalValue: '0',
+            };
+        }
+
+        return cache;
     },
 }

@@ -19,6 +19,11 @@ class AppState {
         shop: null as (IStoreLocationResponseResult | null),
 
         currentProduct: null as (ITescoProduct | null),
+
+        isTotalPriceLocked: {
+            locked: false,
+            totalValue: '0',
+        },
     };
 
     log(message: any): void {
@@ -131,11 +136,20 @@ class AppState {
             this.state.shop = shop;
         };
 
+        const initIsTotalPriceLocked = async () => {
+            const isLocked =
+                    await ShoppingListCacheService.getIsTotalPriceLocked();
+
+            this.state.isTotalPriceLocked = isLocked;
+        };
+
         await Promise.all([
             initUncheckedShoppingList(),
             initCheckedShoppingList(),
 
             initShop(),
+
+            initIsTotalPriceLocked(),
         ]);
     }
 
@@ -145,6 +159,21 @@ class AppState {
 
     setCurrentProduct(product: ITescoProduct): void {
         this.state.currentProduct = product;
+    }
+
+    isTotalPriceLocked(): { locked: boolean, totalValue: string, } {
+        return this.state.isTotalPriceLocked;
+    }
+
+    setTotalPriceLocked(isLocked: boolean, totalValue: string): void {
+        this.state.isTotalPriceLocked = {
+            totalValue,
+            locked: isLocked,
+        };
+
+        (async () => {
+            await ShoppingListCacheService.setIsTotalPriceLocked(this.state.isTotalPriceLocked);
+        })();
     }
 }
 

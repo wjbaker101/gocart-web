@@ -182,12 +182,23 @@
             },
         },
 
+        created() {
+            const isTotalPriceLocked = this.$root.$data.isTotalPriceLocked();
+
+            this.setLocked(isTotalPriceLocked.locked, false);
+            this.savedTotalPrice = isTotalPriceLocked.totalValue;
+        },
+
         methods: {
-            setLocked(isLocked: boolean): void {
+            setLocked(isLocked: boolean, update: boolean = true): void {
                 this.isLocked = isLocked;
 
                 if (this.isLocked) {
                     this.savedTotalPrice = this.totalPrice;
+                }
+
+                if (update) {
+                    this.$root.$data.setTotalPriceLocked(this.isLocked, this.savedTotalPrice);
                 }
             },
         },
