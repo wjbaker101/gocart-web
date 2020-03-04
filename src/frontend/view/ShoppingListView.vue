@@ -38,10 +38,12 @@
                 <p class="heading-right"><span class="counter-number">{{ uncheckedShoppingList.length }}</span></p>
             </div>
             <draggable
-                class="unchecked-products-container"
-                tag="div"
-                v-model="uncheckedShoppingList"
-                v-bind="draggableOptions">
+                    class="unchecked-products-container"
+                    tag="div"
+                    v-model="uncheckedShoppingList"
+                    v-bind="draggableOptions"
+                    @start="setDeleteDragging($event, true, 'unchecked')"
+                    @end="setDeleteDragging($event, false, 'unchecked')">
                 <transition-group type="transition" name="flip-list">
                     <ProductItemComponent
                         :key="String(product.id)"
@@ -64,13 +66,29 @@
                     </span>
                 </p>
             </div>
-            <div class="checked-products-container" v-if="!isCheckedHidden">
+            <draggable
+                    class="checked-products-container"
+                    v-if="!isCheckedHidden"
+                    v-model="checkedShoppingList"
+                    v-bind="draggableOptions"
+                    :group="{ put: [] }"
+                    @start="setDeleteDragging($event, true, 'checked')"
+                    @end="setDeleteDragging($event, false, 'checked')">
                 <ProductItemComponent
                     :key="product.id"
                     v-for="(product, index) in checkedShoppingList"
                     :product="product"
                     hasCheckBox="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
+            </draggable>
+            <div class="delete-product-container"
+                    :class="{ 'is-visible': isDeleteDragging, 'is-over': isDeleteDragOver, }"
+                    @dragover="onDragOver"
+                    @dragenter="onDragEnter"
+                    @dragleave="onDragLeave"
+                    @drop="onDrop"
+                    @dragdrop="onDrop">
+                <BinIcon />
             </div>
         </div>
     </div>
@@ -80,12 +98,15 @@
     import Vue from 'vue';
     import draggable from 'vuedraggable';
 
+    import { EventService, Events } from '@frontend/service/EventService';
+
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ProductItemComponent from '@frontend/component/ProductItemComponent.vue';
 
     import BasketIcon from '@frontend/assets/icon/basket.svg';
+    import BinIcon from '@frontend/assets/icon/bin.svg';
     import UpChevronIcon from '@frontend/assets/icon/chevron-up.svg';
     import DownChevronIcon from '@frontend/assets/icon/chevron-down.svg';
     import InfoIcon from '@frontend/assets/icon/info.svg';
@@ -100,6 +121,7 @@
             HeaderComponent,
             ProductItemComponent,
             BasketIcon,
+            BinIcon,
             UpChevronIcon,
             DownChevronIcon,
             InfoIcon,
@@ -121,6 +143,10 @@
 
                 isLocked: false,
                 savedTotalPrice: 0,
+
+                isDeleteDragging: false,
+                deleteProductID: null,
+                isDeleteDragOver: false,
             }
         },
 
@@ -200,6 +226,46 @@
                 if (update) {
                     this.$root.$data.setTotalPriceLocked(this.isLocked, this.savedTotalPrice);
                 }
+            },
+
+            setDeleteDragging(event: any, isDragging: boolean, source: string): void {
+                this.isDeleteDragging = isDragging;
+
+                if (source === 'unchecked' && event.oldIndex < this.uncheckedShoppingList.length) {
+                    this.deleteProductID = this.uncheckedShoppingList[event.oldIndex].id;
+                }
+                else if (source === 'checked' && event.oldIndex < this.checkedShoppingList.length) {
+                    this.deleteProductID = this.checkedShoppingList[event.oldIndex].id;
+                }
+            },
+
+            onDragOver(event: Event): void {
+                event.preventDefault();
+            },
+
+            onDragEnter(event: Event): void {
+                this.isDeleteDragOver = true;
+
+                event.preventDefault();
+            },
+
+            onDragLeave(event: Event): void {
+                this.isDeleteDragOver = false;
+
+                event.preventDefault();
+            },
+
+            onDrop(event: Event): void {
+                if (this.deleteProductID === null) {
+                    return;
+                }
+
+                this.$root.$data.removeFromUncheckedShoppingList(this.deleteProductID);
+                this.$root.$data.removeFromCheckedShoppingList(this.deleteProductID);
+
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Product has been removed!');
+
+                event.preventDefault();
             },
         },
     })
@@ -307,6 +373,44 @@
 
         .zerostate-shopping-basket {
             color: theme(primary);
+        }
+
+        .delete-product-container {
+            position: fixed;
+            bottom: 6rem;
+            left: 1rem;
+            right: 1rem;
+            text-align: center;
+            border-radius: layout(border-radius);
+            background-color: theme(negative);
+            color: theme(white);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(1rem);
+            z-index: 8;
+            transition: opacity animation(duration-mid), transform animation(duration-short);
+
+            @include box-shadow-small;
+
+            .product-item-component {
+                display: none;
+            }
+
+            svg {
+                margin: 1.5rem 0;
+                pointer-events: none;
+            }
+
+            &.is-visible {
+                opacity: 1;
+                pointer-events: all;
+                transform: translateY(0);
+            }
+
+            &.is-over {
+                outline: 4px solid theme(negative);
+                outline-offset: 3px;
+            }
         }
     }
 </style>
