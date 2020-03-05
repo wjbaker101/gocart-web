@@ -90,7 +90,7 @@
                 @drop="onDrop"
                 @dragdrop="onDrop"
             >
-                <BinIcon /> {{ x }} {{ y }}
+                <BinIcon />
             </div>
         </div>
     </div>
@@ -301,6 +301,8 @@
                 this.$root.$data.removeFromCheckedShoppingList(this.deleteProductID);
 
                 EventService.$emit(Events.EVENT_POPUP_SHOW, 'Product has been removed!');
+
+                this.isDeleteDragOver = false;
             },
 
             isOverBin(x: number, y: number): boolean {
