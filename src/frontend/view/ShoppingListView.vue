@@ -81,14 +81,16 @@
                     hasCheckBox="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
             </draggable>
-            <div class="delete-product-container"
-                    :class="{ 'is-visible': isDeleteDragging, 'is-over': isDeleteDragOver, }"
-                    @dragover="onDragOver"
-                    @dragenter="onDragEnter"
-                    @dragleave="onDragLeave"
-                    @drop="onDrop"
-                    @dragdrop="onDrop">
-                <BinIcon />
+            <div ref="deleteProductContainer"
+                class="delete-product-container"
+                :class="{ 'is-visible': isDeleteDragging, 'is-over': isDeleteDragOver, }"
+                @dragover="onDragOver"
+                @dragenter="onDragEnter"
+                @dragleave="onDragLeave"
+                @drop="onDrop"
+                @dragdrop="onDrop"
+            >
+                <BinIcon /> {{ x }} {{ y }}
             </div>
         </div>
     </div>
@@ -213,6 +215,14 @@
 
             this.setLocked(isTotalPriceLocked.locked, false);
             this.savedTotalPrice = isTotalPriceLocked.totalValue;
+
+            document.addEventListener('touchend', this.onTouchUp);
+            document.addEventListener('touchmove', this.onTouchMove);
+        },
+
+        destroyed() {
+            document.removeEventListener('touchend', this.onTouchUp);
+            document.removeEventListener('touchmove', this.onTouchMove);
         },
 
         methods: {
@@ -256,6 +266,33 @@
             },
 
             onDrop(event: Event): void {
+                this.removeProduct();
+
+                event.preventDefault();
+            },
+
+            onTouchMove(event: TouchEvent): void {
+                const { clientX, clientY } = event.changedTouches[0];
+
+                if (this.isOverBin(clientX, clientY)) {
+                    this.isDeleteDragOver = true;
+                }
+                else {
+                    this.isDeleteDragOver = false;
+                }
+            },
+
+            onTouchUp(event: TouchEvent): void {
+                const { clientX, clientY } = event.changedTouches[0];
+
+                if (!this.isOverBin(clientX, clientY)) {
+                    return;
+                }
+
+                this.removeProduct();
+            },
+
+            removeProduct(): void {
                 if (this.deleteProductID === null) {
                     return;
                 }
@@ -264,8 +301,21 @@
                 this.$root.$data.removeFromCheckedShoppingList(this.deleteProductID);
 
                 EventService.$emit(Events.EVENT_POPUP_SHOW, 'Product has been removed!');
+            },
 
-                event.preventDefault();
+            isOverBin(x: number, y: number): boolean {
+                const { top, left } = this.$refs.deleteProductContainer.getBoundingClientRect();
+                const { offsetWidth, offsetHeight } = this.$refs.deleteProductContainer;
+
+                if (x < left || x > left + offsetWidth) {
+                    return false;
+                }
+
+                if (y < top || y > top + offsetHeight) {
+                    return false;
+                }
+
+                return true;
             },
         },
     })
