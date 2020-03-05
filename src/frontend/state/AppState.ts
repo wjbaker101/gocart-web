@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import Vue from 'vue';
 
 import { ITescoProduct } from '@frontend/interface/ITescoProduct';
