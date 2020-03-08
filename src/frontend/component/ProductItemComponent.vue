@@ -2,12 +2,15 @@
     <div
         class="product-item-component"
         @click.self="onClick">
-
         <div class="is-checked-container" v-if="hasCheckBox">
             <CheckBoxComponent
                 :id="`${product.id}-checkbox`"
                 v-model="product.isChecked"
                 @input="onCheckUpdate" />
+        </div>
+        <div class="plus-container" v-if="hasAddToList" @click="updateIsInList">
+            <PlusIcon class="add" v-if="!isInList" />
+            <BinIcon class="remove" v-if="isInList" />
         </div>
         <div class="image-container">
             <img class="product-image"
@@ -32,18 +35,30 @@
 <script lang="ts">
     import Vue from 'vue';
 
+    import { ITescoProduct } from '@frontend/interface/ITescoProduct';
+
     import CheckBoxComponent from '@frontend/component/item/CheckBoxComponent.vue';
 
+    import BinIcon from '@frontend/assets/icon/bin.svg';
     import FoodIcon from '@frontend/assets/icon/food.svg';
+    import PlusIcon from '@frontend/assets/icon/plus.svg';
 
     export default Vue.extend({
         name: 'ProductItemComponent',
 
-        props: ['product', 'hasCheckBox'],
+        props: ['product', 'hasCheckBox', 'hasAddToList'],
 
         components: {
             CheckBoxComponent,
+            BinIcon,
             FoodIcon,
+            PlusIcon,
+        },
+
+        data() {
+            return {
+                isInList: false,
+            }
         },
 
         computed: {
@@ -54,6 +69,14 @@
             productImage() {
                 return this.product.image.replace('http://', 'https://');
             },
+        },
+
+        created() {
+            const uncheckedList = this.$root.$data.getUncheckedShoppingList();
+            const checkedList = this.$root.$data.getCheckedShoppingList();
+
+            this.isInList = uncheckedList[`id-${this.product.id}`]
+                    || checkedList[`id-${this.product.id}`];
         },
 
         methods: {
@@ -74,6 +97,19 @@
 
                     this.$root.$data.removeFromCheckedShoppingList(String(this.product.id));
                     this.$root.$data.addToUncheckedShoppingList(this.product);
+                }
+            },
+
+            updateIsInList(): void {
+                this.isInList = !this.isInList;
+
+                if (this.isInList) {
+                    this.product.isChecked = false;
+                    this.$root.$data.addToUncheckedShoppingList(this.product);
+                }
+                else {
+                    this.$root.$data.removeFromUncheckedShoppingList(String(this.product.id));
+                    this.$root.$data.removeFromCheckedShoppingList(String(this.product.id));
                 }
             },
         },
@@ -124,6 +160,22 @@
         .is-checked-container {
             pointer-events: all;
             flex: 0 0 auto;
+        }
+
+        .plus-container {
+            padding: 0.25rem 1rem;
+            margin-left: -1rem;
+            margin-right: -0.5rem;
+            pointer-events: all;
+            flex: 0 0 auto;
+
+            .add {
+                color: theme(primary);
+            }
+
+            .remove {
+                color: theme(negative);
+            }
         }
 
         .image-container {

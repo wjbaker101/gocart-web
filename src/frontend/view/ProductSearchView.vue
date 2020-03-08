@@ -31,7 +31,8 @@
                     v-bind:key="index"
                     v-for="(product, index) in searchResult"
                     :product="product"
-                    hasCheckBox="true"
+                    :hasCheckBox="false"
+                    :hasAddToList="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`"
                     @expandProduct="onExpandProduct" />
             </div>

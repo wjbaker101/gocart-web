@@ -49,7 +49,8 @@
                         :key="String(product.id)"
                         v-for="(product, index) in uncheckedShoppingList"
                         :product="product"
-                        hasCheckBox="true"
+                        :hasCheckBox="true"
+                        :hasAddToList="false"
                         :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
                 </transition-group>
             </draggable>
@@ -78,7 +79,8 @@
                     :key="product.id"
                     v-for="(product, index) in checkedShoppingList"
                     :product="product"
-                    hasCheckBox="true"
+                    :hasCheckBox="true"
+                    :hasAddToList="false"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`" />
             </draggable>
             <div ref="deleteProductContainer"
