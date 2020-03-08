@@ -297,6 +297,10 @@
                     return;
                 }
 
+                if (!this.isDeleteDragging) {
+                    return;
+                }
+
                 this.$root.$data.removeFromUncheckedShoppingList(this.deleteProductID);
                 this.$root.$data.removeFromCheckedShoppingList(this.deleteProductID);
 
