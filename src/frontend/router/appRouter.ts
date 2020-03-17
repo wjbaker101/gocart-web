@@ -34,6 +34,18 @@ const router = new Router({
             component: () => import('@frontend/view/BarcodeScannerView.vue'),
         },
         {
+            path: '/login',
+            component: () => import('@frontend/view/LoginView.vue'),
+        },
+        {
+            path: '/create-user',
+            component: () => import('@frontend/view/CreateUserView.vue'),
+        },
+        {
+            path: '/user',
+            component: () => import('@frontend/view/UserView.vue'),
+        },
+        {
             path: '/help',
             component: () => import('@frontend/view/HelpView.vue'),
         },

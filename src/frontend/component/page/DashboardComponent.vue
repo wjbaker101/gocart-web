@@ -14,6 +14,12 @@
                         <span>Help</span>
                     </li>
                 </router-link>
+                <router-link to="/login">
+                    <li @click="closeMenu">
+                        <UserIcon />
+                        <span>User Settings</span>
+                    </li>
+                </router-link>
             </ul>
         </div>
         <div class="links-container">
@@ -52,6 +58,7 @@
     import SearchIcon from '@frontend/assets/icon/search.svg';
     import ShopIcon from '@frontend/assets/icon/shop.svg';
     import InfoIcon from '@frontend/assets/icon/info.svg';
+    import UserIcon from '@frontend/assets/icon/user.svg';
 
     export default Vue.extend({
         name: 'DashboardComponent',
@@ -63,6 +70,7 @@
             SearchIcon,
             ShopIcon,
             InfoIcon,
+            UserIcon,
         },
 
         data() {
@@ -125,6 +133,7 @@
                 list-style: none;
                 padding: 0;
                 margin: 0;
+                line-height: 1.5rem;
 
                 li {
                     padding: 1rem;

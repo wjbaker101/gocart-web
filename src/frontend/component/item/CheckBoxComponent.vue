@@ -52,7 +52,7 @@
                 content: '';
                 display: block;
                 position: absolute;
-                top: 13px;
+                top: 17px;
                 left: 15px;
                 pointer-events: none;
                 opacity: 0;

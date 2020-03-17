@@ -90,5 +90,9 @@
                 background: linear-gradient(-15deg, theme(accent-dark), theme(negative-dark));
             }
         }
+
+        &.full-width {
+            width: 100%;
+        }
     }
 </style>

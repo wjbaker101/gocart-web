@@ -7,6 +7,7 @@ import { IStoreLocationResponseResult } from '@common/interface/response/IStoreL
 
 import TescoShopCacheService from '@frontend/service/TescoShopCacheService';
 import ShoppingListCacheService from '@frontend/service/ShoppingListCacheService';
+import UserCacheService from '@frontend/service/UserCacheService';
 
 class AppState {
 
@@ -26,6 +27,8 @@ class AppState {
             locked: false,
             totalValue: '0',
         },
+
+        user: null,
     };
 
     log(message: any): void {
@@ -145,6 +148,12 @@ class AppState {
             this.state.isTotalPriceLocked = isLocked;
         };
 
+        const initCurrentUser = async () => {
+            const user = await UserCacheService.getCurrentUser();
+
+            this.state.user = user;
+        };
+
         await Promise.all([
             initUncheckedShoppingList(),
             initCheckedShoppingList(),
@@ -152,6 +161,8 @@ class AppState {
             initShop(),
 
             initIsTotalPriceLocked(),
+
+            initCurrentUser(),
         ]);
     }
 
@@ -175,6 +186,18 @@ class AppState {
 
         (async () => {
             await ShoppingListCacheService.setIsTotalPriceLocked(this.state.isTotalPriceLocked);
+        })();
+    }
+
+    getUser(): any {
+        return this.state.user;
+    }
+
+    setUser(user: any) {
+        this.state.user = user;
+
+        (async () => {
+            await UserCacheService.storeCurrentUser(this.state.user);
         })();
     }
 }

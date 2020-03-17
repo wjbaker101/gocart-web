@@ -102,6 +102,7 @@
     import Vue from 'vue';
     import draggable from 'vuedraggable';
 
+    import { FirebaseClient } from '@frontend/api/FirebaseClient';
     import { EventService, Events } from '@frontend/service/EventService';
 
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
@@ -222,9 +223,11 @@
             document.addEventListener('touchmove', this.onTouchMove);
         },
 
-        destroyed() {
+        async destroyed() {
             document.removeEventListener('touchend', this.onTouchUp);
             document.removeEventListener('touchmove', this.onTouchMove);
+
+            await FirebaseClient.saveShoppingList();
         },
 
         methods: {
@@ -324,6 +327,11 @@
                 }
 
                 return true;
+            },
+
+            onAppUnload(event: BeforeUnloadEvent) {
+                prompt('asd');
+                // await FirebaseClient.saveShoppingList();
             },
         },
     })
