@@ -26,6 +26,7 @@
         <div class="search-container">
             <p class="text-centered" v-show="!isLoaded && !isLoading">No results yet!</p>
             <p class="text-centered" v-show="isLoading">Searching...</p>
+            <p class="text-centered" v-show="isLoaded && !isLoading && searchResult.length === 0">Sorry, no products found!</p>
             <div class="search-results" v-show="isLoaded && searchResult !== null">
                 <ProductItemComponent
                     v-bind:key="index"
@@ -117,6 +118,8 @@
 
                 if (response.result.length === 0) {
                     productSearchInput.focus();
+                    this.isLoaded = true;
+                    this.searchResult = [];
                 }
 
                 this.searchResult = response.result.map(product => ({
