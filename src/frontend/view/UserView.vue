@@ -17,6 +17,7 @@
                 <ButtonComponent @click="loadBackUp">
                     Load Back-Up
                 </ButtonComponent>
+                <br>
                 <span class="backup-timestamp">Last back-up: {{ lastBackUpText }}</span>
             </section>
             <section>
@@ -101,8 +102,6 @@
 
             this.backup = userData.data();
             this.backupTimestamp = this.backup.backupTimestamp;
-
-            console.log(this.backup)
         },
 
         methods: {
