@@ -10,8 +10,14 @@
         <div class="view-content">
             <section>
                 <ButtonComponent @click="onBackUp">
-                    Back up Shopping List
+                    Back Up Shopping List
                 </ButtonComponent>
+            </section>
+            <section>
+                <ButtonComponent @click="loadBackUp">
+                    Load Back-Up
+                </ButtonComponent>
+                <span class="backup-timestamp">Last back-up: {{ lastBackUpText }}</span>
             </section>
             <section>
                 <ButtonComponent @click="onLogOut">
@@ -26,7 +32,8 @@
     import Vue from 'vue';
 
     import { FirebaseClient } from '@frontend/api/FirebaseClient';
-    import { EventService, Events } from '../service/EventService';
+    import { EventService, Events } from '@frontend/service/EventService';
+    import { NumberUtils } from '@frontend/util/NumberUtils';
     import AppState from '@frontend/state/AppState';
 
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
@@ -58,11 +65,56 @@
             }
         },
 
+        data() {
+            return {
+                backUp: null,
+                backupTimestamp: null,
+            }
+        },
+
+        computed: {
+            lastBackUpText(): string {
+                if (this.backupTimestamp === null) {
+                    return 'Never';
+                }
+
+                const date = new Date(Number(this.backupTimestamp));
+
+                const day = NumberUtils.padNumber(date.getDay());
+                const month = NumberUtils.padNumber(date.getMonth());
+                const year = date.getFullYear();
+
+                const hours = NumberUtils.padNumber(date.getHours());
+                const minutes = NumberUtils.padNumber(date.getMinutes());
+
+                return `${day}/${month}/${year} at ${hours}:${minutes}`;
+            },
+        },
+
+        async created() {
+            const userData = await FirebaseClient.loadUserData();
+
+            if (userData instanceof Error || userData === null) {
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Unable to load back-up.');
+                return;
+            }
+
+            this.backup = userData.data();
+            this.backupTimestamp = this.backup.backupTimestamp;
+
+            console.log(this.backup)
+        },
+
         methods: {
+            async loadBackUp() {
+                this.$root.$data.setUncheckedShoppingList(this.backup.uncheckedList);
+                this.$root.$data.setCheckedShoppingList(this.backup.checkedList);
+            },
+
             async onBackUp() {
                 await FirebaseClient.saveShoppingList();
 
-                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Shopping List Backed-Up!')
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Back Up Successful!');
             },
 
             async onLogOut() {
@@ -88,6 +140,12 @@
             h2 {
                 margin-bottom: 0;
             }
+        }
+
+        .backup-timestamp {
+            padding-left: 0.5rem;
+            font-size: 0.8em;
+            vertical-align: bottom;
         }
     }
 </style>

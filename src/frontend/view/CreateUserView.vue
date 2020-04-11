@@ -77,22 +77,18 @@ import { EventService, Events } from '../service/EventService';
 
             doFieldCheck(): boolean {
                 if (this.usernameField.length === 0) {
-                    console.log('username bad');
                     return false;
                 }
 
                 if (this.passwordField.length === 0) {
-                    console.log('password bad');
                     return false;
                 }
 
                 if (this.passwordConfirmField.length === 0) {
-                    console.log('password confirm bad');
                     return false;
                 }
 
                 if (this.passwordField !== this.passwordConfirmField) {
-                    console.log('passwords different');
                     return false;
                 }
 

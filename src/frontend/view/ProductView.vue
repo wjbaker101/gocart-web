@@ -149,6 +149,24 @@
             else {
                 this.productData = this.product.productData;
             }
+
+            let prepared: string = this.product.name.toLowerCase().replace('tesco finest', '').replace('tesco', '');
+
+            const measureUnit = this.product.ContentsMeasureType.toLowerCase();
+
+            if (prepared.endsWith(measureUnit)) {
+                prepared = prepared.substring(0, prepared.indexOf(measureUnit));
+            }
+
+            const response = await TescoClient.getGrocerySearch(prepared);
+
+            if (response instanceof Error) {
+                return;
+            }
+
+            const result = response.result.filter(r => r.id !== this.product.id);
+
+            console.log(result);
         },
 
         methods: {

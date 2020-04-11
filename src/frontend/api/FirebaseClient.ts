@@ -88,10 +88,24 @@ export const FirebaseClient = {
         const checkedList = AppState.getCheckedShoppingList();
 
         await database.collection('users').doc(user.uid).update({
+            backupTimestamp: Date.now(),
             uncheckedList,
             checkedList,
         });
+    },
 
-        console.log('Successfully saved shopping list');
+    async loadUserData() {
+        const user = AppState.getUser();
+
+        if (user === null) {
+            return null;
+        }
+
+        try {
+            return await database.collection('users').doc(user.uid).get();
+        }
+        catch (exception) {
+            return new Error('Unable to load user data');
+        }
     },
 }
