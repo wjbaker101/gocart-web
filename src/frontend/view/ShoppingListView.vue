@@ -226,8 +226,6 @@
         async destroyed() {
             document.removeEventListener('touchend', this.onTouchUp);
             document.removeEventListener('touchmove', this.onTouchMove);
-
-            await FirebaseClient.saveShoppingList();
         },
 
         methods: {
@@ -327,11 +325,6 @@
                 }
 
                 return true;
-            },
-
-            onAppUnload(event: BeforeUnloadEvent) {
-                prompt('asd');
-                // await FirebaseClient.saveShoppingList();
             },
         },
     })

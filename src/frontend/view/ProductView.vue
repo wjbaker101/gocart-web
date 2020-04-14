@@ -53,6 +53,12 @@
                     </tbody>
                 </table>
             </section>
+            <h2 v-if="alternativeProducts.length > 0">
+                <span>Alternative Products</span>
+            </h2>
+            <section class="alternative-products-section" v-if="alternativeProducts.length > 0">
+                <AlternativeProductComponent :key="`ap-${index}`" v-for="(p, index) in alternativeProducts" :product="p" />
+            </section>
         </div>
     </div>
 </template>
@@ -73,6 +79,7 @@
     import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
     import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
     import NumberInputComponent from '@frontend/component/item/NumberInputComponent.vue';
+    import AlternativeProductComponent from '@frontend/component/AlternativeProductComponent.vue';
 
     export default Vue.extend({
         name: 'ProductView',
@@ -81,6 +88,7 @@
             HeaderComponent,
             ButtonComponent,
             NumberInputComponent,
+            AlternativeProductComponent,
         },
 
         data() {
@@ -88,6 +96,7 @@
                 product: null as (ITescoProduct | null),
                 productData: null,
                 isProductInShoppingList: false,
+                alternativeProducts: [],
             }
         },
 
@@ -155,7 +164,7 @@
             const measureUnit = this.product.ContentsMeasureType.toLowerCase();
 
             if (prepared.endsWith(measureUnit)) {
-                prepared = prepared.substring(0, prepared.indexOf(measureUnit));
+                prepared = prepared.substring(0, prepared.lastIndexOf(' '));
             }
 
             const response = await TescoClient.getGrocerySearch(prepared);
@@ -164,9 +173,15 @@
                 return;
             }
 
-            const result = response.result.filter(r => r.id !== this.product.id);
+            const result = response.result.filter(r => r.id !== this.product.id).map(product => ({
+                ...product,
+                description: product.description ? product.description.join('<br>') : '',
+                quantity: 1,
+                isChecked: false,
+                timesAddedToShoppingList: 0,
+            }));
 
-            console.log(result);
+            this.alternativeProducts = result;
         },
 
         methods: {
@@ -243,6 +258,13 @@
                     font-weight: bold;
                 }
             }
+        }
+
+        .alternative-products-section {
+            display: flex;
+            padding: 1rem;
+            overflow-x: auto;
+            white-space: nowrap;
         }
     }
 </style>
