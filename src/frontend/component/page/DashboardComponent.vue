@@ -24,19 +24,19 @@
         </div>
         <div class="links-container">
             <router-link to="/">
-                <div class="dashboard-item">
+                <div class="dashboard-item" @click="closeMenu">
                     <ListIcon /><br>
                     <small>List</small>
                 </div>
             </router-link>
             <router-link to="/search">
-                <div class="dashboard-item">
+                <div class="dashboard-item" @click="closeMenu">
                     <SearchIcon /><br>
                     <small>Search</small>
                 </div>
             </router-link>
             <router-link to="/shop">
-                <div class="dashboard-item">
+                <div class="dashboard-item" @click="closeMenu">
                     <ShopIcon /><br>
                     <small>Shops</small>
                 </div>
@@ -46,6 +46,7 @@
                 <small>Menu</small>
             </div>
         </div>
+        <div class="close-container" @click="closeMenu"></div>
     </div>
 </template>
 
@@ -110,6 +111,29 @@
                 pointer-events: all;
                 clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
             }
+
+            .close-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: all;
+                background-color: theme(black);
+                opacity: 0.4;
+            }
+        }
+
+        .close-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity animation(duration-long);
         }
 
         .menu-container {
@@ -123,6 +147,7 @@
             clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
             background-color: theme(white);
             border-bottom: 2px solid theme(grey);
+            z-index: 2;
             transition: clip-path animation(duration-short);
 
             box-shadow:
@@ -152,7 +177,10 @@
         }
 
         .links-container {
+            position: relative;
             display: flex;
+            z-index: 2;
+            background-color: theme(white);
 
             & > * {
                 flex: 1;
