@@ -81,6 +81,10 @@
 
         methods: {
             onClick(): void {
+                if (this.product.isFreeform) {
+                    return;
+                }
+
                 this.$root.$data.setCurrentProduct(this.product);
                 this.$router.push({
                     name: 'product-route',

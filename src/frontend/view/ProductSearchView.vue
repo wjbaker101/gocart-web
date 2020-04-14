@@ -29,13 +29,29 @@
             <p class="text-centered" v-show="isLoaded && !isLoading && searchResult.length === 0">Sorry, no products found!</p>
             <div class="search-results" v-show="isLoaded && searchResult !== null">
                 <ProductItemComponent
-                    v-bind:key="index"
-                    v-for="(product, index) in searchResult"
+                    :key="product.id"
+                    v-for="(product, index) in firstSearchResults"
                     :product="product"
                     :hasCheckBox="false"
                     :hasAddToList="true"
                     :style="`animation-duration: ${loadAnimationDuration(index)}s`"
                     @expandProduct="onExpandProduct" />
+                <div class="freeform-container">
+                    <p>Can't find the product you're looking for?</p>
+                    <p>
+                        <ButtonComponent @click="addFreeformText()">Add as Freeform Text</ButtonComponent>
+                    </p>
+                </div>
+                <div v-if="searchResult && searchResult.length > 3">
+                    <ProductItemComponent
+                        :key="product.id"
+                        v-for="(product, index) in restOfSearchTerms"
+                        :product="product"
+                        :hasCheckBox="false"
+                        :hasAddToList="true"
+                        :style="`animation-duration: ${loadAnimationDuration(index)}s`"
+                        @expandProduct="onExpandProduct" />
+                </div>
             </div>
         </div>
     </div>
@@ -44,8 +60,11 @@
 <script lang="ts">
     import Vue from 'vue';
 
+    import { v4 as uuid } from 'uuid';
+
     import TescoClient from '@frontend/api/TescoClient';
     import { TescoProductService } from '@frontend/service/TescoProductService';
+    import { EventService, Events } from '@frontend/service/EventService';
 
     import { IResponseEntity } from '@common/interface/IResponseEntity';
     import { ITescoProduct } from '@frontend/interface/ITescoProduct';
@@ -81,6 +100,30 @@
         },
 
         computed: {
+            firstSearchResults(): ITescoProduct[] {
+                if (this.searchResult === null) {
+                    return [];
+                }
+
+                if (this.searchResult.length < 3) {
+                    return this.searchResult;
+                }
+
+                return this.searchResult.filter((r: any, i: number) => i < 3);
+            },
+
+            restOfSearchTerms(): ITescoProduct[] {
+                if (this.searchResult === null) {
+                    return [];
+                }
+
+                if (this.searchResult.length < 3) {
+                    return [];
+                }
+
+                return this.searchResult.filter((r: any, i: number) => i >= 3);
+            },
+
             loadAnimationDuration(): (index: number) => number {
                 return (index: number) => {
                     if (index > 20) {
@@ -195,6 +238,22 @@
 
                 this.searchResult = this.searchResult.sort(sort);
             },
+
+            addFreeformText() {
+                this.$root.$data.addToUncheckedShoppingList({
+                    id: `freeform-${uuid()}`,
+                    name: this.searchTerm,
+                    image: '',
+                    price: 0,
+                    description: '',
+                    quantity: 1,
+                    isChecked: false,
+                    timesAddedToShoppingList: 0,
+                    isFreeform: true,
+                });
+
+                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Added as Freeform Text!');
+            },
         },
 
         async created(): Promise<void> {
@@ -260,6 +319,11 @@
 
         .search-container {
             padding: 1rem;
+        }
+
+        .freeform-container {
+            padding: 1rem 0;
+            text-align: center;
         }
     }
 </style>
