@@ -1,5 +1,16 @@
 <template>
-    <div class="alternative-product-component" @click="onClick">
+    <div
+        class="alternative-product-component"
+        @click="onClick"
+        :class="{
+            'is-cheaper': isCheaper,
+            'is-healthier': isHealthier,
+        }"
+    >
+        <div class="benefit-container">
+            <div class="healthier">Healthier</div>
+            <div class="cheaper">Cheaper</div>
+        </div>
         <div class="image-container">
             <img :src="product.image">
         </div>
@@ -24,7 +35,7 @@
     export default Vue.extend({
         name: 'AlternativeProductComponent',
 
-        props: ['product'],
+        props: ['product', 'originalProduct'],
 
         components: {
             ButtonComponent,
@@ -43,6 +54,21 @@
                 }
 
                 return 'Add';
+            },
+
+            isCheaper(): boolean {
+                return this.product.price < this.originalProduct.price;
+            },
+
+            isHealthier(): boolean {
+                if (!this.product.productData
+                        || !this.originalProduct.productData) {
+
+                    return false;
+                }
+
+                return this.product.productData.healthScore >
+                    this.originalProduct.productData.healthScore;
             },
         },
 
@@ -85,11 +111,61 @@
     .alternative-product-component {
         min-width: 250px;
         padding: 1rem 2rem;
+        position: relative;
         display: inline-block;
         text-align: center;
         background-color: theme(white);
         white-space: pre-wrap;
         cursor: pointer;
+
+        .benefit-container {
+            position: absolute;
+            top: -0;
+            left: 0.5rem;
+            transform: translateY(-50%);
+            color: theme(white);
+
+            .cheaper,
+            .healthier {
+                padding: 0.25rem 0.5rem;
+                border-radius: layout(border-radius);
+            }
+
+            .cheaper {
+                display: none;
+                background-color: #171796;
+            }
+
+            .healthier {
+                display: none;
+                background-color: #176417;
+                margin-right: 0.5rem;
+            }
+        }
+
+        &.is-cheaper,
+        &.is-healthier {
+            .benefit-container {
+                opacity: 1;
+                pointer-events: all;
+            }
+        }
+
+        &.is-cheaper .benefit-container .cheaper {
+            display: initial;
+        }
+
+        &.is-healthier .benefit-container .healthier {
+            display: initial;
+        }
+
+        &.is-healthier {
+            outline: 0.25rem solid rgba(23, 100, 23, 0.3);
+        }
+
+        &.is-cheaper {
+            outline: 0.25rem solid rgba(23, 23, 150, 0.3);
+        }
 
         @include box-shadow-small;
 

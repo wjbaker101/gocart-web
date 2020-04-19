@@ -57,7 +57,12 @@
                 <span>Alternative Products</span>
             </h2>
             <section class="alternative-products-section" v-if="alternativeProducts.length > 0">
-                <AlternativeProductComponent :key="`ap-${index}`" v-for="(p, index) in alternativeProducts" :product="p" />
+                <AlternativeProductComponent
+                    :key="`ap-${index}`"
+                    v-for="(p, index) in alternativeProducts"
+                    :product="p"
+                    :originalProduct="product" />
+                <div style="min-width: 1rem;"></div>
             </section>
         </div>
     </div>
@@ -181,6 +186,31 @@
                 timesAddedToShoppingList: 0,
             }));
 
+            await this.getAlternativeProductsData(result);
+
+            result.sort((a: ITescoProduct, b: ITescoProduct) => {
+                if (!a.productData || !b.productData) {
+                    return 0;
+                }
+
+                const relativeA = a.productData.healthScore / a.price;
+                const relativeB = b.productData.healthScore / b.price;
+
+                if (relativeA === relativeB) {
+                    return 0;
+                }
+
+                if (relativeA < relativeB) {
+                    return 1;
+                }
+
+                if (relativeA > relativeB) {
+                    return -1;
+                }
+
+                return 0;
+            });
+
             this.alternativeProducts = result;
         },
 
@@ -212,6 +242,29 @@
                 TescoProductService.addDataToExistingProduct(this.product, result);
 
                 this.productData = this.product.productData;
+            },
+
+            async getAlternativeProductsData(products: ITescoProduct[]): Promise<void> {
+                const tpncList = products
+                        .map((r: ITescoProduct) => r.id);
+
+                const productDataResult =
+                        await TescoClient.getMultiProductDataByTPNC(tpncList);
+
+                if (productDataResult instanceof Error) {
+                    return;
+                }
+
+                products.forEach((alternativeProduct: ITescoProduct) => {
+                    const product = productDataResult.result
+                            .find(p => Number(p.tpnc) === alternativeProduct.id);
+
+                    if (product) {
+                        TescoProductService.addDataToExistingProduct(
+                                alternativeProduct,
+                                product);
+                    }
+                });
             },
 
             getNumericalValue(value: string | number): string {
