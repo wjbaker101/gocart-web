@@ -53,17 +53,24 @@
                     </tbody>
                 </table>
             </section>
-            <h2 v-if="alternativeProducts.length > 0">
-                <span>Alternative Products</span>
-            </h2>
-            <section class="alternative-products-section" v-if="alternativeProducts.length > 0">
-                <AlternativeProductComponent
-                    :key="`ap-${index}`"
-                    v-for="(p, index) in alternativeProducts"
-                    :product="p"
-                    :originalProduct="product" />
-                <div style="min-width: 1rem;"></div>
-            </section>
+            <div v-if="alternativeProducts.length > 0">
+                <h2>
+                    <span>Alternative Products</span>
+                </h2>
+                <section>
+                    <p>Adding an alternative product will automatically remove <strong>{{ product.name }}</strong> from your shopping list.</p>
+                </section>
+                <section class="alternative-products-section">
+                    <AlternativeProductComponent
+                        :key="`ap-${index}`"
+                        v-for="(p, index) in alternativeProducts"
+                        :product="p"
+                        :originalProduct="product"
+                        @onAdd="onAlternativeProductAdd"
+                    />
+                    <div style="min-width: 1rem;"></div>
+                </section>
+            </div>
         </div>
     </div>
 </template>
@@ -265,6 +272,10 @@
                                 product);
                     }
                 });
+            },
+
+            onAlternativeProductAdd(productID: string) {
+                this.isProductInShoppingList = false;
             },
 
             getNumericalValue(value: string | number): string {

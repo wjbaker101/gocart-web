@@ -97,6 +97,11 @@
 
                 if (this.isInList) {
                     this.$root.$data.addToUncheckedShoppingList(this.product);
+
+                    this.$root.$data.removeFromUncheckedShoppingList(this.originalProduct.id);
+                    this.$root.$data.removeFromCheckedShoppingList(this.originalProduct.id);
+
+                    this.$emit('onAdd', this.product.id);
                 }
                 else {
                     this.$root.$data.removeFromUncheckedShoppingList(this.product.id);
