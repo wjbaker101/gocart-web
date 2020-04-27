@@ -77,7 +77,7 @@ export const FirebaseClient = {
         }
     },
 
-    async saveShoppingList() {
+    async saveShoppingList(timestamp: number): Promise<void> {
         const user = AppState.getUser();
 
         if (user === null) {
@@ -88,7 +88,7 @@ export const FirebaseClient = {
         const checkedList = AppState.getCheckedShoppingList();
 
         await database.collection('users').doc(user.uid).update({
-            backupTimestamp: Date.now(),
+            backupTimestamp: timestamp,
             uncheckedList,
             checkedList,
         });

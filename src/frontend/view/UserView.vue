@@ -75,14 +75,14 @@
 
         computed: {
             lastBackUpText(): string {
-                if (this.backupTimestamp === null) {
+                if (!this.backupTimestamp) {
                     return 'Never';
                 }
 
                 const date = new Date(Number(this.backupTimestamp));
 
-                const day = NumberUtils.padNumber(date.getDay());
-                const month = NumberUtils.padNumber(date.getMonth());
+                const day = NumberUtils.padNumber(date.getDate());
+                const month = NumberUtils.padNumber(date.getMonth() + 1);
                 const year = date.getFullYear();
 
                 const hours = NumberUtils.padNumber(date.getHours());
@@ -111,7 +111,11 @@
             },
 
             async onBackUp() {
-                await FirebaseClient.saveShoppingList();
+                const timestamp = Date.now();
+
+                await FirebaseClient.saveShoppingList(timestamp);
+
+                this.backupTimestamp = timestamp;
 
                 EventService.$emit(Events.EVENT_POPUP_SHOW, 'Back Up Successful!');
             },
