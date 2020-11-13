@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: layout(border-radius);
+    overflow: hidden;
+
+    thead {
+        text-align: left;
+        background-color: theme(primary);
+        background: linear-gradient(-15deg, theme(primary-dark), theme(primary));
+        color: theme(white);
+
+        th {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+
+    tbody {
+        background-color: theme(white);
+
+        td {
+            padding: 0.25rem 0.5rem;
+
+            &.numerical {
+                text-align: right;
+            }
+        }
+    }
+}

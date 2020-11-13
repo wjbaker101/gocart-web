@@ -1,197 +1,165 @@
 <template>
-    <div class="shop-search-view">
-        <HeaderComponent :hasBackButton="true">
-            <template v-slot:below>
-                <div class="search-input-container">
-                    <input
-                        ref="shopSearchInput"
-                        v-model="searchTerm"
-                        placeholder="London"
-                        @keypress.enter="onSearch"
-                        type="search">
-                    <ButtonComponent class="search-button" @click="onSearch">
-                        <SearchIcon />
-                    </ButtonComponent>
-                </div>
-            </template>
-        </HeaderComponent>
-        <div class="search-container">
-            <p class="text-centered" v-show="!isLoaded && !isLoading">No results yet!</p>
-            <p class="text-centered" v-show="isLoading">Searching...</p>
-            <div class="search-results" v-show="isLoaded && searchResult !== null">
-                <ShopItemComponent
-                    v-bind:key="index"
-                    v-for="(shop, index) in searchResult"
-                    :style="`animation-duration: ${loadAnimationDuration(index)}s`"
+    <PageContainerComponent backButton>
+        <template #header-bottom>
+            <div class="flex">
+                <input
+                    ref="searchTextbox"
+                    type="search"
+                    placeholder="London"
+                    class="header-shop-search-view-search-textbox"
+                    v-model="searchTerm"
+                    @keyup.enter="onSearch"
+                >
+                <ButtonComponent
+                    class="flex-auto"
+                    v-if="searchTerm.length > 0"
+                    @click="onClearSearch"
+                    isSecondary
+                >
+                    &times;
+                </ButtonComponent>
+            </div>
+        </template>
+        <div class="shop-search-view">
+            <section v-if="isSearching">
+                <LoadingComponent>
+                    <p>Finding shops near you,<br> give me a second...</p>
+                </LoadingComponent>
+            </section>
+            <section class="zero-state" v-else-if="shops === null">
+                <SearchIcon massive />
+                <p><strong>Enter a specific location,</strong>
+                <br>I'll try and find a Tesco shop nearby!</p>
+            </section>
+            <section class="zero-state" v-else-if="shops.length === 0">
+                <QuestionMarkCircleIcon massive />
+                <p><strong>Sorry, I didn't find anything,</strong>
+                <br>Try something different!</p>
+            </section>
+            <div class="shop-list" v-else>
+                <ShopComponent
+                    :key="`shop-${index}`"
+                    v-for="(shop, index) in shops"
                     :shop="shop"
-                    :isExpanded="shop.isExpanded"
-                    @click.native="expandShop(shop)" />
+                    :isOpen="shop.name === openShop"
+                    @open="onOpen"
+                    @close="onClose"
+                />
             </div>
         </div>
-    </div>
+    </PageContainerComponent>
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
+import { onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
 
-    import TescoClient from '@frontend/api/TescoClient';
-    import { LocationClient } from '@frontend/api/LocationClient';
+import PageContainerComponent from '@/component/PageContainerComponent.vue';
+import LoadingComponent from '@/component/LoadingComponent.vue';
+import ShopComponent from '@/component/ShopComponent.vue';
+import ButtonComponent from '@/component/item/ButtonComponent.vue';
+import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
+import SearchIcon from '@/component/icon/SearchIcon.vue';
 
-    import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
-    import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
-    import ShopItemComponent from '@frontend/component/ShopItemComponent.vue';
+import { TescoService } from '@/service/Tesco.service';
+import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-    import SearchIcon from '@frontend/assets/icon/search.svg';
+import { AppState } from '@/store/type/AppState.model';
+import { Shop } from '@/model/Shop.model';
 
-    import { IStoreLocationResponseResult } from '@common/interface/response/IStoreLocationResponse';
-import { EventService, Events } from '../service/EventService';
+export default {
+    name: 'ProductSearchView',
 
-    interface IStoreLocationExpandable extends IStoreLocationResponseResult {
-        isExpanded: boolean,
-    }
+    components: {
+        PageContainerComponent,
+        LoadingComponent,
+        ShopComponent,
+        ButtonComponent,
+        QuestionMarkCircleIcon,
+        SearchIcon,
+    },
 
-    export default Vue.extend({
-        name: 'ShopSearchView',
+    setup() {
+        const store = useStore<AppState>();
 
-        components: {
-            HeaderComponent,
-            ButtonComponent,
-            ShopItemComponent,
-            SearchIcon,
-        },
+        const searchTextbox = ref<HTMLInputElement | null>(null);
 
-        data() {
-            return {
-                searchResult: null as (IStoreLocationExpandable[] | null),
-                searchTerm: '',
-                isLoaded: false,
-                isLoading: false,
-                isSortOptionsVisible: false,
-                expandedShop: null as (IStoreLocationExpandable | null),
-            }
-        },
+        const searchTerm = ref<string>('');
+        const isSearching = ref<boolean>(false);
+        const shops = ref<Shop[] | null>(null);
 
-        computed: {
-            loadAnimationDuration(): (index: number) => number {
-                return (index: number) => {
-                    if (index > 20) {
-                        return 20 * 0.15;
+        const openShop = ref<string>('');
+
+        onMounted(() => {
+            searchTextbox.value?.focus();
+        });
+
+        UseScrollPosition('ShopSearchView');
+
+        return {
+            searchTextbox,
+            searchTerm,
+            isSearching,
+            shops,
+            openShop,
+
+            async onSearch() {
+                if (searchTerm.value === null)
+                    return;
+
+                if (searchTerm.value.trim().length < 3)
+                    return;
+
+                searchTextbox.value?.blur();
+
+                isSearching.value = true;
+
+                const searchShops =
+                    await TescoService.getNearbyShops(searchTerm.value);
+
+                isSearching.value = false;
+
+                if (searchShops instanceof Error) {
+                    shops.value = null;
+
+                    searchTextbox.value?.focus();
+                }
+                else {
+                    shops.value = searchShops;
+
+                    if (shops.value.length === 0) {
+                        searchTextbox.value?.focus();
                     }
-
-                    return (index + 1) * 0.15;
                 }
             },
-        },
 
-        methods: {
-            async onSearch(): Promise<void> {
-                const shopSearchInput: HTMLInputElement
-                        = this.$refs.shopSearchInput;
-
-                if (this.searchTerm.length === 0) {
-                    shopSearchInput.focus();
-
-                    return;
-                }
-
-                this.isLoaded = false;
-                this.isLoading = true;
-
-                shopSearchInput.blur();
-
-                const response = await TescoClient.getNearbyShops(this.searchTerm);
-
-                if (response instanceof Error) {
-                    shopSearchInput.focus();
-                    return;
-                }
-
-                if (response.result.length === 0) {
-                    shopSearchInput.focus();
-                }
-
-                this.searchResult = response.result.map(s => ({
-                    ...s,
-                    isExpanded: false,
-                }));
-
-                this.isLoaded = true;
-                this.isLoading = false;
+            onClearSearch() {
+                searchTerm.value = '';
             },
 
-            expandShop(shop: IStoreLocationExpandable): void {
-                const expanded = shop.isExpanded;
-
-                if (this.expandedShop) {
-                    this.expandedShop.isExpanded = false;
-                }
-
-                shop.isExpanded = !expanded;
-                this.expandedShop = shop;
+            onOpen(shopName: string) {
+                openShop.value = shopName;
             },
 
-            requestLocation() {
-                if (!navigator.geolocation) {
-                    return;
-                }
-
-                navigator.geolocation.getCurrentPosition(
-                        this.onLocationSuccess,
-                        this.onLocationFailure);
+            onClose() {
+                openShop.value = '';
+                searchTextbox.value?.focus();
             },
-
-            async onLocationSuccess(location: Position): Promise<void> {
-                const { latitude, longitude } = location.coords;
-
-                const response =
-                        await LocationClient.getPostcode(latitude, longitude);
-
-                this.searchTerm = response.result;
-
-                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Using your current location!');
-
-                await this.onSearch();
-            },
-
-            onLocationFailure(error: PositionError): void {
-                EventService.$emit(Events.EVENT_POPUP_SHOW, 'Unable to use your location.');
-            },
-        },
-
-        async created() {
-            this.$emit('viewChange', 'shop_search');
-        },
-
-        async mounted() {
-            await this.requestLocation();
-        },
-    })
+        }
+    },
+}
 </script>
 
 <style lang="scss">
-    .shop-search-view {
+.header-shop-search-view-search-textbox {
+    margin-right: 0.5rem;
+    text-transform: capitalize;
+}
 
-        .search-input-container {
-            padding-top: 1rem;
-            display: flex;
+.shop-search-view {
 
-            .search-input {
-                flex: 1;
-                border-radius: layout(border-radius);
-            }
-
-            .search-button {
-                flex: 0 0 auto;
-                margin-left: 0.5rem;
-            }
-        }
-
-        .search-container {
-            padding: 1rem 0;
-        }
-
-        .search-results {
-            padding: 0 1rem;
-        }
+    .shop-list {
+        padding-top: 0.5rem;
     }
+}
 </style>

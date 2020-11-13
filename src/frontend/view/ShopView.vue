@@ -1,151 +1,189 @@
 <template>
-    <div class="shop-view">
-        <HeaderComponent>
-            <template #right-side>
-                <router-link to="/shop/search">
-                    <EditIcon />
-                </router-link>
-            </template>
-            <template #below v-if="shop">
-                <div class="shop-title-container">
-                    <h2>{{ shop.location.name }}</h2>
-                </div>
-            </template>
-        </HeaderComponent>
-        <div class="view-content zerostate-shop-view" v-if="!shop">
-            <section class="text-centered">
-                <ShopIcon class="zerostate-shop-icon icon-xlarge" />
-                <p><strong>No shop selected!</strong></p>
-                <p>Choose a shop, and it'll appear here.</p>
+    <PageContainerComponent>
+        <template #header-right>
+            <router-link class="header-shop-view-edit-group" to="/shop/search">
+                <EditIcon />
+                <span>Edit</span>
+            </router-link>
+        </template>
+        <template #header-bottom v-if="shop !== null">
+            <h3 class="header-shop-view-shop-name">{{ shop.name }}</h3>
+        </template>
+        <div class="shop-view">
+            <section class="zero-state" v-if="shop === null">
+                <ShopIcon massive />
+                <p><strong>You haven't selected a shop yet!</strong></p>
+                <p>Press the 'Edit' button above to choose one.</p>
             </section>
+            <div v-else>
+                <section class="background">
+                    <h2>Opening Hours</h2>
+                    <table class="opening-hours-table">
+                        <tbody>
+                            <tr>
+                                <td>Mon</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.mo) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tues</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.tu) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Weds</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.we) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Thurs</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.th) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Fri</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.fr) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sat</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.sa) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sun</td>
+                                <td>{{ getOpeningHour(shop.openingHour?.su) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="background">
+                    <h2>Location Preview</h2>
+                    <div class="preview-image-container text-centered">
+                        <div
+                            class="preview-image-placeholder"
+                            v-if="!shop.location.mapImage"
+                        >
+                            <LoadingComponent>
+                                <p>Just grabbing a preview image,<br> one moment...</p>
+                            </LoadingComponent>
+                        </div>
+                        <img
+                            v-else
+                            width="350"
+                            height="350"
+                            class="preview-image fade-in-long"
+                            :src="`data:image/png;base64,${shop.location.mapImage}`"
+                        >
+                    </div>
+                </section>
+                <section class="background" v-if="displayFacilities.length > 0">
+                    <h2>Facilities Provided</h2>
+                    <ul>
+                        <li
+                            :key="`facility-${index}`"
+                            v-for="(facility, index) in displayFacilities"
+                        >
+                            {{ facility }}
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </div>
-        <div class="view-content" v-if="shop">
-            <h2>Opening Hours</h2>
-            <section>
-                <table class="opening-hours-table">
-                    <tbody>
-                        <tr>
-                            <td>Mon</td>
-                            <td>{{ getOpeningHour(openingHours.mo) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Tues</td>
-                            <td>{{ getOpeningHour(openingHours.tu) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Weds</td>
-                            <td>{{ getOpeningHour(openingHours.we) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Thurs</td>
-                            <td>{{ getOpeningHour(openingHours.th) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fri</td>
-                            <td>{{ getOpeningHour(openingHours.fr) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sat</td>
-                            <td>{{ getOpeningHour(openingHours.sa) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sun</td>
-                            <td>{{ getOpeningHour(openingHours.su) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-            <h2>Facilities Provided</h2>
-            <section>
-                <ul>
-                    <li v-for="(facility, index) in facilities" :key="index">{{ facility }}</li>
-                </ul>
-            </section>
-        </div>
-    </div>
+    </PageContainerComponent>
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
+import { computed, readonly } from 'vue';
+import { useStore } from 'vuex';
 
-    import {
-        IStoreLocationResponseResult,
-        IStoreLocationResponseOpeningHour,
-        IStoreLocationResponseOpeningHours,
-        IStoreLocationResponseFacility,
-    }
-    from '@common/interface/response/IStoreLocationResponse';
+import PageContainerComponent from '@/component/PageContainerComponent.vue';
+import LoadingComponent from '@/component/LoadingComponent.vue';
+import EditIcon from '@/component/icon/PencilIcon.vue';
+import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-    import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
+import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-    import EditIcon from '@frontend/assets/icon/edit.svg';
-    import ShopIcon from '@frontend/assets/icon/shop.svg';
+import { AppState } from '@/store/type/AppState.model';
+import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
 
-    export default Vue.extend({
-        name: 'ShopView',
+export default {
+    name: 'ShopView',
 
-        components: {
-            HeaderComponent,
-            EditIcon,
-            ShopIcon,
-        },
+    components: {
+        PageContainerComponent,
+        LoadingComponent,
+        EditIcon,
+        ShopIcon,
+    },
 
-        data() {
-            return {
-                shop: null as (IStoreLocationResponseResult | null),
+    setup() {
+        const store = useStore<AppState>();
 
-                allowedFacilities: {
-                    'ATM': 'ATM',
-                    'Cafe': 'Cafe',
-                    'Clothing Range': 'Clothing Range',
-                    'Customer Recycling Point': 'Recycling Point',
-                    'Disabled parking facilities are available': 'Disabled Parking',
-                    'Facilities are available for people who are visually impaired. Including large print and braille.': 'Visually Impaired Facilities',
-                    'Facilities are available for people with hearing impairments.': 'Hearing Impaired Facilities',
-                    'Facilities are available for people with mobility impairment.': 'Mobility Impaired Facilities',
-                    'Jet Wash': 'Jet Wash',
-                    'Hand Car Wash': 'Hand Car Wash',
-                    'Petrol': 'Petrol',
-                    'Photo Booth - Digital Passport Enabled': 'Photo Booth',
-                    'Scan as you Shop': 'Scan as you Shop',
-                    'Tesco Mobile Shop': 'Tesco Mobile Shop',
-                    'Tesco Pay+': 'Tesco Pay+',
-                    'Toilets': 'Toilets',
-                    'Wifi': 'Wifi',
-                    'Collect+': 'Collect+',
-                    'Self-Service Instant Photo Printing': 'Self-Service Instant Photo Printing',
-                    'Pharmacy': 'Pharmacy',
-                    'Timpson': 'Timpson',
-                },
+        const shop = computed<Shop | null>(() => store.getters.selectedShop);
+
+        const allowedFacilities = readonly<Record<string, string>>({
+            'ATM': 'ATM',
+            'Cafe': 'Cafe',
+            'Clothing Range': 'Clothing Range',
+            'Customer Recycling Point': 'Recycling Point',
+            'Disabled parking facilities are available': 'Disabled Parking',
+            'Facilities are available for people who are visually impaired. Including large print and braille.': 'Visually Impaired Facilities',
+            'Facilities are available for people with hearing impairments.': 'Hearing Impaired Facilities',
+            'Facilities are available for people with mobility impairment.': 'Mobility Impaired Facilities',
+            'Jet Wash': 'Jet Wash',
+            'Hand Car Wash': 'Hand Car Wash',
+            'Petrol': 'Petrol',
+            'Photo Booth - Digital Passport Enabled': 'Photo Booth',
+            'Scan as you Shop': 'Scan as you Shop',
+            'Tesco Mobile Shop': 'Tesco Mobile Shop',
+            'Tesco Pay+': 'Tesco Pay+',
+            'Toilets': 'Toilets',
+            'Wifi': 'Wifi',
+            'Collect+': 'Collect+',
+            'Self-Service Instant Photo Printing': 'Self-Service Instant Photo Printing',
+            'Pharmacy': 'Pharmacy',
+            'Timpson': 'Timpson',
+        });
+
+        const displayFacilities = computed<string[]>(() => {
+            if (shop.value === null || shop.value.facilities === null)
+                return [];
+
+            return shop.value.facilities
+                .map(f => allowedFacilities[f])
+                .filter(f => f !== undefined)
+                .sort((a: string, b: string) => {
+                    if(a < b) return -1;
+                    if(a > b) return 1;
+                    return 0;
+                });
+        });
+
+        const formatOpeningHour = (openingHour: string): string => {
+            const hour = Number(`${openingHour[0]}${openingHour[1]}`);
+            const minutes = Number(`${openingHour[2]}${openingHour[3]}`);
+
+            if (hour === 0 || hour === 24) {
+                return 'Midnight';
             }
-        },
 
-        computed: {
-            openingHours(): Record<string, IStoreLocationResponseOpeningHour> | null {
-                if (!this.shop) return null;
+            const hourPostfix = (hour > 12) ? 'pm' : 'am';
+            const hour12Hour = (hour > 12) ? hour - 12 : hour;
 
-                return this.shop.location.openingHours[0].standardOpeningHours;
-            },
+            const minutesFormatted = minutes.toString().padStart(2, '0');
 
-            facilities(): IStoreLocationResponseFacility[] {
-                return this.shop.location.facilities
-                        .slice()
-                        .filter((f: IStoreLocationResponseFacility) => (f.description in this.allowedFacilities))
-                        .map((f: IStoreLocationResponseFacility) => this.allowedFacilities[f.description])
-                        .sort(this.sortByFacilityDescription);
-            },
-        },
-
-        async created(): Promise<void> {
-            const cachedShop = await this.$root.$data.getSelectedShop();
-
-            if (cachedShop && cachedShop !== null) {
-                this.shop = cachedShop;
+            if (minutes === 0) {
+                return `${hour12Hour}${hourPostfix}`;
             }
-        },
 
-        methods: {
-            getOpeningHour(openingHour: IStoreLocationResponseOpeningHour): string {
+            return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
+        };
+
+        UseScrollPosition('ShopView');
+
+        return {
+            shop,
+            displayFacilities,
+
+            getOpeningHour(openingHour: ShopOpeningHourHours): string {
+                if (!openingHour) {
+                    return 'No data';
+                }
                 if (!openingHour.isOpen) {
                     return 'Closed';
                 }
@@ -156,78 +194,64 @@
                     return '24 Hours';
                 }
 
-                const open = this.formatOpeningHour(!openingHour.open ? '0000' : openingHour.open);
-                const close = this.formatOpeningHour(!openingHour.close ? '0000' : openingHour.close);
+                const open = formatOpeningHour(!openingHour.open ? '0000' : openingHour.open);
+                const close = formatOpeningHour(!openingHour.close ? '0000' : openingHour.close);
 
                 return `${open} - ${close}`;
             },
-
-            formatOpeningHour(openingHour: string): string {
-                const hour = Number(`${openingHour[0]}${openingHour[1]}`);
-                const minutes = Number(`${openingHour[2]}${openingHour[3]}`);
-
-                if (hour === 0 || hour === 24) {
-                    return 'Midnight';
-                }
-
-                const hourPostfix = (hour > 12) ? 'pm' : 'am';
-                const hour12Hour = (hour > 12) ? hour - 12 : hour;
-
-                const minutesFormatted = minutes.toString().padStart(2, '0');
-
-                if (minutes === 0) {
-                    return `${hour12Hour}${hourPostfix}`;
-                }
-
-                return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
-            },
-
-            sortByFacilityDescription(a: string, b: string): number {
-                if(a < b) return -1;
-                if(a > b) return 1;
-                return 0;
-            },
-        },
-    })
+        }
+    },
+}
 </script>
 
 <style lang="scss">
-    .shop-view {
+.header-shop-view-edit-group {
+    color: inherit;
+    text-decoration: none;
+}
 
-        .shop-title-container {
-            text-align: center;
+.header-shop-view-shop-name {
+    margin: 0;
+    text-align: center;
+}
 
-            h2 {
-                margin-bottom: 0;
-            }
-        }
+.shop-view {
 
-        .opening-hours-table {
+    .preview-image-container {
+        line-height: 0;
+    }
+
+    .preview-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: layout(border-radius);
+
+        @include box-shadow-small;
+    }
+
+    .preview-image-placeholder {
+        width: 350px;
+        max-width: 100%;
+        position: relative;
+        margin: 0 auto;
+        border-radius: layout(border-radius);
+        line-height: 1.6rem;
+
+        @include box-shadow-small;
+
+        .loading-component {
             width: 100%;
-
-            td {
-                border-bottom: 1px solid theme(grey-dark);
-
-                &:first-child {
-                    width: 33%;
-                }
-            }
-
-            tr {
-
-                :first-child {
-                    font-weight: bold;
-                    padding-right: 1rem;
-                }
-            }
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .zerostate-shop-view {
-            padding-top: 25vh;
-
-            .zerostate-shop-icon {
-                color: theme(primary);
-            }
+        &::before {
+            content: '';
+            display: block;
+            padding-top: 100%;
         }
     }
+}
 </style>

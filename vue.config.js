@@ -1,17 +1,11 @@
-const config = require('./src/common/config/config.json');
+const config = require('./src/frontend/config/properties.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    outputDir: './build/src/frontend',
+    outputDir: './src/backend/src/main/resources/public',
 
     chainWebpack(config) {
         config.module.rules.delete('svg');
-
-        config.plugin('fork-ts-checker')
-            .tap(args => {
-                args[0].tsconfig = './tsconfig.frontend.json';
-                return args;
-            });
 
         config.plugin('html')
             .tap(args => {
@@ -31,22 +25,24 @@ module.exports = {
         },
         resolve: {
             alias: {
-                '@common': __dirname + '/src/common',
-                '@frontend': __dirname + '/src/frontend',
+                '@': __dirname + '/src/frontend',
             },
         },
         entry: {
             app: './src/frontend/main.ts',
         },
         plugins: [
-            new CopyWebpackPlugin([{
-                from: 'src/frontend/public/',
-                to: '',
-            }]),
+            new CopyWebpackPlugin({
+                patterns: [{
+                    from: 'src/frontend/public/',
+                    to: '',
+                }],
+            }),
         ],
     },
 
     devServer: {
+        port: config.frontend.port,
         proxy: {
             '/api': {
                 target: `http://localhost:${config.backend.port}`,
@@ -60,18 +56,16 @@ module.exports = {
     css: {
         loaderOptions: {
             sass: {
-                data: `
-                    @import 'src/frontend/style/webstyle.scss';
-                `,
+                prependData: `@import 'src/frontend/style/global-inject.scss';`,
             },
         },
     },
 
     pwa: {
         name: 'GoCart',
-        themeColor: '#176bc0',
-        msTileColor: '#176bc0',
+        themeColor: '#2292a4',
+        msTileColor: '#2292a4',
         appleMobileWebAppCapable: 'yes',
-        appleMobileWebAppStatusBarStyle: '176bc0',
+        appleMobileWebAppStatusBarStyle: '2292a4',
     },
 }

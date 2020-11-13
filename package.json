@@ -1,84 +1,38 @@
 {
-  "name": "gocart",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "lint": "vue-cli-service lint",
-    "build:all": "npm run build:backend && npm run build:frontend",
-    "build:backend": "npx tsc -p ./tsconfig.backend.json",
-    "build:frontend": "vue-cli-service build",
-    "start:backend": "npm run build:backend && node ./build/src/backend/server.js",
-    "start:frontend": "vue-cli-service serve"
-  },
-  "dependencies": {
-    "@types/connect-history-api-fallback": "^1.3.3",
-    "@types/dateformat": "^3.0.1",
-    "@types/express": "^4.17.2",
-    "@types/node": "^12.12.24",
-    "@types/qs": "^6.9.1",
-    "axios": "^0.19.0",
-    "body-parser": "^1.19.0",
-    "connect-history-api-fallback": "^1.6.0",
-    "core-js": "^2.6.11",
-    "dateformat": "^3.0.3",
-    "express": "^4.17.1",
-    "immortal-db": "^1.0.3",
-    "module-alias": "^2.2.2",
-    "qs": "^6.9.1",
-    "quagga": "^0.12.1",
-    "register-service-worker": "^1.7.0",
-    "tslib": "^1.10.0",
-    "vue": "^2.6.11",
-    "vue-router": "^3.1.6",
-    "vuedraggable": "^2.23.2"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.25",
-    "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-plugin-eslint": "^4.2.3",
-    "@vue/cli-plugin-pwa": "^4.1.2",
-    "@vue/cli-plugin-typescript": "^4.1.2",
-    "@vue/cli-service": "^4.2.3",
-    "@vue/eslint-config-typescript": "^4.0.0",
-    "@vue/test-utils": "^1.0.0-beta.30",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^24.9.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.2.3",
-    "jest": "^25.1.0",
-    "node-sass": "^4.13.1",
-    "node-ts": "^5.0.4",
-    "sass-loader": "^7.3.1",
-    "ts-jest": "^24.3.0",
-    "typescript": "^3.8.3",
-    "vue-cli-plugin-typescript": "0.0.1",
-    "vue-jest": "^3.0.5",
-    "vue-svg-loader": "^0.12.0",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue",
-      "ts"
-    ],
-    "transform": {
-      ".*\\.(vue)$": "vue-jest",
-      "^.+\\.tsx?$": "ts-jest",
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    "name": "gocart-web",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build"
     },
-    "moduleNameMapper": {
-      "^@backend/(.*)$": "<rootDir>/src/backend/$1",
-      "^@common/(.*)$": "<rootDir>/src/common/$1",
-      "^@frontend/(.*)$": "<rootDir>/src/frontend/$1"
-    }
-  },
-  "_moduleAliases": {
-    "@backend": "build/src/backend",
-    "@common": "build/src/common",
-    "@frontend": "build/src/frontend"
-  }
+    "dependencies": {
+        "axios": "^0.21.0",
+        "core-js": "^3.6.5",
+        "immortal-db": "^1.1.0",
+        "register-service-worker": "^1.7.1",
+        "vue": "^3.0.0",
+        "vue-class-component": "^8.0.0-0",
+        "vue-draggable-next": "^2.0.0",
+        "vue-router": "^4.0.0-0",
+        "vuex": "^4.0.0-0"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-pwa": "~4.5.0",
+        "@vue/cli-plugin-router": "~4.5.0",
+        "@vue/cli-plugin-typescript": "~4.5.0",
+        "@vue/cli-plugin-vuex": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/compiler-sfc": "^3.0.0",
+        "copy-webpack-plugin": "^6.2.1",
+        "node-sass": "^4.12.0",
+        "sass-loader": "^8.0.2",
+        "typescript": "~3.9.3"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
 }

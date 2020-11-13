@@ -1,0 +1,48 @@
+$primary: #2292a4;
+$secondary: #d96c06;
+$accent: #ce1483;
+$negative: #ee3731;
+
+$colours: (
+    white: #fff,
+
+    black: #0f0a0a,
+    black-light: #444,
+    black-dark: #000,
+
+    grey: #ececec,
+    grey-light: #fafafa,
+    grey-dark: #d2d2d2,
+
+    primary: $primary,
+    primary-light: lighten($primary, 10%),
+    primary-dark: darken($primary, 10%),
+
+    secondary: $secondary,
+    secondary-light: lighten($secondary, 10%),
+    secondary-dark: darken($secondary, 10%),
+
+    accent: $accent,
+    accent-light: lighten($accent, 10%),
+    accent-dark: darken($accent, 10%),
+
+    negative: $negative,
+    negative-light: lighten($negative, 10%),
+    negative-dark: darken($negative, 10%),
+);
+
+@function theme($colour) {
+    @return map-get($colours, $colour);
+}
+
+@mixin box-shadow-small {
+    box-shadow:
+        1px 0 1px rgba(0, 0, 0, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@mixin box-shadow-small-hover {
+    box-shadow:
+        1px 0 1px rgba(0, 0, 0, 0.2),
+        0 2px 6px rgba(0, 0, 0, 0.4);
+}

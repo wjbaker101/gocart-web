@@ -1,0 +1,21 @@
+.fade-in-short {
+    animation: fade-in animation(duration-short);
+}
+
+.fade-in-mid {
+    animation: fade-in animation(duration-mid);
+}
+
+.fade-in-long {
+    animation: fade-in animation(duration-long);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

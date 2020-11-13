@@ -1,262 +1,312 @@
 <template>
-    <div class="product-search-view">
-        <HeaderComponent>
-            <template v-slot:below>
-                <div class="search-input-container">
-                    <input ref="productSearchInput"
-                            v-model="searchTerm"
-                            placeholder="Apple Pie"
-                            @keypress.enter="onSearch"
-                            type="search">
-                    <ButtonComponent class="search-button" @click="onSearch">
-                        <SearchIcon />
-                    </ButtonComponent>
-                </div>
-            </template>
-            <template v-slot:right-side>
-                <div class="sort-container" @click="isSortOptionsVisible = ! isSortOptionsVisible">
-                    Sort Results
-                    <SortIcon />
-                    <SearchSortComponent
-                        :isVisible="isSortOptionsVisible"
-                        @sortChange="onSortChange" />
-                </div>
-            </template>
-        </HeaderComponent>
-        <div class="search-container">
-            <p class="text-centered" v-show="!isLoaded && !isLoading">No results yet!</p>
-            <p class="text-centered" v-show="isLoading">Searching...</p>
-            <div class="search-results" v-show="isLoaded && searchResult !== null">
-                <ProductItemComponent
-                    v-bind:key="index"
-                    v-for="(product, index) in searchResult"
+    <PageContainerComponent backButton>
+        <template #header-right>
+            <div
+                class="product-search-view-sort-filter-button"
+                @click="onSortAndFilterToggle"
+            >
+                <SortIcon />
+                <span>Sort &amp; Filter</span>
+            </div>
+        </template>
+        <template #header-bottom>
+            <div
+                class="product-search-view-sort-filter-container"
+                v-if="isSortAndFilterShown"
+            >
+                <ul>
+                    <li
+                        :key="`sort-option-${index}`"
+                        v-for="(sortOption, index) in displaySortOptions"
+                        :class="{ 'is-selected': sortOption.type === currentSortOption }"
+                        @click="onSortOption(sortOption.type)"
+                    >
+                        <component :is="sortOption.icon" />
+                        <span>{{ sortOption.title }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex">
+                <input
+                    ref="searchTextbox"
+                    type="search"
+                    placeholder="Apple Strudel"
+                    class="product-search-view-search-textbox flex-1"
+                    v-model="searchTerm"
+                    @keyup.enter="onSearch"
+                >
+                <ButtonComponent
+                    class="flex-auto"
+                    v-if="searchTerm.length > 0"
+                    @click="onClearSearch"
+                    isSecondary
+                >
+                    &times;
+                </ButtonComponent>
+            </div>
+        </template>
+        <div class="product-search-view">
+            <section v-if="isSearching">
+                <LoadingComponent>
+                    <p>Getting a list of products for you,<br> one second...</p>
+                </LoadingComponent>
+            </section>
+            <section class="zero-state" v-else-if="displayProducts === null">
+                <SearchIcon massive />
+                <p><strong>Enter the name of a product,</strong>
+                <br>I'll try and find it for you!</p>
+            </section>
+            <section class="zero-state" v-else-if="displayProducts.length === 0">
+                <QuestionMarkCircleIcon massive />
+                <p><strong>Sorry, I didn't find anything,</strong>
+                <br>Try something different!</p>
+            </section>
+            <div class="product-list" v-else>
+                <ProductComponent
+                    :key="`product-${index}`"
+                    v-for="(product, index) in displayProducts"
+                    forSearch
                     :product="product"
-                    :hasCheckBox="false"
-                    :hasAddToList="true"
-                    :style="`animation-duration: ${loadAnimationDuration(index)}s`"
-                    @expandProduct="onExpandProduct" />
+                />
             </div>
         </div>
-    </div>
+    </PageContainerComponent>
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
+import { computed, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
+import { useStore } from 'vuex';
 
-    import TescoClient from '@frontend/api/TescoClient';
-    import { TescoProductService } from '@frontend/service/TescoProductService';
+import PageContainerComponent from '@/component/PageContainerComponent.vue';
+import LoadingComponent from '@/component/LoadingComponent.vue';
+import ProductComponent from '@/component/ProductComponent.vue';
+import ButtonComponent from '@/component/item/ButtonComponent.vue';
+import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
+import SearchIcon from '@/component/icon/SearchIcon.vue';
+import SortAlphaIcon from '@/component/icon/SortAlphaIcon.vue';
+import SortIcon from '@/component/icon/SortIcon.vue';
+import SortListIcon from '@/component/icon/SortListIcon.vue';
+import SortNumericIcon from '@/component/icon/SortNumericIcon.vue';
 
-    import { IResponseEntity } from '@common/interface/IResponseEntity';
-    import { ITescoProduct } from '@frontend/interface/ITescoProduct';
+import { TescoService } from '@/service/Tesco.service';
+import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-    import HeaderComponent from '@frontend/component/page/HeaderComponent.vue';
-    import ProductItemComponent from '@frontend/component/ProductItemComponent.vue';
-    import ButtonComponent from '@frontend/component/item/ButtonComponent.vue';
-    import SearchSortComponent from '@frontend/component/search-view/SearchSortComponent.vue';
+import { AppState } from '@/store/type/AppState.model';
+import { StateKeys } from '@/store/type/StateKeys';
+import { Product } from '@/model/Product.model';
+import { SortOption, SortOptionType } from '@/model/SortOption.model';
 
-    import SortIcon from '@frontend/assets/icon/sort.svg';
-    import SearchIcon from '@frontend/assets/icon/search.svg';
+export default {
+    name: 'ProductSearchView',
 
-    export default Vue.extend({
-        name: 'ProductSearchView',
+    components: {
+        PageContainerComponent,
+        ButtonComponent,
+        LoadingComponent,
+        ProductComponent,
+        QuestionMarkCircleIcon,
+        SearchIcon,
+        SortIcon,
+    },
 
-        components: {
-            HeaderComponent,
-            ProductItemComponent,
-            ButtonComponent,
-            SearchSortComponent,
-            SortIcon,
-            SearchIcon,
-        },
+    setup() {
+        const store = useStore<AppState>();
 
-        data() {
-            return {
-                searchResult: null as (ITescoProduct[] | null),
-                searchTerm: '',
-                isLoaded: false,
-                isLoading: false,
-                isSortOptionsVisible: false,
-            }
-        },
+        const searchTextbox = ref<HTMLInputElement | null>(null);
 
-        computed: {
-            loadAnimationDuration(): (index: number) => number {
-                return (index: number) => {
-                    if (index > 20) {
-                        return 20 * 0.15;
+        const searchTerm = ref<string>('');
+        const isSearching = ref<boolean>(false);
+        const products = ref<Product[] | null>(null);
+
+        const isSortAndFilterShown = ref<boolean>(false);
+
+        const currentSortOption = ref<SortOptionType>(
+            store.getters.searchSortOption);
+
+        const displaySortOptions = shallowReadonly<SortOption[]>([
+            {
+                title: 'Alphabetical (A - Z)',
+                type: SortOptionType.ALPHABETICAL,
+                icon: SortAlphaIcon,
+            },
+            {
+                title: 'Price (Lowest - Highest)',
+                type: SortOptionType.PRICE,
+                icon: SortNumericIcon,
+            },
+            {
+                title: 'Health (Best - Worst)',
+                type: SortOptionType.HEALTH_SCORE,
+                icon: SortListIcon,
+            },
+        ]);
+
+        const sortFunctions = readonly({
+            [SortOptionType.ALPHABETICAL.toString()](a: Product, b: Product): number {
+                if (a.name > b.name) return 1;
+                if (a.name < b.name) return -1;
+
+                return 0;
+            },
+            [SortOptionType.PRICE.toString()](a: Product, b: Product): number {
+                if (a.price > b.price) return 1;
+                if (a.price < b.price) return -1;
+
+                return 0;
+            },
+            [SortOptionType.HEALTH_SCORE.toString()](a: Product, b: Product): number {
+                if (!a.healthScore || !b.healthScore)
+                    return 0;
+
+                if (a.healthScore < b.healthScore) return 1;
+                if (a.healthScore > b.healthScore) return -1;
+
+                return 0;
+            },
+        });
+
+        const displayProducts = computed<Product[] | null>(() => {
+            if (products.value === null)
+                return null;
+
+            return products.value
+                .sort(sortFunctions[currentSortOption.value.toString()]);
+        });
+
+        onBeforeMount(() => {
+            const currentSearch = store.getters.currentSearch;
+
+            if (currentSearch === null)
+                return;
+
+            products.value = currentSearch.products;
+            searchTerm.value = currentSearch.searchTerm;
+        });
+
+        onMounted(() => {
+            searchTextbox.value?.focus();
+        });
+
+        UseScrollPosition('ProductSearchView');
+
+        return {
+            searchTextbox,
+
+            searchTerm,
+            isSearching,
+            displayProducts,
+
+            isSortAndFilterShown,
+            currentSortOption,
+            displaySortOptions,
+
+            async onSearch() {
+                if (searchTerm.value === null)
+                    return;
+
+                if (searchTerm.value.trim().length < 3)
+                    return;
+
+                searchTextbox.value?.blur();
+
+                isSearching.value = true;
+
+                const searchProducts =
+                    await TescoService.searchProducts(searchTerm.value);
+
+                isSearching.value = false;
+
+                if (searchProducts instanceof Error) {
+                    products.value = null;
+
+                    searchTextbox.value?.focus();
+                }
+                else {
+                    products.value = searchProducts;
+
+                    if (products.value.length === 0) {
+                        searchTextbox.value?.focus();
                     }
 
-                    return (index + 1) * 0.15;
+                    store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
+                        products: products.value,
+                        searchTerm: searchTerm.value,
+                    });
                 }
             },
-        },
 
-        methods: {
-            async onSearch(): Promise<void> {
-                const productSearchInput: HTMLInputElement
-                        = this.$refs.productSearchInput;
+            onClearSearch() {
+                searchTerm.value = '';
+                searchTextbox.value?.focus();
 
-                if (this.searchTerm.length === 0) {
-                    productSearchInput.focus();
-
-                    return;
-                }
-
-                this.isLoaded = false;
-                this.isLoading = true;
-
-                productSearchInput.blur();
-
-                const response =
-                        await TescoClient.getGrocerySearch(this.searchTerm);
-
-                if (response instanceof Error) {
-                    productSearchInput.focus();
-                    return;
-                }
-
-                if (response.result.length === 0) {
-                    productSearchInput.focus();
-                }
-
-                this.searchResult = response.result.map(product => ({
-                    ...product,
-                    description: product.description ? product.description.join('<br>') : '',
-                    quantity: 1,
-                    isChecked: false,
-                    timesAddedToShoppingList: 0,
-                }));
-
-                this.$root.$data.setSearchResult({
-                    searchTerm: this.searchTerm,
-                    searchResult: this.searchResult,
-                });
-
-                this.isLoaded = true;
-                this.isLoading = false;
-
-                await this.getProductData();
-            },
-
-            onExpandProduct(product: ITescoProduct): void {
-                this.$emit('expandProduct', product);
-            },
-
-            async getProductData(): Promise<void> {
-                const tpncList = this.searchResult
-                        .map((r: ITescoProduct) => r.id);
-
-                const productDataResult =
-                        await TescoClient.getMultiProductDataByTPNC(tpncList);
-
-                if (productDataResult instanceof Error) {
-                    return;
-                }
-
-                this.searchResult.forEach((searchResult: ITescoProduct) => {
-                    const product = productDataResult.result
-                            .find(p => Number(p.tpnc) === searchResult.id);
-
-                    if (product) {
-                        TescoProductService.addDataToExistingProduct(
-                                searchResult,
-                                product);
-                    }
+                store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
+                    products: products.value,
+                    searchTerm: searchTerm.value,
                 });
             },
 
-            getCachedSearchResult(): void {
-                if (this.searchResult !== null) {
-                    return;
-                }
-
-                const cache = this.$root.$data.getSearchResult();
-
-                if (cache === null) {
-                    return;
-                }
-
-                this.searchResult = cache.searchResult;
-                this.searchTerm = cache.searchTerm;
-
-                this.isLoaded = true;
-                this.isLoading = false;
+            onSortAndFilterToggle() {
+                isSortAndFilterShown.value = !isSortAndFilterShown.value;
             },
 
-            onSortChange(sort: (a: ITescoProduct, b: ITescoProduct) => number):
-                    void {
+            onSortOption(sortOption: SortOptionType) {
+                currentSortOption.value = sortOption;
 
-                if (!this.searchResult || this.searchResult.length === 0) {
-                    return;
-                }
+                isSortAndFilterShown.value = false;
 
-                this.searchResult = this.searchResult.sort(sort);
+                store.dispatch(StateKeys.SEARCH_SETTINGS_SET, {
+                    sortOption,
+                });
             },
-        },
-
-        async created(): Promise<void> {
-            this.getCachedSearchResult();
-        },
-    })
+        }
+    },
+}
 </script>
 
 <style lang="scss">
-    .product-search-view {
-        position: relative;
+.product-search-view-sort-filter-button {
+    cursor: pointer;
+}
 
-        .sort-container {
-            position: relative;
-            margin-left: auto;
+.product-search-view-sort-filter-container {
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
             display: table;
-            cursor: pointer;
-            user-select: none;
-
-            ul {
-                margin: 0;
-                list-style: none;
-                padding-left: 0;
-            }
-        }
-
-        .sort-options-container {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            pointer-events: none;
-            padding: 1rem;
-            transform: translateY(100%);
-            z-index: 10;
-            text-align: initial;
-            background-color: theme(white);
-            color: theme(black);
-            border-left: 3px solid theme(secondary);
+            padding: 0.125rem 0.5rem;
             border-radius: layout(border-radius);
-            box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.5);
-            opacity: 0;
+            cursor: pointer;
 
-            &.is-visible {
-                opacity: 1;
-                pointer-events: all;
+            &.is-selected {
+                background-color: theme(primary-dark);
+
+                @include box-shadow-small;
             }
-        }
-
-        .search-input-container {
-            padding-top: 1rem;
-            display: flex;
-
-            .search-input {
-                flex: 1;
-                border-radius: layout(border-radius);
-            }
-
-            .search-button {
-                flex: 0 0 auto;
-                margin-left: 0.5rem;
-            }
-        }
-
-        .search-container {
-            padding: 1rem;
         }
     }
+
+    .icon {
+        margin-right: 0.5rem;
+    }
+
+    span,
+    .icon {
+        vertical-align: middle;
+    }
+}
+
+.product-search-view-search-textbox {
+    margin-right: 0.5rem;
+    text-transform: capitalize;
+}
+
+.product-search-view {
+
+    .product-list {
+        padding-top: 0.5rem;
+    }
+}
 </style>

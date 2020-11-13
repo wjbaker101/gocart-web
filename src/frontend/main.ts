@@ -1,20 +1,16 @@
-import Vue from 'vue';
-import App from '@frontend/App.vue';
+import { createApp } from 'vue';
 
-import appRouter from '@frontend/router/appRouter';
-import appState from '@frontend/state/AppState';
+import App from '@/App.vue';
+import router from '@/router/AppRouter';
+import store from '@/store/AppStore';
 
-import '@frontend/registerServiceWorker';
+import '@/registerServiceWorker';
 
 (async () => {
-    await appState.init();
+    await store.dispatch('INIT');
 
-    Vue.config.productionTip = false;
-
-    new Vue({
-        router: appRouter,
-        render: h => h(App),
-        data: appState,
-    })
-    .$mount('#app');
+    createApp(App)
+        .use(store)
+        .use(router)
+        .mount('#app');
 })();

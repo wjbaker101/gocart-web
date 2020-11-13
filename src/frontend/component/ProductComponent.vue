@@ -1,34 +1,169 @@
 <template>
-    <div class="product-component" v-if="isVisible">
-        <div class="image-container">
-            <img class="product-image" :src="product.image">
+    <div class="product-component flex align-center" @click="onSelect">
+        <div class="flex-auto" v-if="!forSearch">
+            <CheckBoxComponent
+                :id="`checked-checkbox-${product.id}`"
+                type="checkbox"
+                v-model="isChecked"
+                @click.stop="() => {}"
+            />
         </div>
-        <div class="product-title">
-            <h2>{{ product.name }}</h2>
+        <div class="flex-auto">
+            <img
+                width="50"
+                height="50"
+                class="product-image"
+                :src="product.imageUrl"
+            >
         </div>
-        <div class="product-price">
-            <span>£{{ product.price.toFixed(2) }}</span>
+        <div class="product-name flex-1">
+            {{ product.name }}
+        </div>
+        <div class="product-price flex-auto">
+            {{ displayPrice }}
+            <strong v-if="product.listQuantity > 1">
+                &times;{{ product.listQuantity }}
+            </strong>
+        </div>
+        <div class="add-to-list-container flex-auto" v-if="forSearch">
+            <div class="icon-container" @click.stop="isChecked = !isChecked">
+                <BinIcon v-if="isChecked" colour="url(#bin-grad)" />
+                <PlusIcon v-else />
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
+import { computed, PropType, ref, toRefs, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-    export default Vue.extend({
-        name: 'ProductComponent',
+import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
+import BinIcon from '@/component/icon/BinIcon.vue';
+import PlusIcon from '@/component/icon/PlusIcon.vue';
 
-        props: ['product', 'isVisible'],
-    })
+import { AppStateMapper } from '@/store/AppStore';
+import {
+    UseShoppingListChecked,
+    UseForSeachChecked,
+} from '@/use/ProductChecked.use';
+
+import { AppState } from '@/store/type/AppState.model';
+import { StateKeys } from '@/store/type/StateKeys';
+import { Product } from '@/model/Product.model';
+
+interface ProductComponentProps {
+    product: Product,
+    forSearch: Boolean,
+}
+
+export default {
+    name: 'ProductComponent',
+
+    components: {
+        CheckBoxComponent,
+        BinIcon,
+        PlusIcon,
+    },
+
+    props: {
+        product: {
+            type: Object as PropType<Product>,
+            required: true,
+        },
+        forSearch: Boolean,
+    },
+
+    setup(props: ProductComponentProps) {
+        const router = useRouter();
+        const store = useStore<AppState>();
+
+        const isChecked = props.forSearch
+            ? UseForSeachChecked(props.product).isChecked
+            : UseShoppingListChecked(props.product).isChecked;
+
+        const displayPrice = computed<string>(
+            () => `£${props.product.price.toFixed(2)}`);
+
+        return {
+            isChecked,
+            displayPrice,
+
+            onSelect() {
+                store.dispatch(StateKeys.CURRENT_PRODUCT_SET, props.product);
+                router.push({ path: '/product', });
+            },
+        }
+    },
+}
 </script>
 
 <style lang="scss">
-    .product-component {
-        width: 100vw;
-        position: fixed;
-        top: 84px;
-        bottom: 92px;
-        background-color: theme(white);
+.product-component {
+    position: relative;
+    padding: 0.5rem;
+    background-color: theme(white);
+    cursor: pointer;
+
+    &:first-child {
+        border-top-right-radius: layout(border-radius);
+        border-top-left-radius: layout(border-radius);
+    }
+
+    &:last-child {
+        border-bottom-right-radius: layout(border-radius);
+        border-bottom-left-radius: layout(border-radius);
+    }
+
+    &:hover,
+    &.is-dragged,
+    &.sortable-chosen {
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
         z-index: 1;
     }
+
+    &.is-dragged,
+    &.sortable-chosen {
+        border-radius: layout(border-radius);
+        border: 2px solid theme(secondary);
+    }
+
+    .product-image {
+        margin-left: 0.5rem;
+        border-radius: layout(border-radius);
+    }
+
+    .product-name {
+        padding-left: 0.5rem;
+        overflow-x: hidden;
+        white-space: nowrap;
+    }
+
+    .product-price {
+        padding-left: 0.25rem;
+        box-shadow: -2px 0 4px 0.5rem theme(white);
+    }
+
+    .add-to-list-container {
+        margin-left: 0.5rem;
+        line-height: 0;
+
+        .icon-container {
+            padding: 0.5rem;
+        }
+
+        .icon {
+            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+        }
+
+        .icon-plus {
+            color: theme(primary);
+        }
+
+        .icon-bin {
+            color: theme(negative);
+        }
+    }
+}
 </style>

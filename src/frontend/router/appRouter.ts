@@ -1,43 +1,37 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-Vue.use(Router);
+import ProductSearchView from '@/view/ProductSearchView.vue';
+import ProductView from '@/view/ProductView.vue';
+import ShoppingListView from '@/view/ShoppingListView.vue';
+import ShopSearchView from '@/view/ShopSearchView.vue';
+import ShopView from '@/view/ShopView.vue';
 
-const router = new Router({
-    mode: 'history',
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: '',
+        component: ShoppingListView,
+    },
+    {
+        path: '/product',
+        component: ProductView,
+    },
+    {
+        path: '/search',
+        component: ProductSearchView,
+    },
+    {
+        path: '/shop',
+        component: ShopView,
+    },
+    {
+        path: '/shop/search',
+        component: ShopSearchView,
+    },
+];
 
-    routes: [
-        {
-            path: '/',
-            component: () => import('@frontend/view/ShoppingListView.vue'),
-        },
-        {
-            path: '/search',
-            component: () => import('@frontend/view/ProductSearchView.vue'),
-        },
-        {
-            name: 'product-route',
-            path: '/product',
-            props: true,
-            component: () => import('@frontend/view/ProductView.vue'),
-        },
-        {
-            path: '/shop/search',
-            component: () => import('@frontend/view/ShopSearchView.vue'),
-        },
-        {
-            path: '/shop',
-            component: () => import('@frontend/view/ShopView.vue'),
-        },
-        {
-            path: '/scan',
-            component: () => import('@frontend/view/BarcodeScannerView.vue'),
-        },
-        {
-            path: '/help',
-            component: () => import('@frontend/view/HelpView.vue'),
-        },
-    ],
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
 });
 
 export default router;

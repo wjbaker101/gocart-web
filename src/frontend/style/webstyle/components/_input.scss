@@ -1,0 +1,54 @@
+label {
+    display: block;
+
+    & > span {
+        font-weight: bold;
+    }
+
+    & + label {
+        margin-top: 1rem;
+    }
+
+    input {
+        border: 2px solid theme(grey-dark);
+
+        @include box-shadow-small;
+
+        &:focus {
+            @include box-shadow-small-hover;
+        }
+    }
+}
+
+input {
+    width: 100%;
+    padding: 0.5rem;
+    font: inherit;
+    line-height: 1em;
+    letter-spacing: inherit;
+    background-color: theme(white);
+    border: 0;
+    border: 2px solid theme(grey);
+    border-radius: layout(border-radius);
+    transition: border-color animation(duration-mid);
+
+    box-shadow:
+        1px 2px 3px rgba(0, 0, 0, 0.1),
+        -2px -2px 12px rgba(0, 0, 0, 0.1) inset;
+
+    &:focus {
+        border-color: theme(secondary);
+    }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}

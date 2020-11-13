@@ -1,0 +1,22 @@
+html {
+    height: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-size: 15px;
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 1px;
+    line-height: 1.6em;
+    color: theme(black-light);
+    background-color: theme(grey-light);
+
+    // Push content above the bottom dashboard
+    padding-bottom: 70.2px;
+}

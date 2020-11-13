@@ -1,25 +1,29 @@
 <template>
-    <button class="button-component" :class="elementClass" @click="$emit('click', $event)">
+    <button class="button-component" :class="elementClass">
         <slot />
     </button>
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
+import { computed, SetupContext } from 'vue';
 
-    export default Vue.extend({
-        name: 'ButtonComponent',
+export default {
+    name: 'ButtonComponent',
 
-        props: ['isSecondary'],
+    props: {
+        isSecondary: Boolean,
+    },
 
-        computed: {
-            elementClass() {
-                return {
-                    'is-secondary': this.isSecondary,
-                }
-            },
-        },
-    })
+    setup(props: any, context: SetupContext) {
+        const elementClass = computed(() => ({
+            'is-secondary': props.isSecondary,
+        }));
+
+        return {
+            elementClass,
+        }
+    },
+}
 </script>
 
 <style lang="scss">
@@ -89,6 +93,10 @@
             &::after {
                 background: linear-gradient(-15deg, theme(accent-dark), theme(negative-dark));
             }
+        }
+
+        &.full-width {
+            width: 100%;
         }
     }
 </style>
