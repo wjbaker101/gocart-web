@@ -135,6 +135,7 @@ export default {
 
             onClearSearch() {
                 searchTerm.value = '';
+                searchTextbox.value?.focus();
             },
 
             onOpen(shopName: string) {
