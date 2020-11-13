@@ -6,12 +6,12 @@
                     ref="searchTextbox"
                     type="search"
                     placeholder="London"
-                    class="header-shop-search-view-search-textbox"
+                    class="shop-search-view-search-textbox"
                     v-model="searchTerm"
                     @keyup.enter="onSearch"
                 >
                 <ButtonComponent
-                    class="flex-auto"
+                    class="flex-auto shop-search-view-reset-search-button"
                     v-if="searchTerm.length > 0"
                     @click="onClearSearch"
                     isSecondary
@@ -151,12 +151,15 @@ export default {
 </script>
 
 <style lang="scss">
-.header-shop-search-view-search-textbox {
-    margin-right: 0.5rem;
-    text-transform: capitalize;
-}
-
 .shop-search-view {
+
+    &-search-textbox {
+        text-transform: capitalize;
+    }
+
+    &-reset-search-button {
+        margin-left: 0.5rem;
+    }
 
     .shop-list {
         padding-top: 0.5rem;
