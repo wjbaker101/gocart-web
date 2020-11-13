@@ -55,17 +55,11 @@
                             &times;
                         </ButtonComponent>
                     </section>
-                    <VueDraggable
-                        v-model="displayChecked"
-                        v-bind="draggableOptions"
-                        :group="{ put: [] }"
-                    >
-                        <ProductComponent
-                            :key="`product-${product.id}`"
-                            v-for="product in filteredDisplayChecked"
-                            :product="product"
-                        />
-                    </VueDraggable>
+                    <ProductComponent
+                        :key="`product-${product.id}`"
+                        v-for="product in filteredDisplayChecked"
+                        :product="product"
+                    />
                 </div>
             </div>
         </div>
