@@ -36,7 +36,7 @@
                     @keyup.enter="onSearch"
                 >
                 <ButtonComponent
-                    class="flex-auto"
+                    class="product-search-view-reset-search-button flex-auto"
                     v-if="searchTerm.length > 0"
                     @click="onClearSearch"
                     isSecondary
@@ -264,46 +264,49 @@ export default {
 </script>
 
 <style lang="scss">
-.product-search-view-sort-filter-button {
-    cursor: pointer;
-}
+.product-search-view {
 
-.product-search-view-sort-filter-container {
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+    &-sort-filter-button {
+        cursor: pointer;
+    }
 
-        li {
-            display: table;
-            padding: 0.125rem 0.5rem;
-            border-radius: layout(border-radius);
-            cursor: pointer;
+    &-sort-filter-container {
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
 
-            &.is-selected {
-                background-color: theme(primary-dark);
+            li {
+                display: table;
+                padding: 0.125rem 0.5rem;
+                border-radius: layout(border-radius);
+                cursor: pointer;
 
-                @include box-shadow-small;
+                &.is-selected {
+                    background-color: theme(primary-dark);
+
+                    @include box-shadow-small;
+                }
             }
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+        }
+
+        span,
+        .icon {
+            vertical-align: middle;
         }
     }
 
-    .icon {
-        margin-right: 0.5rem;
+    &-search-textbox {
+        text-transform: capitalize;
     }
 
-    span,
-    .icon {
-        vertical-align: middle;
+    &-reset-search-button {
+        margin-left: 0.5rem;
     }
-}
-
-.product-search-view-search-textbox {
-    margin-right: 0.5rem;
-    text-transform: capitalize;
-}
-
-.product-search-view {
 
     .product-list {
         padding-top: 0.5rem;
