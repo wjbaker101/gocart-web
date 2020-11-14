@@ -12,7 +12,7 @@ public class ApiController {
     @Autowired
     public ApiController() {}
 
-    @RequestMapping("{?:(?:(?!api|img|\\.).)*}/**")
+    @RequestMapping("{?:(?:(?!api|img|js|css|\\.).)*}/**")
     public String useVueHistoryMode() {
         return "/index.html";
     }
