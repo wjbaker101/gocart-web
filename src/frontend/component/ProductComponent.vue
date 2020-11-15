@@ -116,7 +116,6 @@ export default {
         border-bottom-left-radius: layout(border-radius);
     }
 
-    &:hover,
     &.is-dragged,
     &.sortable-chosen {
         box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
