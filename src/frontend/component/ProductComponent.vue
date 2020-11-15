@@ -105,6 +105,7 @@ export default {
     padding: 0.5rem;
     background-color: theme(white);
     cursor: pointer;
+    user-select: none;
 
     &:first-child {
         border-top-right-radius: layout(border-radius);
