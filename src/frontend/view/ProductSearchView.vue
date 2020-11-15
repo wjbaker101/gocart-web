@@ -184,7 +184,8 @@ export default {
         });
 
         onMounted(() => {
-            searchTextbox.value?.focus();
+            if (searchTerm.value.length === 0)
+                searchTextbox.value?.focus();
         });
 
         UseScrollPosition('ProductSearchView');
