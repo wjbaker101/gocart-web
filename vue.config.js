@@ -66,6 +66,8 @@ module.exports = {
         themeColor: '#2292a4',
         msTileColor: '#2292a4',
         appleMobileWebAppCapable: 'yes',
-        appleMobileWebAppStatusBarStyle: '2292a4',
+        manifestOptions: {
+            background_color: '#fafafa',
+        },
     },
 }
