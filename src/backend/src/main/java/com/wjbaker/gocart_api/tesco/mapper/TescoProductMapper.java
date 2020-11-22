@@ -3,12 +3,19 @@ package com.wjbaker.gocart_api.tesco.mapper;
 import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class TescoProductMapper {
+
+    private static final List<String> INGREDIENTS_BLACKLIST = Arrays.asList(
+            "INGREDIENTS:",
+            "INGREDIENTS LIST:",
+            "<p>",
+            "</p>"
+    );
 
     private TescoProductMapper() {}
 
@@ -32,10 +39,18 @@ public abstract class TescoProductMapper {
 
         return ingredients
                 .stream()
-                .map(i -> i
-                        .replaceAll("INGREDIENTS:", "")
-                        .replaceAll("INGREDIENTS LIST:", ""))
+                .map(TescoProductMapper::formatIngredient)
                 .collect(Collectors.toList());
+    }
+
+    private static String formatIngredient(final String ingredientLine) {
+        String line = ingredientLine;
+
+        for (String text : INGREDIENTS_BLACKLIST) {
+            line = line.replaceAll(text, "");
+        }
+
+        return line;
     }
 
     private static TescoProduct.Nutrition mapNutrition(final ProductDataResponse.Product.Nutrition nutrition) {
