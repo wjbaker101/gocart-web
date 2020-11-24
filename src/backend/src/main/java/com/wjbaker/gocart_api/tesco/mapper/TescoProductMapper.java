@@ -5,7 +5,6 @@ import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class TescoProductMapper {
@@ -19,18 +18,33 @@ public abstract class TescoProductMapper {
 
     private TescoProductMapper() {}
 
-    public static TescoProduct map(final ProductDataResponse.Product product) {
+    public static List<TescoProduct> map(final ProductDataResponse response) {
+        if (response == null)
+            return null;
+
+        return response.getProducts()
+                .stream()
+                .map(TescoProductMapper::mapTescoProduct)
+                .collect(Collectors.toList());
+    }
+
+    private static TescoProduct mapTescoProduct(final ProductDataResponse.Product product) {
         return TescoProduct.builder()
                 .id(product.getTpnc())
                 .barcodeId(product.getGtin())
                 .description(product.getDescription())
                 .brand(product.getBrand())
-                .healthScore(Optional.ofNullable(product.getProductCharacteristics())
-                        .map(ProductDataResponse.Product.ProductCharacteristics::getHealthScore)
-                        .orElse(null))
+                .healthScore(mapHealthScore(product.getProductCharacteristics()))
                 .ingredients(mapIngredients(product.getIngredients()))
                 .nutrition(mapNutrition(product.getCalcNutrition()))
                 .build();
+    }
+
+    private static Integer mapHealthScore(final ProductDataResponse.Product.ProductCharacteristics characteristics) {
+        if (characteristics == null)
+            return null;
+
+        return characteristics.getHealthScore();
     }
 
     private static List<String> mapIngredients(List<String> ingredients) {

@@ -27,7 +27,7 @@ public class TescoController {
 
     @GetMapping("/product/{productId}")
     public ApiResponse<TescoProduct> productData(@PathVariable final String productId) {
-        TescoProduct product = this.tescoService.productData(productId);
+        var product = this.tescoService.productData(productId);
 
         return ApiResponse.result(product);
     }

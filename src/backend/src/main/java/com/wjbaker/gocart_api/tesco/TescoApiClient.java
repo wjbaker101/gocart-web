@@ -1,11 +1,9 @@
 package com.wjbaker.gocart_api.tesco;
 
 import com.wjbaker.gocart_api.config.type.TescoApiConfig;
+import com.wjbaker.gocart_api.tesco.mapper.TescoProductMapper;
 import com.wjbaker.gocart_api.tesco.mapper.TescoShopMapper;
-import com.wjbaker.gocart_api.tesco.type.GrocerySearchResponse;
-import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
-import com.wjbaker.gocart_api.tesco.type.StoreLocationResponse;
-import com.wjbaker.gocart_api.tesco.type.TescoShop;
+import com.wjbaker.gocart_api.tesco.type.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -51,11 +49,17 @@ public class TescoApiClient {
                 .body(TescoShopMapper.map(response.getBody()));
     }
 
-    public ResponseEntity<ProductDataResponse> productData(final List<String> productIds) {
-        String url = String.format("/product/?%s", productIds.stream()
+    public ResponseEntity<List<TescoProduct>> productData(final List<String> productIds) {
+        var joinedProductIds = productIds
+                .stream()
                 .map(id -> "tpnc=" + id)
-                .collect(Collectors.joining("&")));
+                .collect(Collectors.joining("&"));
 
-        return this.restTemplate.getForEntity(url, ProductDataResponse.class);
+        var url = String.format("/product/?%s", joinedProductIds);
+
+        var response = this.restTemplate.getForEntity(url, ProductDataResponse.class);
+
+        return ResponseEntity.status(response.getStatusCode())
+                .body(TescoProductMapper.map(response.getBody()));
     }
 }

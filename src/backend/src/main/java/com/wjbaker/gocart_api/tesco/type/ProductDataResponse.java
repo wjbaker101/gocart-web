@@ -87,7 +87,7 @@ public class ProductDataResponse {
             private int totalAlcoholUnits;
 
             @Getter @Setter
-            private int healthScore;
+            private Integer healthScore;
         }
 
         public static class PackageDimension {

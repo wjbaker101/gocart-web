@@ -1,8 +1,10 @@
 package com.wjbaker.gocart_api.tesco;
 
 import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
-import com.wjbaker.gocart_api.tesco.mapper.TescoProductMapper;
-import com.wjbaker.gocart_api.tesco.type.*;
+import com.wjbaker.gocart_api.tesco.type.GrocerySearchResponse;
+import com.wjbaker.gocart_api.tesco.type.SearchProduct;
+import com.wjbaker.gocart_api.tesco.type.TescoProduct;
+import com.wjbaker.gocart_api.tesco.type.TescoShop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,24 +59,18 @@ public class TescoService {
     }
 
     public TescoProduct productData(final String productId) {
-        Optional<ProductDataResponse> response =
-                Optional.ofNullable(this.tescoApiClient.productData(Collections.singletonList(productId)).getBody());
+        var productIdAsList = Collections.singletonList(productId);
 
-        return response.flatMap(res -> res.getProducts()
-                .stream()
-                .findFirst()
-                .map(TescoProductMapper::map))
+        var response = Optional.ofNullable(this.tescoApiClient.productData(productIdAsList).getBody());
+
+        return response
+                .map(products -> products.get(0))
                 .orElse(null);
     }
 
     public List<TescoProduct> productDataList(final List<String> productIds) {
-        Optional<ProductDataResponse> response =
-                Optional.ofNullable(this.tescoApiClient.productData(productIds).getBody());
+        var response = Optional.ofNullable(this.tescoApiClient.productData(productIds).getBody());
 
-        return response.map(res -> res.getProducts()
-                .stream()
-                .map(TescoProductMapper::map)
-                .collect(Collectors.toList()))
-                .orElse(null);
+        return response.orElse(null);
     }
 }
