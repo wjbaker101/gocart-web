@@ -1,7 +1,7 @@
 package com.wjbaker.gocart_api.tesco.mapper;
 
-import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.GrocerySearchResponse;
+import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 
 import java.util.List;
@@ -11,24 +11,52 @@ public abstract class SearchProductsMapper {
 
     private SearchProductsMapper() {}
 
-    public static SearchProduct map(final GrocerySearchResponse.UK.GHS.Products.Result result, final TescoProduct tescoProduct) {
-        var builder = SearchProduct.builder()
+    public static List<SearchProduct> map(final GrocerySearchResponse response, final TescoProduct tescoProduct) {
+        if (response == null)
+            return null;
+
+        if (response.getUk() == null)
+            return null;
+
+        if (response.getUk().getGhs() == null)
+            return null;
+
+        if (response.getUk().getGhs().getProducts() == null)
+            return null;
+
+        if (response.getUk().getGhs().getProducts().getResults() == null)
+            return null;
+
+        return response.getUk().getGhs().getProducts().getResults()
+                .stream()
+                .map(SearchProductsMapper::mapSearchProduct)
+                .collect(Collectors.toList());
+    }
+
+    public static SearchProduct mapWithProduct(final SearchProduct product, final TescoProduct tescoProduct) {
+        if (product == null)
+            return null;
+
+        if (tescoProduct == null)
+            return product;
+
+        product.setBarcodeId(tescoProduct.getBarcodeId());
+        product.setIngredients(tescoProduct.getIngredients());
+        product.setHealthScore(tescoProduct.getHealthScore());
+        product.setNutrition(mapNutrition(tescoProduct.getNutrition()));
+
+        return product;
+    }
+
+    private static SearchProduct mapSearchProduct(final GrocerySearchResponse.UK.GHS.Products.Result result) {
+        return SearchProduct.builder()
                 .id(result.getId())
                 .name(result.getName())
                 .imageUrl(mapImageUrl(result.getImageUrl()))
                 .price(result.getPrice())
                 .description(mapDescription(result.getDescription()))
                 .department(result.getDepartment())
-                .superDepartment(result.getSuperDepartment());
-
-        if (tescoProduct == null)
-            return builder.build();
-
-        return builder
-                .barcodeId(tescoProduct.getBarcodeId())
-                .ingredients(tescoProduct.getIngredients())
-                .healthScore(tescoProduct.getHealthScore())
-                .nutrition(mapNutrition(tescoProduct.getNutrition()))
+                .superDepartment(result.getSuperDepartment())
                 .build();
     }
 
@@ -57,16 +85,25 @@ public abstract class SearchProductsMapper {
                 .build();
     }
 
-    private static List<SearchProduct.Nutrition.Nutrient> mapNutrients(final List<TescoProduct.Nutrition.Nutrient> nutrients) {
+    private static List<SearchProduct.Nutrition.Nutrient> mapNutrients(
+            final List<TescoProduct.Nutrition.Nutrient> nutrients) {
+
         if (nutrients == null)
             return null;
 
         return nutrients.stream()
-                .map(n -> SearchProduct.Nutrition.Nutrient.builder()
-                        .name(n.getName())
-                        .valuePer100g(n.getValuePer100g())
-                        .valuePerServing(n.getValuePerServing())
-                .build())
+                .map(SearchProductsMapper::mapNutrient)
                 .collect(Collectors.toList());
+    }
+
+    private static SearchProduct.Nutrition.Nutrient mapNutrient(final TescoProduct.Nutrition.Nutrient nutrient) {
+        if (nutrient == null)
+            return null;
+
+        return SearchProduct.Nutrition.Nutrient.builder()
+                .name(nutrient.getName())
+                .valuePer100g(nutrient.getValuePer100g())
+                .valuePerServing(nutrient.getValuePerServing())
+                .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.wjbaker.gocart_api.tesco;
 
 import com.wjbaker.gocart_api.config.type.TescoApiConfig;
+import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.tesco.mapper.TescoProductMapper;
 import com.wjbaker.gocart_api.tesco.mapper.TescoShopMapper;
 import com.wjbaker.gocart_api.tesco.type.*;
@@ -32,10 +33,14 @@ public class TescoApiClient {
         this.offset = 0;
     }
 
-    public ResponseEntity<GrocerySearchResponse> grocerySearch(final String searchTerm) {
-        String url = String.format("/grocery/products?query=%s&limit=%d&offset=%d", searchTerm, this.limit, this.offset);
+    public ResponseEntity<List<SearchProduct>> grocerySearch(final String searchTerm) {
+        var url = String.format("/grocery/products?query=%s&limit=%d&offset=%d", searchTerm, this.limit, this.offset);
 
-        return this.restTemplate.getForEntity(url, GrocerySearchResponse.class);
+        var response = this.restTemplate.getForEntity(url, GrocerySearchResponse.class);
+
+        return ResponseEntity
+                .status(response.getStatusCode())
+                .body(SearchProductsMapper.map(response.getBody(), null));
     }
 
     public ResponseEntity<List<TescoShop>> storeLocation(final String searchTerm) {

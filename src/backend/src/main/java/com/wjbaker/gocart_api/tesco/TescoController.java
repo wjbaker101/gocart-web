@@ -34,7 +34,7 @@ public class TescoController {
 
     @GetMapping("/product/search/{searchTerm}")
     public ApiResponse<List<SearchProduct>> searchProducts(@PathVariable final String searchTerm) {
-        List<SearchProduct> products = this.tescoService.searchProducts(searchTerm);
+        var products = this.tescoService.searchProducts(searchTerm);
 
         return ApiResponse.result(products);
     }
