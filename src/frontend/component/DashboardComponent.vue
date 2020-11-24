@@ -3,7 +3,7 @@
         <div class="pages-container content-width flex">
             <router-link
                 class="flex-1"
-                :class="{ 'is-current': false }"
+                :class="{ 'is-current': currentPage == dashboardPage.link }"
                 :key="`dashboard-page-${index}`"
                 v-for="(dashboardPage, index) in dashboardPages"
                 :to="dashboardPage.link"
@@ -83,9 +83,12 @@ export default {
             opacity: currentPageIndicator.isVisible ? '1' : '0',
         }));
 
+        const currentPage = computed<string>(() => route.path);
+
         return {
             dashboardPages,
             currentPageIndicatorStyle,
+            currentPage,
         }
     },
 }
