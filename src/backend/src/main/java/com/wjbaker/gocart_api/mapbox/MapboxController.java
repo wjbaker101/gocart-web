@@ -20,7 +20,7 @@ public class MapboxController {
             @PathVariable final double longitude,
             @PathVariable final double latitude) {
 
-        String mapAsBase64 = this.mapboxService.getStaticMapAsBase64(longitude, latitude);
+        var mapAsBase64 = this.mapboxService.getStaticMapAsBase64(longitude, latitude);
 
         return ApiResponse.result(mapAsBase64);
     }

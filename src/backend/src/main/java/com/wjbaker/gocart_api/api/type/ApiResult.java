@@ -17,7 +17,7 @@ public class ApiResult<T> {
     private long timestamp;
 
     public static <T> ApiResult<T> result(final T result) {
-        ApiResult<T> apiResult = new ApiResult<>();
+        var apiResult = new ApiResult<T>();
         apiResult.result = result;
         apiResult.timestamp = System.currentTimeMillis();
 
@@ -25,7 +25,7 @@ public class ApiResult<T> {
     }
 
     public static <T> ApiResult<T> error(final String error) {
-        ApiResult<T> apiResult = new ApiResult<>();
+        var apiResult = new ApiResult<T>();
         apiResult.error = error;
         apiResult.timestamp = System.currentTimeMillis();
 
