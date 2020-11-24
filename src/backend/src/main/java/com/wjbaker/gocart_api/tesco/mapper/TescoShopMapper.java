@@ -3,33 +3,54 @@ package com.wjbaker.gocart_api.tesco.mapper;
 import com.wjbaker.gocart_api.tesco.type.StoreLocationResponse;
 import com.wjbaker.gocart_api.tesco.type.TescoShop;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class TescoShopMapper {
 
     private TescoShopMapper() {}
 
-    public static TescoShop map(final StoreLocationResponse.Result result) {
-        if (result == null)
+    public static List<TescoShop> map(final StoreLocationResponse response) {
+        if (response == null)
             return null;
 
+        if (response.getResults() == null)
+            return null;
+
+        return response.getResults()
+                .stream()
+                .map(TescoShopMapper::mapTescoShop)
+                .collect(Collectors.toList());
+    }
+
+    private static TescoShop mapTescoShop(final StoreLocationResponse.Result result) {
         return TescoShop.builder()
-                .name(result.getLocation().getName())
-                .facilities(Optional.ofNullable(result.getLocation())
-                        .map(StoreLocationResponse.Result.Location::getFacilities)
-                        .map(facilities -> facilities.stream()
-                                .map(TescoShopMapper::mapFacility)
-                                .collect(Collectors.toList()))
-                        .orElse(null))
-                .openingHour(mapOpeningHours(Optional.ofNullable(result.getLocation())
-                        .map(StoreLocationResponse.Result.Location::getOpeningHours)
-                        .map(openingHours -> openingHours.get(0))
-                        .map(StoreLocationResponse.Result.Location.OpeningHour::getStandardOpeningHours)
-                .orElse(null)))
+                .name(mapName(result.getLocation()))
+                .facilities(mapFacilities(result.getLocation()))
+                .openingHour(mapOpeningHours(result.getLocation()))
                 .distance(mapDistance(result.getDistanceFrom()))
                 .location(mapLocation(result.getLocation().getGeo()))
                 .build();
+    }
+
+    private static String mapName(final StoreLocationResponse.Result.Location location) {
+        if (location == null)
+            return null;
+
+        return location.getName();
+    }
+
+    private static List<String> mapFacilities(final StoreLocationResponse.Result.Location location) {
+        if (location == null)
+            return null;
+
+        if (location.getFacilities() == null)
+            return null;
+
+        return location.getFacilities()
+                .stream()
+                .map(TescoShopMapper::mapFacility)
+                .collect(Collectors.toList());
     }
 
     private static String mapFacility(final StoreLocationResponse.Result.Location.Facility facility) {
@@ -39,20 +60,29 @@ public abstract class TescoShopMapper {
         return facility.getDescription();
     }
 
-    private static TescoShop.OpeningHour mapOpeningHours(
-            final StoreLocationResponse.Result.Location.OpeningHour.StandardOpeningHours openingHour) {
+    private static TescoShop.OpeningHour mapOpeningHours(final StoreLocationResponse.Result.Location location) {
+        if (location == null)
+            return null;
 
-        if (openingHour == null)
+        if (location.getOpeningHours() == null)
+            return null;
+
+        if (location.getOpeningHours().get(0) == null)
+            return null;
+
+        var openingHours = location.getOpeningHours().get(0).getStandardOpeningHours();
+
+        if (openingHours == null)
             return null;
 
         return TescoShop.OpeningHour.builder()
-                .mo(mapHours(openingHour.getMo()))
-                .tu(mapHours(openingHour.getTu()))
-                .we(mapHours(openingHour.getWe()))
-                .th(mapHours(openingHour.getTh()))
-                .fr(mapHours(openingHour.getFr()))
-                .sa(mapHours(openingHour.getSa()))
-                .su(mapHours(openingHour.getSu()))
+                .mo(mapHours(openingHours.getMo()))
+                .tu(mapHours(openingHours.getTu()))
+                .we(mapHours(openingHours.getWe()))
+                .th(mapHours(openingHours.getTh()))
+                .fr(mapHours(openingHours.getFr()))
+                .sa(mapHours(openingHours.getSa()))
+                .su(mapHours(openingHours.getSu()))
                 .build();
     }
 
@@ -80,6 +110,9 @@ public abstract class TescoShopMapper {
     }
 
     private static TescoShop.Location mapLocation(final StoreLocationResponse.Result.Location.Geo geo) {
+        if (geo.getCoordinates() == null)
+            return null;
+
         return TescoShop.Location.builder()
                 .longitude(geo.getCoordinates().getLongitude())
                 .latitude(geo.getCoordinates().getLatitude())

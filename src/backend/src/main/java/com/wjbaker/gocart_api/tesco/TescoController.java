@@ -41,7 +41,7 @@ public class TescoController {
 
     @GetMapping("/shop/search/{searchTerm}")
     public ApiResponse<List<TescoShop>> nearbyShops(@PathVariable final String searchTerm) {
-        List<TescoShop> nearbyShops = this.tescoService.nearbyShops(searchTerm);
+        var nearbyShops = this.tescoService.nearbyShops(searchTerm);
 
         return ApiResponse.result(nearbyShops);
     }

@@ -2,7 +2,6 @@ package com.wjbaker.gocart_api.tesco;
 
 import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.tesco.mapper.TescoProductMapper;
-import com.wjbaker.gocart_api.tesco.mapper.TescoShopMapper;
 import com.wjbaker.gocart_api.tesco.type.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,14 +51,9 @@ public class TescoService {
     }
 
     public List<TescoShop> nearbyShops(final String searchTerm) {
-        Optional<StoreLocationResponse> response =
-                Optional.ofNullable(this.tescoApiClient.storeLocation(searchTerm).getBody());
+        var response = Optional.ofNullable(this.tescoApiClient.storeLocation(searchTerm).getBody());
 
-        return response.map(res -> res.getResults()
-                .stream()
-                .map(TescoShopMapper::map)
-                .collect(Collectors.toList()))
-                .orElse(new ArrayList<>());
+        return response.orElse(null);
     }
 
     public TescoProduct productData(final String productId) {
