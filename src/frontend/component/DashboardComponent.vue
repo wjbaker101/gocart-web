@@ -129,7 +129,7 @@ nav[role=navigation] {
 
     .current-page {
         width: 33.333%;
-        height: 2px;
+        height: 4px;
         position: absolute;
         bottom: 0;
         border-top-left-radius: layout(border-radius);
