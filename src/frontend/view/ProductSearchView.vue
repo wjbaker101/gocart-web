@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="flex">
+            <div class="flex flex-animate">
                 <input
                     ref="searchTextbox"
                     type="search"
@@ -37,7 +37,7 @@
                 >
                 <ButtonComponent
                     class="product-search-view-reset-search-button flex-auto"
-                    v-if="searchTerm.length > 0"
+                    :class="{ 'is-visible': searchTerm.length > 0 }"
                     @click="onClearSearch"
                     isSecondary
                 >
@@ -307,6 +307,13 @@ export default {
 
     &-reset-search-button {
         margin-left: 0.5rem;
+        overflow: hidden;
+
+        &:not(.is-visible) {
+            flex: 0;
+            padding: 0;
+            margin: 0;
+        }
     }
 
     .product-list {

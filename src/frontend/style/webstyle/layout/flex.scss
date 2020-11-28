@@ -21,3 +21,9 @@
 .flex-3 {
     flex: 3;
 }
+
+.flex-animate {
+    & > * {
+        transition: flex animation(duration-short);
+    }
+}

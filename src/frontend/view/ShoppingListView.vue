@@ -35,7 +35,7 @@
                 </section>
                 <div>
                     <section
-                        class="search-checked-container flex"
+                        class="search-checked-container flex flex-animate"
                         v-if="displayChecked.length > 5"
                     >
                         <input
@@ -47,8 +47,10 @@
                             @focus="onCheckedTextBoxFocus"
                         >
                         <ButtonComponent
-                            class="flex-auto"
-                            v-if="checkedSearchTerm.length > 0"
+                            class="flex-auto reset-checked-search-button"
+                            :class="{
+                                'is-visible': checkedSearchTerm.length > 0,
+                            }"
                             @click="onClearCheckedSearch"
                             isSecondary
                         >
@@ -194,8 +196,18 @@ export default {
     }
 
     .search-checked-textbox {
-        margin-right: 0.5rem;
         text-transform: capitalize;
+    }
+
+    .reset-checked-search-button {
+        margin-left: 0.5rem;
+        overflow: hidden;
+
+        &:not(.is-visible) {
+            flex: 0;
+            padding: 0;
+            margin: 0;
+        }
     }
 }
 </style>
