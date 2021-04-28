@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.api.type;
+package com.wjbaker.gocart_api.type;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

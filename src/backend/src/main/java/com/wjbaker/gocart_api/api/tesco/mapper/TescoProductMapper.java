@@ -1,7 +1,7 @@
-package com.wjbaker.gocart_api.tesco.mapper;
+package com.wjbaker.gocart_api.api.tesco.mapper;
 
-import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
-import com.wjbaker.gocart_api.tesco.type.TescoProduct;
+import com.wjbaker.gocart_api.api.tesco.type.ProductDataResponse;
+import com.wjbaker.gocart_api.api.tesco.type.TescoProduct;
 
 import java.util.Arrays;
 import java.util.List;

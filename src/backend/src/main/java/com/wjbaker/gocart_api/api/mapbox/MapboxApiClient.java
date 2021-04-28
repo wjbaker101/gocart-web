@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.mapbox;
+package com.wjbaker.gocart_api.api.mapbox;
 
 import com.wjbaker.gocart_api.config.type.MapboxApiConfig;
 import org.apache.tomcat.util.codec.binary.Base64;

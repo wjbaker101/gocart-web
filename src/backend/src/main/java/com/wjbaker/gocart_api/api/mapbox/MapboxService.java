@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.mapbox;
+package com.wjbaker.gocart_api.api.mapbox;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

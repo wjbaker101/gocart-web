@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.tesco.type;
+package com.wjbaker.gocart_api.api.tesco.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

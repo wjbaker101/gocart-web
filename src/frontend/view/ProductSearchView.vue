@@ -12,7 +12,7 @@
         <template #header-bottom>
             <div
                 class="product-search-view-sort-filter-container"
-                v-if="isSortAndFilterShown"
+                :class="{ 'is-visible': isSortAndFilterShown }"
             >
                 <ul>
                     <li
@@ -272,10 +272,20 @@ export default {
     }
 
     &-sort-filter-container {
+        overflow: hidden;
+
+        &.is-visible {
+            ul {
+                margin-bottom: 0;
+            }
+        }
+
         ul {
-            margin: 0;
+            position: relative;
+            margin: 0 0 -100% 0;
             padding: 0;
             list-style: none;
+            transition: margin-bottom 5s;
 
             li {
                 display: table;
