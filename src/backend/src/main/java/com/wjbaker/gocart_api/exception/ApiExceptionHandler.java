@@ -12,6 +12,9 @@ public final class ApiExceptionHandler {
         if (exception instanceof ApiBadRequestException)
             return ApiErrorResponse.ofBadRequest(exception.getError());
 
+        if (exception instanceof ApiNotAuthorisedException)
+            return ApiErrorResponse.ofNotAuthorised(exception.getError());
+
         return ApiErrorResponse.of(exception.getError());
     }
 }

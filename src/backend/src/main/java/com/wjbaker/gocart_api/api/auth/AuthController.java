@@ -1,8 +1,6 @@
 package com.wjbaker.gocart_api.api.auth;
 
-import com.wjbaker.gocart_api.api.auth.type.CreateUserRequest;
-import com.wjbaker.gocart_api.api.auth.type.CreateUserResponse;
-import com.wjbaker.gocart_api.api.auth.type.UpdateUserRequest;
+import com.wjbaker.gocart_api.api.auth.type.*;
 import com.wjbaker.gocart_api.exception.ApiException;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,10 @@ public final class AuthController {
     }
 
     @PostMapping("/login")
-    public void login() {
-        this.authService.login();
+    public ApiResultResponse<LoginResponse> login(@RequestBody final LoginRequest request) throws ApiException {
+        var loginResponse = this.authService.login(request);
+
+        return ApiResultResponse.of(loginResponse);
     }
 
     @PostMapping("/logout")

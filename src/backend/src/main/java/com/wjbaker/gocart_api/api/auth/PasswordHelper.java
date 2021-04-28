@@ -21,4 +21,10 @@ public final class PasswordHelper {
 
         return DigestUtils.sha256Hex(concatenated);
     }
+
+    public boolean isPasswordValid(final String expectedPassword, final String password, final UUID salt) {
+        var concatenated = password + salt + pepper;
+
+        return expectedPassword.equals(DigestUtils.sha256Hex(concatenated));
+    }
 }

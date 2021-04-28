@@ -28,4 +28,8 @@ public final class ApiErrorResponse extends ResponseEntity<ApiErrorResponse.ApiE
     public static ApiErrorResponse ofBadRequest(final String error) {
         return new ApiErrorResponse(new ApiError(error), HttpStatus.BAD_REQUEST);
     }
+
+    public static ApiErrorResponse ofNotAuthorised(final String error) {
+        return new ApiErrorResponse(new ApiError(error), HttpStatus.UNAUTHORIZED);
+    }
 }
