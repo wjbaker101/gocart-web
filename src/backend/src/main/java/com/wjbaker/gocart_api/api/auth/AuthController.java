@@ -1,12 +1,12 @@
 package com.wjbaker.gocart_api.api.auth;
 
 import com.wjbaker.gocart_api.api.auth.type.*;
+import com.wjbaker.gocart_api.data.entity.UserEntity;
 import com.wjbaker.gocart_api.exception.ApiException;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,6 +26,7 @@ public final class AuthController {
         return ApiResultResponse.of(loginResponse);
     }
 
+    @RequireUser
     @PostMapping("/logout")
     public void logout() {
         this.authService.logout();
@@ -40,19 +41,21 @@ public final class AuthController {
         return ApiResultResponse.ofCreated(user);
     }
 
-    @PutMapping("/user/{reference}")
+    @RequireUser
+    @PutMapping("/user")
     public ApiResultResponse<Boolean> updateUser(
-        @PathVariable final UUID reference,
+        @AuthenticationPrincipal final UserEntity user,
         @RequestBody final UpdateUserRequest request) throws ApiException {
 
-        this.authService.updateUser(reference, request);
+        this.authService.updateUser(user, request);
 
         return ApiResultResponse.of(true);
     }
 
-    @DeleteMapping("/user/{reference}")
-    public ApiResultResponse<Boolean> deleteUser(@PathVariable final UUID reference) throws ApiException {
-        this.authService.deleteUser(reference);
+    @RequireUser
+    @DeleteMapping("/user")
+    public ApiResultResponse<Boolean> deleteUser(@AuthenticationPrincipal final UserEntity user) throws ApiException {
+        this.authService.deleteUser(user);
 
         return ApiResultResponse.of(true);
     }

@@ -95,12 +95,9 @@ public final class AuthService {
         return createUserResponse;
     }
 
-    public void updateUser(final UUID reference, final UpdateUserRequest request) throws ApiException {
-        var user = this.userRepository.findByReference(reference)
-            .orElseThrow(() -> new ApiBadRequestException("A user with this reference does not exist. Please make sure you are logged in as this user and try again."));
-
+    public void updateUser(final UserEntity user, final UpdateUserRequest request) throws ApiException {
         var existingUser = this.userRepository.findByUsernameIgnoreCase(request.getUsername());
-        if (existingUser.isPresent() && existingUser.get().getReference() != user.getReference())
+        if (existingUser.isPresent() && !existingUser.get().getReference().equals(user.getReference()))
             throw new ApiBadRequestException("A user with this username already exists. Please choose a different one and try again.");
 
         var passwordSalt = UUID.randomUUID();
@@ -113,10 +110,7 @@ public final class AuthService {
         this.userRepository.save(user);
     }
 
-    public void deleteUser(final UUID reference) throws ApiException {
-        var user = this.userRepository.findByReference(reference)
-            .orElseThrow(() -> new ApiBadRequestException("A user with this username does not exist. Please make sure you are logged in as this user and try again."));
-
+    public void deleteUser(final UserEntity user) throws ApiException {
         this.userRepository.delete(user);
     }
 }
