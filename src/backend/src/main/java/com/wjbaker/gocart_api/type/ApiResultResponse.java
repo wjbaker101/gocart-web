@@ -24,4 +24,8 @@ public final class ApiResultResponse<T> extends ResponseEntity<ApiResultResponse
     public static <T> ApiResultResponse<T> of(final T result) {
         return new ApiResultResponse<>(new ApiResult<>(result), HttpStatus.OK);
     }
+
+    public static <T> ApiResultResponse<T> ofCreated(final T result) {
+        return new ApiResultResponse<>(new ApiResult<>(result), HttpStatus.CREATED);
+    }
 }
