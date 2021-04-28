@@ -74,7 +74,10 @@ public final class AuthService {
         this.userRepository.save(user);
     }
 
-    public void deleteUser() {
+    public void deleteUser(final UUID reference) throws ApiException {
+        var user = this.userRepository.findByReference(reference)
+            .orElseThrow(() -> new ApiBadRequestException("A user with this username does not exist. Please make sure you are logged in as this user and try again."));
 
+        this.userRepository.delete(user);
     }
 }

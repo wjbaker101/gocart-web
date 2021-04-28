@@ -50,8 +50,10 @@ public final class AuthController {
         return ApiResultResponse.of(true);
     }
 
-    @DeleteMapping("/user")
-    public void deleteUser() {
-        this.authService.deleteUser();
+    @DeleteMapping("/user/{reference}")
+    public ApiResultResponse<Boolean> deleteUser(@PathVariable final UUID reference) throws ApiException {
+        this.authService.deleteUser(reference);
+
+        return ApiResultResponse.of(true);
     }
 }
