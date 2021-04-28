@@ -1,6 +1,6 @@
 package com.wjbaker.gocart_api.api.global;
 
-import com.wjbaker.gocart_api.type.ApiResponse;
+import com.wjbaker.gocart_api.type.ApiErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +18,7 @@ public class ApiController {
     }
 
     @ExceptionHandler
-    public ApiResponse<String> handleErrors(final Exception exception) {
-        return ApiResponse.error("Something went wrong.");
+    public ApiErrorResponse handleErrors(final Exception exception) {
+        return ApiErrorResponse.of("Something went wrong.");
     }
 }
