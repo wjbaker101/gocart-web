@@ -100,12 +100,7 @@ public final class AuthService {
         if (existingUser.isPresent() && !existingUser.get().getReference().equals(user.getReference()))
             throw new ApiBadRequestException("A user with this username already exists. Please choose a different one and try again.");
 
-        var passwordSalt = UUID.randomUUID();
-        var hashedPassword = this.passwordHelper.hashPassword(request.getPassword(), passwordSalt);
-
         user.setUsername(request.getUsername());
-        user.setPassword(hashedPassword);
-        user.setPasswordSalt(passwordSalt);
 
         this.userRepository.save(user);
     }
