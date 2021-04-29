@@ -3,11 +3,13 @@ package com.wjbaker.gocart_api.api.tesco;
 import com.wjbaker.gocart_api.api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.api.tesco.type.TescoProduct;
 import com.wjbaker.gocart_api.api.tesco.type.TescoShop;
-import com.wjbaker.gocart_api.type.ApiErrorResponse;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -45,12 +47,5 @@ public class TescoController {
         var nearbyShops = this.tescoService.nearbyShops(searchTerm);
 
         return ApiResultResponse.of(nearbyShops);
-    }
-
-    @ExceptionHandler
-    public ApiErrorResponse handleErrors(final Exception exception) {
-        exception.printStackTrace();
-
-        return ApiErrorResponse.of("Something went wrong.");
     }
 }

@@ -17,4 +17,9 @@ public final class ApiExceptionHandler {
 
         return ApiErrorResponse.of(exception.getError());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ApiErrorResponse handleException(final Exception exception) {
+        return ApiErrorResponse.of("Sorry, an error occurred on our side. Please try again later or contact support.");
+    }
 }
