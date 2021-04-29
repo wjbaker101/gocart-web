@@ -4,7 +4,6 @@ import com.wjbaker.gocart_api.api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.api.tesco.type.TescoProduct;
 import com.wjbaker.gocart_api.api.tesco.type.TescoShop;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.apache.logging.log4j.LogManager.getLogger;
-
 @RestController
 @RequestMapping("/api/tesco")
 public class TescoController {
-
-    private final Logger logger = getLogger(TescoController.class);
 
     private final TescoService tescoService;
 
