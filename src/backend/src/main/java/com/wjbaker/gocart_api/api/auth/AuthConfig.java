@@ -14,7 +14,7 @@ public class AuthConfig {
     private final byte[] signingKey;
 
     @Autowired
-    public AuthConfig(@Value("${auth.signingKey}") final String signingKey) {
+    public AuthConfig(@Value("${auth.signing-key}") final String signingKey) {
         this.signingKey = signingKey.getBytes();
     }
 }
