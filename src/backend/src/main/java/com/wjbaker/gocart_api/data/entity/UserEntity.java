@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,4 +28,7 @@ public final class UserEntity {
 
     @Column(name = "password_salt", nullable = false)
     private UUID passwordSalt;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserProductEntity> products;
 }
