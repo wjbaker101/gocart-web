@@ -23,6 +23,11 @@ public final class GetUserProductsResponse {
         private String department;
         private String superDepartment;
 
+        private String barcodeId;
+        private String brand;
+        private Integer healthScore;
+        private List<String> ingredients;
+
         private int listQuantity;
         private boolean isChecked;
         private int addCount;
