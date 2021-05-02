@@ -12,4 +12,6 @@ import java.util.List;
 public interface ShoppingRepository extends JpaRepository<UserProductEntity, Long> {
 
     List<UserProductEntity> findByUser(final UserEntity user);
+
+    void deleteByUserAndProductTpnb(final UserEntity user, final String tpnb);
 }
