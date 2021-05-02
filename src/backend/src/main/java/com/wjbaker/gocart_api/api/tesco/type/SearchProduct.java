@@ -17,6 +17,7 @@ public class SearchProduct {
     private String department;
     private String superDepartment;
     private String barcodeId;
+    private String brand;
     private List<String> ingredients;
     private Integer healthScore;
     private Nutrition nutrition;

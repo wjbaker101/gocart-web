@@ -54,6 +54,7 @@ public final class ProductService {
         var extendedProduct = new ExtendedProductEntity();
         extendedProduct.setProduct(productEntity);
         extendedProduct.setBarcodeId(product.getBarcodeId());
+        extendedProduct.setBrand(product.getBrand());
         extendedProduct.setHealthScore(product.getHealthScore());
 
         if (product.getIngredients() != null) {

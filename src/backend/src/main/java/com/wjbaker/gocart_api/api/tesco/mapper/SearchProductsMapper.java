@@ -41,6 +41,7 @@ public abstract class SearchProductsMapper {
             return product;
 
         product.setBarcodeId(tescoProduct.getBarcodeId());
+        product.setBrand(tescoProduct.getBrand());
         product.setIngredients(tescoProduct.getIngredients());
         product.setHealthScore(tescoProduct.getHealthScore());
         product.setNutrition(mapNutrition(tescoProduct.getNutrition()));
