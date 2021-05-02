@@ -49,15 +49,16 @@ public abstract class SearchProductsMapper {
     }
 
     private static SearchProduct mapSearchProduct(final GrocerySearchResponse.UK.GHS.Products.Result result) {
-        return SearchProduct.builder()
-                .id(result.getId())
-                .name(result.getName())
-                .imageUrl(mapImageUrl(result.getImageUrl()))
-                .price(result.getPrice())
-                .description(mapDescription(result.getDescription()))
-                .department(result.getDepartment())
-                .superDepartment(result.getSuperDepartment())
-                .build();
+        var searchProduct = new SearchProduct();
+        searchProduct.setId(result.getId());
+        searchProduct.setName(result.getName());
+        searchProduct.setImageUrl(mapImageUrl(result.getImageUrl()));
+        searchProduct.setPrice(result.getPrice());
+        searchProduct.setDescription(mapDescription(result.getDescription()));
+        searchProduct.setDepartment(result.getDepartment());
+        searchProduct.setSuperDepartment(result.getSuperDepartment());
+
+        return searchProduct;
     }
 
     private static String mapDescription(final List<String> description) {
@@ -78,11 +79,12 @@ public abstract class SearchProductsMapper {
         if (nutrition == null)
             return null;
 
-        return SearchProduct.Nutrition.builder()
-                .per100gHeader(nutrition.getPer100gHeader())
-                .perServingHeader(nutrition.getPerServingHeader())
-                .nutrients(mapNutrients(nutrition.getNutrients()))
-                .build();
+        var productNutrition = new SearchProduct.Nutrition();
+        productNutrition.setPer100gHeader(nutrition.getPer100gHeader());
+        productNutrition.setPerServingHeader(nutrition.getPerServingHeader());
+        productNutrition.setNutrients(mapNutrients(nutrition.getNutrients()));
+
+        return productNutrition;
     }
 
     private static List<SearchProduct.Nutrition.Nutrient> mapNutrients(
@@ -100,10 +102,11 @@ public abstract class SearchProductsMapper {
         if (nutrient == null)
             return null;
 
-        return SearchProduct.Nutrition.Nutrient.builder()
-                .name(nutrient.getName())
-                .valuePer100g(nutrient.getValuePer100g())
-                .valuePerServing(nutrient.getValuePerServing())
-                .build();
+        var productNutrient = new SearchProduct.Nutrition.Nutrient();
+        productNutrient.setName(nutrient.getName());
+        productNutrient.setValuePer100g(nutrient.getValuePer100g());
+        productNutrient.setValuePerServing(nutrient.getValuePerServing());
+
+        return productNutrient;
     }
 }

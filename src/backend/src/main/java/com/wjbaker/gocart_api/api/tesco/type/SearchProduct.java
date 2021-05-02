@@ -1,69 +1,40 @@
 package com.wjbaker.gocart_api.api.tesco.type;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Builder
+@Getter
+@Setter
 public class SearchProduct {
 
-    @Getter @Setter
     private String id;
-
-    @Getter @Setter
     private String name;
-
-    @Getter @Setter
     private Double price;
-
-    @Getter @Setter
     private String imageUrl;
-
-    @Getter @Setter
     private String description;
-
-    @Getter @Setter
     private String department;
-
-    @Getter @Setter
     private String superDepartment;
-
-    @Getter @Setter
     private String barcodeId;
-
-    @Getter @Setter
     private List<String> ingredients;
-
-    @Getter @Setter
     private Integer healthScore;
-
-    @Getter @Setter
     private Nutrition nutrition;
 
-    @Builder
+    @Getter
+    @Setter
     public static class Nutrition {
 
-        @Getter @Setter
         private String per100gHeader;
-
-        @Getter @Setter
         private String perServingHeader;
-
-        @Getter @Setter
         private List<Nutrient> nutrients;
 
-        @Builder
+        @Getter
+        @Setter
         public static class Nutrient {
 
-            @Getter @Setter
             private String name;
-
-            @Getter @Setter
             private float valuePer100g;
-
-            @Getter @Setter
             private float valuePerServing;
         }
     }
