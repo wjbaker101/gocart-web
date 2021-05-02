@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(schema = "entity", name = "product")
@@ -13,19 +14,19 @@ public final class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "tpnb")
-    private long tpnb;
+    private String tpnb;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private ExtendedProductEntity extendedProduct;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private double price;
+    @Column(name = "price", precision = 15, scale = 2)
+    private Double price;
 
     @Column(name = "image_url")
     private String imageUrl;

@@ -41,7 +41,7 @@ public class GrocerySearchResponse {
                     private String name;
 
                     @Getter @Setter
-                    private float price;
+                    private Double price;
 
                     @Getter @Setter
                     @JsonProperty("image")

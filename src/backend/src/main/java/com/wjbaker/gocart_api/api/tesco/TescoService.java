@@ -1,5 +1,6 @@
 package com.wjbaker.gocart_api.api.tesco;
 
+import com.wjbaker.gocart_api.api.shopping.ProductService;
 import com.wjbaker.gocart_api.api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.api.tesco.type.TescoProduct;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class TescoService {
 
     private final TescoApiClient tescoApiClient;
+    private final ProductService productService;
 
     @Autowired
-    public TescoService(final TescoApiClient tescoApiClient) {
+    public TescoService(final TescoApiClient tescoApiClient, final ProductService productService) {
         this.tescoApiClient = tescoApiClient;
+        this.productService = productService;
     }
 
     public List<SearchProduct> searchProducts(final String searchTerm) {
@@ -29,19 +32,25 @@ public class TescoService {
             return null;
 
         List<TescoProduct> productData = this.productDataList(response.get()
-                .stream()
-                .map(SearchProduct::getId)
-                .collect(Collectors.toList()));
+            .stream()
+            .map(SearchProduct::getId)
+            .collect(Collectors.toList()));
 
-        return response.map(res -> res
+        var products = response.map(res -> res
+            .stream()
+            .map(product -> SearchProductsMapper.mapWithProduct(product, productData
                 .stream()
-                .map(product -> SearchProductsMapper.mapWithProduct(product, productData
-                        .stream()
-                        .filter(p -> product.getId().equals(p.getId()))
-                        .findFirst()
-                        .orElse(null)))
-                .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                .filter(p -> product.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null)))
+            .collect(Collectors.toList()))
+            .orElse(Collections.emptyList());
+
+        for (var product : products) {
+            this.productService.saveOrUpdateProduct(product);
+        }
+
+        return products;
     }
 
     public List<TescoShop> nearbyShops(final String searchTerm) {

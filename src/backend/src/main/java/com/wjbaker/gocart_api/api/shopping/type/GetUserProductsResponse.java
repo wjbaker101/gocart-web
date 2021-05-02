@@ -15,7 +15,7 @@ public final class GetUserProductsResponse {
     @Setter
     public static final class Product {
 
-        private long tpnb;
+        private String tpnb;
         private String name;
         private double price;
         private String imageUrl;

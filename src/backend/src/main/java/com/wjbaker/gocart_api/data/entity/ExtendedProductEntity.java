@@ -14,7 +14,7 @@ public final class ExtendedProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "product_id")
