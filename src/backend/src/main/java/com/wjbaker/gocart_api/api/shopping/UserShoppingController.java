@@ -4,6 +4,7 @@ import com.wjbaker.gocart_api.api.auth.type.RequireUser;
 import com.wjbaker.gocart_api.api.shopping.type.AddProductToUserRequest;
 import com.wjbaker.gocart_api.api.shopping.type.GetUserProductsResponse;
 import com.wjbaker.gocart_api.api.shopping.type.RemoveProductFromUserRequest;
+import com.wjbaker.gocart_api.api.shopping.type.UpdateProductForUser;
 import com.wjbaker.gocart_api.data.entity.UserEntity;
 import com.wjbaker.gocart_api.exception.ApiException;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
@@ -31,12 +32,21 @@ public final class UserShoppingController {
     }
 
     @RequireUser
-    @PutMapping("/product")
+    @PostMapping("/product")
     public ApiResultResponse<Boolean> addProductToUser(
         @AuthenticationPrincipal final UserEntity user,
         @RequestBody final AddProductToUserRequest request) {
 
         this.userShoppingService.addProductToUser(user, request);
+
+        return ApiResultResponse.of(true);
+    }
+
+    @RequireUser
+    @PutMapping("/product")
+    public ApiResultResponse<Boolean> updateProductForUser(
+        @AuthenticationPrincipal final UserEntity user,
+        @RequestBody final UpdateProductForUser request) {
 
         return ApiResultResponse.of(true);
     }
