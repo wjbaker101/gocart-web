@@ -1,6 +1,6 @@
 package com.wjbaker.gocart_api.api.mapbox;
 
-import com.wjbaker.gocart_api.config.type.MapboxApiConfig;
+import com.wjbaker.gocart_api.config.MapboxApiConfig;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;

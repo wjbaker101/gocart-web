@@ -1,10 +1,10 @@
 package com.wjbaker.gocart_api.api.tesco;
 
-import com.wjbaker.gocart_api.config.type.TescoApiConfig;
 import com.wjbaker.gocart_api.api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.api.tesco.mapper.TescoProductMapper;
 import com.wjbaker.gocart_api.api.tesco.mapper.TescoShopMapper;
 import com.wjbaker.gocart_api.api.tesco.type.*;
+import com.wjbaker.gocart_api.config.TescoApiConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
