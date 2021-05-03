@@ -4,7 +4,7 @@ import com.wjbaker.gocart_api.api.auth.type.RequireUser;
 import com.wjbaker.gocart_api.api.shopping.type.AddProductToUserRequest;
 import com.wjbaker.gocart_api.api.shopping.type.GetUserProductsResponse;
 import com.wjbaker.gocart_api.api.shopping.type.RemoveProductFromUserRequest;
-import com.wjbaker.gocart_api.api.shopping.type.UpdateProductForUser;
+import com.wjbaker.gocart_api.api.shopping.type.UpdateProductForUserRequest;
 import com.wjbaker.gocart_api.data.entity.UserEntity;
 import com.wjbaker.gocart_api.exception.ApiException;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
@@ -46,7 +46,9 @@ public final class UserShoppingController {
     @PutMapping("/product")
     public ApiResultResponse<Boolean> updateProductForUser(
         @AuthenticationPrincipal final UserEntity user,
-        @RequestBody final UpdateProductForUser request) {
+        @RequestBody final UpdateProductForUserRequest request) throws ApiException {
+
+        this.userShoppingService.updateProductForUser(user, request);
 
         return ApiResultResponse.of(true);
     }
