@@ -5,6 +5,7 @@ import com.wjbaker.gocart_api.api.shopping.type.AddProductToUserRequest;
 import com.wjbaker.gocart_api.api.shopping.type.GetUserProductsResponse;
 import com.wjbaker.gocart_api.api.shopping.type.RemoveProductFromUserRequest;
 import com.wjbaker.gocart_api.data.entity.UserEntity;
+import com.wjbaker.gocart_api.exception.ApiException;
 import com.wjbaker.gocart_api.type.ApiResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

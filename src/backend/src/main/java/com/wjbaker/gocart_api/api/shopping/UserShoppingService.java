@@ -8,6 +8,8 @@ import com.wjbaker.gocart_api.data.entity.UserEntity;
 import com.wjbaker.gocart_api.data.entity.UserProductEntity;
 import com.wjbaker.gocart_api.data.repository.ProductRepository;
 import com.wjbaker.gocart_api.data.repository.ShoppingRepository;
+import com.wjbaker.gocart_api.exception.ApiException;
+import com.wjbaker.gocart_api.exception.ApiNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,8 @@ public final class UserShoppingService {
     }
 
     public void removeProductFromUser(final UserEntity user, final RemoveProductFromUserRequest request) {
-        this.shoppingRepository.deleteByUserAndProductTpnb(user, request.getTpnb());
+        var userProduct = this.shoppingRepository.findByUserAndProductTpnb(user, request.getTpnb());
+
+        userProduct.ifPresent(this.shoppingRepository::delete);
     }
 }
