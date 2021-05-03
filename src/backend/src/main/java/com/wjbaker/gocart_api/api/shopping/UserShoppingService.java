@@ -8,8 +8,6 @@ import com.wjbaker.gocart_api.data.entity.UserEntity;
 import com.wjbaker.gocart_api.data.entity.UserProductEntity;
 import com.wjbaker.gocart_api.data.repository.ProductRepository;
 import com.wjbaker.gocart_api.data.repository.ShoppingRepository;
-import com.wjbaker.gocart_api.exception.ApiException;
-import com.wjbaker.gocart_api.exception.ApiNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +37,7 @@ public final class UserShoppingService {
         var userProduct = new UserProductEntity();
         userProduct.setUser(user);
         userProduct.setProduct(product.get());
-        userProduct.setListQuantity(1);
+        userProduct.setListQuantity(request.getListQuantity());
         userProduct.setChecked(false);
         userProduct.setAddCount(1);
 

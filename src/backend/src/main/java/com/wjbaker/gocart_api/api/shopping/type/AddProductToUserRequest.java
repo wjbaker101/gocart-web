@@ -8,4 +8,5 @@ import lombok.Setter;
 public final class AddProductToUserRequest {
 
     private String tpnb;
+    private int listQuantity = 1;
 }
