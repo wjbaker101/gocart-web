@@ -276,16 +276,15 @@ export default {
 
         &.is-visible {
             ul {
-                margin-bottom: 0;
+                display: block;
             }
         }
 
         ul {
             position: relative;
-            margin: 0 0 -100% 0;
             padding: 0;
             list-style: none;
-            transition: margin-bottom 5s;
+            display: none;
 
             li {
                 display: table;
