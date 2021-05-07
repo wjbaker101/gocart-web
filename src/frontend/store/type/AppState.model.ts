@@ -1,6 +1,7 @@
 import { Product } from '@/model/Product.model';
 import { Shop } from '@/model/Shop.model';
 import { SortOptionType } from '@/model/SortOption.model';
+import { User } from '@/model/User.model';
 
 export interface CurrentSearchAppState {
     products: Product[],
@@ -27,4 +28,6 @@ export interface AppState {
     shoppingList: ShoppingListAppState,
 
     selectedShop: Shop | null,
+
+    user: User | null,
 }

@@ -1,9 +1,10 @@
 import { CacheService } from '@/service/Cache.service';
 
-import { Product } from '@/model/Product.model';
-import { Shop } from '@/model/Shop.model';
 import { StateKeys } from '@/store/type/StateKeys';
 import { SearchAppState } from '@/store/type/AppState.model';
+import { Product } from '@/model/Product.model';
+import { Shop } from '@/model/Shop.model';
+import { User } from '@/model/User.model';
 
 export const StateCacheService = {
 
@@ -68,5 +69,12 @@ export const StateCacheService = {
 
     async setSelectedShop(shop: Shop): Promise<void> {
         return await CacheService.set(StateKeys.SELECTED_SHOP, shop);
+    },
+
+    async setUser(user: User | null): Promise<void> {
+        if (user === null)
+            return await CacheService.delete(StateKeys.USER);
+
+        return await CacheService.set(StateKeys.USER, user);
     },
 }

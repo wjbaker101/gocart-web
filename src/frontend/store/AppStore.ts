@@ -4,10 +4,11 @@ import { API } from '@/api/API';
 import { StateCacheService } from '@/service/StateCache.service';
 
 import { AppState, CurrentSearchAppState, SearchAppState } from '@/store/type/AppState.model';
+import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { Shop } from '@/model/Shop.model';
 import { SortOptionType } from '@/model/SortOption.model';
-import { StateKeys } from '@/store/type/StateKeys';
+import { User } from '@/model/User.model';
 
 export const AppStateMapper = {
 
@@ -34,6 +35,8 @@ const AppStore = createStore<AppState>({
         },
 
         selectedShop: null,
+
+        user: null,
     },
 
     getters: {
@@ -48,6 +51,8 @@ const AppStore = createStore<AppState>({
         checkedProductList: state => state.shoppingList.checked,
 
         selectedShop: state => state.selectedShop,
+
+        user: state => state.user,
     },
 
     mutations: {
@@ -97,6 +102,10 @@ const AppStore = createStore<AppState>({
 
         [StateKeys.SELECTED_SHOP_SET](state: AppState, shop: Shop) {
             state.selectedShop = shop;
+        },
+
+        [StateKeys.USER_SET](state: AppState, user: User | null) {
+            state.user = user;
         },
     },
 
@@ -261,6 +270,12 @@ const AppStore = createStore<AppState>({
             }
 
             await StateCacheService.setSelectedShop(shop);
+        },
+
+        async [StateKeys.USER_SET]({ commit }, user: User | null) {
+            commit(StateKeys.USER_SET, user);
+
+            await StateCacheService.setUser(user);
         },
     },
 });

@@ -16,4 +16,7 @@ export enum StateKeys {
 
     SELECTED_SHOP = 'SELECTED_SHOP',
     SELECTED_SHOP_SET = 'SELECTED_SHOP_SET',
+
+    USER = 'USER',
+    USER_SET = 'USER_SET',
 }

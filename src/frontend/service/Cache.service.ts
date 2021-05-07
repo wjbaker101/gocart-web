@@ -23,4 +23,8 @@ export const CacheService = {
     async set(key: string, data: any): Promise<void> {
         await immortalDB.set(key, JSON.stringify(data));
     },
+
+    async delete(key: string): Promise<void> {
+        await immortalDB.remove(key);
+    },
 }
