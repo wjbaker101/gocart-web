@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { computed, PropType, ref, toRefs, watch } from 'vue';
+import { computed, PropType } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -43,7 +43,6 @@ import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
 import BinIcon from '@/component/icon/BinIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
-import { AppStateMapper } from '@/store/AppStore';
 import {
     UseShoppingListChecked,
     UseForSeachChecked,
