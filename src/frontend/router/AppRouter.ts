@@ -5,6 +5,7 @@ import ProductView from '@/view/ProductView.vue';
 import ShoppingListView from '@/view/ShoppingListView.vue';
 import ShopSearchView from '@/view/ShopSearchView.vue';
 import ShopView from '@/view/ShopView.vue';
+import UserView from '@/view/UserView.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -26,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/shop/search',
         component: ShopSearchView,
+    },
+    {
+        path: '/user',
+        component: UserView,
     },
 ];
 
