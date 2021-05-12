@@ -27,7 +27,9 @@
                 <section class="background">
                     <h2>Log Out</h2>
                     <p>
-                        <ButtonComponent>Log Out</ButtonComponent>
+                        <ButtonComponent @click="logOut">
+                            Log Out
+                        </ButtonComponent>
                     </p>
                 </section>
             </div>
@@ -45,7 +47,9 @@ import LoadingComponent from '@/component/LoadingComponent.vue';
 
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
+import { API } from '@/api/API';
 import { AppState } from '@/store/type/AppState.model';
+import { StateKeys } from '@/store/type/StateKeys';
 import { User } from '@/model/User.model';
 
 export default {
@@ -66,6 +70,15 @@ export default {
 
         return {
             user,
+
+            async logOut() {
+                const logoutResponse = await API.logout(user.value);
+
+                if (logoutResponse instanceof Error)
+                    return;
+
+                store.dispatch(StateKeys.USER_SET, null);
+            },
         }
     },
 }

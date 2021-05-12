@@ -83,7 +83,7 @@ export default {
 
                 store.dispatch(StateKeys.USER_SET, <User>{
                     username: loginResponse.username,
-                    jwtToken: loginResponse.loginToken,
+                    loginToken: loginResponse.loginToken,
                 });
 
                 router.push({ path: '/user' });
