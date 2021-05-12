@@ -20,7 +20,7 @@
                 <section class="background">
                     <h2>Details</h2>
                     <p>
-                        <strong>Your Username:</strong>
+                        <strong>Logged in as: </strong>
                         <span>{{ user.username }}</span>
                     </p>
                 </section>
