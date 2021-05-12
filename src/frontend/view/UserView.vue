@@ -27,6 +27,7 @@
                 <section class="background">
                     <h2>Log Out</h2>
                     <p>
+                        <UserMessageComponent :message="userMessage" />
                         <ButtonComponent @click="logOut">
                             Log Out
                         </ButtonComponent>
@@ -38,12 +39,13 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
+import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
@@ -59,6 +61,7 @@ export default {
         ButtonComponent,
         PageContainerComponent,
         LoadingComponent,
+        UserMessageComponent,
     },
 
     setup() {
@@ -66,16 +69,23 @@ export default {
 
         const user = computed<User | null>(() => store.getters.user);
 
+        const userMessage = ref<string | null>(null);
+
         UseScrollPosition('UserView');
 
         return {
             user,
+            userMessage,
 
             async logOut() {
+                userMessage.value = null;
+
                 const logoutResponse = await API.logout(user.value);
 
-                if (logoutResponse instanceof Error)
+                if (logoutResponse instanceof Error) {
+                    userMessage.value = logoutResponse.message;
                     return;
+                }
 
                 store.dispatch(StateKeys.USER_SET, null);
             },
