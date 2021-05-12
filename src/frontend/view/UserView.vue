@@ -1,6 +1,6 @@
 <template>
     <PageContainerComponent>
-        <template #header-bottom v-if="user !== null">
+        <template #header-bottom>
             <h3 class="header-user-view-title">Your User</h3>
         </template>
         <div class="user-view">
@@ -11,7 +11,9 @@
                     <ButtonComponent>Sign Up</ButtonComponent>
                 </p>
                 <p>
-                    <ButtonComponent>Log In</ButtonComponent>
+                    <router-link to="/user/login">
+                        <ButtonComponent>Log In</ButtonComponent>
+                    </router-link>
                 </p>
             </section>
             <div v-else>
