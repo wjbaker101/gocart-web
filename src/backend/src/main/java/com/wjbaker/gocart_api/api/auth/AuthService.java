@@ -62,6 +62,7 @@ public final class AuthService {
             .compact();
 
         var loginResponse = new LoginResponse();
+        loginResponse.setUsername(user.getUsername());
         loginResponse.setLoginToken(jwtToken);
 
         return loginResponse;
