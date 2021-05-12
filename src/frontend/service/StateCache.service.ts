@@ -71,6 +71,10 @@ export const StateCacheService = {
         return await CacheService.set(StateKeys.SELECTED_SHOP, shop);
     },
 
+    async getUser(): Promise<User | null> {
+        return await CacheService.get<User>(StateKeys.USER);
+    },
+
     async setUser(user: User | null): Promise<void> {
         if (user === null)
             return await CacheService.delete(StateKeys.USER);

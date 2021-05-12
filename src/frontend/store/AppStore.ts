@@ -142,6 +142,12 @@ const AppStore = createStore<AppState>({
             if (searchSettings !== null) {
                 commit(StateKeys.SEARCH_SETTINGS_SET, searchSettings);
             }
+
+            const user = await StateCacheService.getUser();
+
+            if (user !== null) {
+                commit(StateKeys.USER_SET, user);
+            }
         },
 
         [StateKeys.CURRENT_SEARCH_SET](
