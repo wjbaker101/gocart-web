@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { computed, readonly } from 'vue';
+import { computed, defineComponent, readonly } from 'vue';
 import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -101,7 +101,7 @@ import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { AppState } from '@/store/type/AppState.model';
 import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
 
-export default {
+export default defineComponent({
     name: 'ShopView',
 
     components: {
@@ -201,7 +201,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

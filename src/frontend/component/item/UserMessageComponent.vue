@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
 
-export default {
+export default defineComponent({
     name: 'CheckBoxComponent',
 
     components: {
@@ -31,7 +31,7 @@ export default {
     setup() {
         return {}
     },
-}
+})
 </script>
 
 <style lang="scss">

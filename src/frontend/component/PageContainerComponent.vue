@@ -25,11 +25,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 import LeftArrowIcon from '@/component/icon/ArrowLeftIcon.vue';
 
-export default {
+export default defineComponent({
     name: 'PageContainerComponent',
 
     components: {
@@ -49,7 +50,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
+import { computed, defineComponent, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
 import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -96,7 +96,7 @@ import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { SortOption, SortOptionType } from '@/model/SortOption.model';
 
-export default {
+export default defineComponent({
     name: 'ProductSearchView',
 
     components: {
@@ -261,7 +261,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

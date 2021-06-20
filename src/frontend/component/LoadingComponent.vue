@@ -7,9 +7,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
+
 import LoadingIcon from '@/component/icon/LoadingIcon.vue';
 
-export default {
+export default defineComponent({
     name: 'LoadingComponent',
 
     components: {
@@ -19,7 +21,7 @@ export default {
     props: {
         label: String,
     },
-}
+})
 </script>
 
 <style lang="scss">

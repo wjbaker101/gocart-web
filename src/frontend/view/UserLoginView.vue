@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
@@ -36,7 +36,7 @@ import { StateKeys } from '@/store/type/StateKeys';
 import { User } from '@/model/User.model';
 import router from '@/router/AppRouter';
 
-export default {
+export default defineComponent({
     name: 'UserView',
 
     components: {
@@ -90,7 +90,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onBeforeMount, readonly, ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeMount, readonly, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -104,7 +104,7 @@ import { AppState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
 import { StateKeys } from '@/store/type/StateKeys';
 
-export default {
+export default defineComponent({
     name: 'ProductView',
 
     components: {
@@ -200,7 +200,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { computed, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -57,7 +57,7 @@ interface ProductComponentProps {
     forSearch: Boolean,
 }
 
-export default {
+export default defineComponent({
     name: 'ProductComponent',
 
     components: {
@@ -95,7 +95,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -67,7 +67,7 @@ import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { AppState } from '@/store/type/AppState.model';
 import { Shop } from '@/model/Shop.model';
 
-export default {
+export default defineComponent({
     name: 'ProductSearchView',
 
     components: {
@@ -148,7 +148,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

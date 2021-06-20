@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive, ref, shallowReadonly, watch } from 'vue';
+import { computed, defineComponent, reactive, ref, shallowReadonly, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import CogIcon from '@/component/icon/CogIcon.vue';
@@ -57,7 +57,7 @@ interface DashboardPage {
     icon: any,
 }
 
-export default {
+export default defineComponent({
     name: 'DashboardComponent',
 
     components: {
@@ -140,7 +140,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

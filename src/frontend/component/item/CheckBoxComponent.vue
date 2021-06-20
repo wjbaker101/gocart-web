@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
-import { onMounted, reactive, ref, SetupContext } from 'vue';
+import { defineComponent, ref, SetupContext } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'CheckBoxComponent',
 
     props: {
@@ -40,7 +40,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onBeforeMount, onBeforeUnmount, readonly, ref, watch } from 'vue';
+import { Component, computed, defineComponent, onBeforeMount, onBeforeUnmount, readonly, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { VueDraggableNext as VueDraggable } from 'vue-draggable-next';
 
@@ -87,7 +87,7 @@ import { AppState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
 import { StateKeys } from '@/store/type/StateKeys';
 
-export default {
+export default defineComponent({
     name: 'ShoppingListView',
 
     components: {
@@ -186,7 +186,7 @@ export default {
             },
         }
     },
-}
+})
 </script>
 
 <style lang="scss">

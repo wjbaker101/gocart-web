@@ -5,14 +5,14 @@
 </template>
 
 <script lang="ts">
-import { computed, SetupContext } from 'vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'ButtonComponent',
 
     setup() {
     },
-}
+})
 </script>
 
 <style lang="scss">

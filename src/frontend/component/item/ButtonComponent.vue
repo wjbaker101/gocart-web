@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import { computed, SetupContext } from 'vue';
+import { computed, defineComponent, SetupContext } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'ButtonComponent',
 
     props: {
@@ -23,7 +23,7 @@ export default {
             elementClass,
         }
     },
-}
+})
 </script>
 
 <style lang="scss">
