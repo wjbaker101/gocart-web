@@ -63,8 +63,8 @@ module.exports = {
 
     pwa: {
         name: 'GoCart',
-        themeColor: '#2292a4',
-        msTileColor: '#2292a4',
+        themeColor: '#176bc0',
+        msTileColor: '#176bc0',
         appleMobileWebAppCapable: 'yes',
         manifestOptions: {
             background_color: '#fafafa',
