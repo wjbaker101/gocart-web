@@ -30,10 +30,14 @@
                     </VueDraggable>
                 </div>
                 <section ref="checkedSection" class="flex align-center">
-                    <h3 class="flex-1">Checked Items</h3>
+                    <h3 class="flex-1">Checked Items <small v-if="!shoppingListSettings.isCheckedItemsVisible"><em>(Hidden)</em></small></h3>
                     <p class="flex-auto">({{ displayChecked.length }})</p>
+                    <div class="checked-items-visibility-container flex flex-auto align-center" @click="toggleCheckedItemsVisibility">
+                        <ChevronUpIcon v-if="shoppingListSettings.isCheckedItemsVisible" />
+                        <ChevronDownIcon v-else />
+                    </div>
                 </section>
-                <div>
+                <div v-if="shoppingListSettings.isCheckedItemsVisible">
                     <section
                         class="search-checked-container flex flex-animate"
                         v-if="displayChecked.length > 5"
@@ -69,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { Component, computed, defineComponent, onBeforeMount, onBeforeUnmount, readonly, ref, watch } from 'vue';
+import { computed, defineComponent, readonly, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VueDraggableNext as VueDraggable } from 'vue-draggable-next';
 
@@ -77,13 +81,14 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ProductComponent from '@/component/ProductComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import BasketIcon from '@/component/icon/BasketIcon.vue';
+import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
+import ChevronUpIcon from '@/component/icon/ChevronUpIcon.vue';
 
 import { AppStateMapper } from '@/store/AppStore';
-import { TescoService } from '@/service/Tesco.service';
 import { SortService } from '@/service/Sort.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-import { AppState } from '@/store/type/AppState.model';
+import { AppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
 import { StateKeys } from '@/store/type/StateKeys';
 
@@ -96,6 +101,8 @@ export default defineComponent({
         ProductComponent,
         ButtonComponent,
         BasketIcon,
+        ChevronDownIcon,
+        ChevronUpIcon,
     },
 
     setup() {
@@ -112,6 +119,8 @@ export default defineComponent({
             disabled: false,
             ghostClass: 'is-dragged',
         });
+
+        const shoppingListSettings = computed<ShoppingListSettingsState>(() => store.getters.shoppingListSettings);
 
         const displayUnchecked = computed<Product[]>({
             get: () => Array.from<string>(store.getters
@@ -172,6 +181,7 @@ export default defineComponent({
             displayChecked,
             filteredDisplayChecked,
             isShoppingListEmpty,
+            shoppingListSettings,
 
             onCheckedTextBoxFocus() {
                 if (checkedSection.value === null)
@@ -183,6 +193,13 @@ export default defineComponent({
             onClearCheckedSearch() {
                 checkedSearchTerm.value = '';
                 searchTextbox.value?.focus();
+            },
+
+            toggleCheckedItemsVisibility() {
+                store.dispatch(StateKeys.SHOPPING_LIST_SETTINGS_SET, {
+                    ...shoppingListSettings.value,
+                    isCheckedItemsVisible: !shoppingListSettings.value.isCheckedItemsVisible,
+                });
             },
         }
     },
@@ -208,6 +225,11 @@ export default defineComponent({
             padding: 0;
             margin: 0;
         }
+    }
+
+    .checked-items-visibility-container {
+        margin-left: 0.5rem;
+        cursor: pointer;
     }
 }
 </style>

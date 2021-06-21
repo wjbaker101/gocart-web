@@ -3,7 +3,7 @@ import { createStore } from 'vuex';
 import { API } from '@/api/API';
 import { StateCacheService } from '@/service/StateCache.service';
 
-import { AppState, CurrentSearchAppState, SearchAppState } from '@/store/type/AppState.model';
+import { AppState, CurrentSearchAppState, SearchAppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { Shop } from '@/model/Shop.model';
@@ -32,6 +32,9 @@ const AppStore = createStore<AppState>({
             products: {},
             unchecked: new Set<string>(),
             checked: new Set<string>(),
+            settings: {
+                isCheckedItemsVisible: true,
+            },
         },
 
         selectedShop: null,
@@ -49,6 +52,7 @@ const AppStore = createStore<AppState>({
         shoppingList: state => state.shoppingList.products,
         uncheckedProductList: state => state.shoppingList.unchecked,
         checkedProductList: state => state.shoppingList.checked,
+        shoppingListSettings: state => state.shoppingList.settings,
 
         selectedShop: state => state.selectedShop,
 
@@ -96,6 +100,12 @@ const AppStore = createStore<AppState>({
             state.shoppingList.checked = checked;
         },
 
+        [StateKeys.SHOPPING_LIST_SETTINGS_SET](
+            state: AppState, settings: ShoppingListSettingsState) {
+
+            state.shoppingList.settings = settings;
+        },
+
         [StateKeys.CURRENT_PRODUCT_SET](state: AppState, product: Product) {
             state.currentProduct = product;
         },
@@ -129,6 +139,12 @@ const AppStore = createStore<AppState>({
 
             if (checked !== null) {
                 commit(StateKeys.SHOPPING_LIST_CHECKED_SET, checked);
+            }
+
+            const shoppingListSettings = await StateCacheService.getShoppingListSettings();
+
+            if (shoppingListSettings !== null) {
+                commit(StateKeys.SHOPPING_LIST_SETTINGS_SET, shoppingListSettings);
             }
 
             const currentShop = await StateCacheService.getSelectedShop();
@@ -262,6 +278,14 @@ const AppStore = createStore<AppState>({
             commit(StateKeys.SHOPPING_LIST_CHECKED_SET, products);
 
             await StateCacheService.setShoppingListChecked(products);
+        },
+
+        async [StateKeys.SHOPPING_LIST_SETTINGS_SET](
+            { commit }, settings: ShoppingListSettingsState) {
+
+            commit(StateKeys.SHOPPING_LIST_SETTINGS_SET, settings);
+
+            await StateCacheService.setShoppingListSettings(settings);
         },
 
         async [StateKeys.SELECTED_SHOP_SET]({ commit }, shop: Shop) {

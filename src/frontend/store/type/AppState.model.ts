@@ -8,10 +8,15 @@ export interface CurrentSearchAppState {
     searchTerm: string,
 }
 
+export interface ShoppingListSettingsState {
+    isCheckedItemsVisible: boolean,
+}
+
 export interface ShoppingListAppState {
     products: Record<string, Product>,
     unchecked: Set<string>,
     checked: Set<string>,
+    settings: ShoppingListSettingsState,
 }
 
 export interface SearchAppState {
