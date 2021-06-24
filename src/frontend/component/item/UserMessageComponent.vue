@@ -1,5 +1,5 @@
 <template>
-    <div class="user-message-component flex align-center" v-if="message !== null">
+    <div class="user-message-component flex align-center" v-if="message.length > 0">
         <div class="flex-auto">
             <QuestionMarkCircleIcon />
         </div>
@@ -10,12 +10,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
 
 export default defineComponent({
-    name: 'CheckBoxComponent',
+    name: 'UserMessageComponent',
 
     components: {
         QuestionMarkCircleIcon,
@@ -23,13 +23,9 @@ export default defineComponent({
 
     props: {
         message: {
-            type: Object as PropType<string | null>,
+            type: String,
             required: true,
         },
-    },
-
-    setup() {
-        return {}
     },
 })
 </script>

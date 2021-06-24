@@ -109,7 +109,15 @@ export default defineComponent({
         SortIcon,
     },
 
-    setup() {
+    props: {
+        prePopulatedSearchTerm: {
+            type: String,
+            required: false,
+            default: '',
+        },
+    },
+
+    setup(props) {
         const store = useStore<AppState>();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
@@ -173,6 +181,41 @@ export default defineComponent({
                 .sort(sortFunctions[currentSortOption.value.toString()]);
         });
 
+        const onSearch = async function () {
+            if (searchTerm.value === null)
+                return;
+
+            if (searchTerm.value.trim().length < 3)
+                return;
+
+            searchTextbox.value?.blur();
+
+            isSearching.value = true;
+
+            const searchProducts =
+                await TescoService.searchProducts(searchTerm.value);
+
+            isSearching.value = false;
+
+            if (searchProducts instanceof Error) {
+                products.value = null;
+
+                searchTextbox.value?.focus();
+            }
+            else {
+                products.value = searchProducts;
+
+                if (products.value.length === 0) {
+                    searchTextbox.value?.focus();
+                }
+
+                store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
+                    products: products.value,
+                    searchTerm: searchTerm.value,
+                });
+            }
+        };
+
         onBeforeMount(() => {
             const currentSearch = store.getters.currentSearch;
 
@@ -184,6 +227,11 @@ export default defineComponent({
         });
 
         onMounted(() => {
+            if (props.prePopulatedSearchTerm.length > 0) {
+                searchTerm.value = props.prePopulatedSearchTerm;
+                onSearch();
+            }
+
             if (searchTerm.value.length === 0)
                 searchTextbox.value?.focus();
         });
@@ -201,40 +249,7 @@ export default defineComponent({
             currentSortOption,
             displaySortOptions,
 
-            async onSearch() {
-                if (searchTerm.value === null)
-                    return;
-
-                if (searchTerm.value.trim().length < 3)
-                    return;
-
-                searchTextbox.value?.blur();
-
-                isSearching.value = true;
-
-                const searchProducts =
-                    await TescoService.searchProducts(searchTerm.value);
-
-                isSearching.value = false;
-
-                if (searchProducts instanceof Error) {
-                    products.value = null;
-
-                    searchTextbox.value?.focus();
-                }
-                else {
-                    products.value = searchProducts;
-
-                    if (products.value.length === 0) {
-                        searchTextbox.value?.focus();
-                    }
-
-                    store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
-                        products: products.value,
-                        searchTerm: searchTerm.value,
-                    });
-                }
-            },
+            onSearch,
 
             onClearSearch() {
                 searchTerm.value = '';

@@ -18,8 +18,10 @@ const routes: Array<RouteRecordRaw> = [
         component: ProductView,
     },
     {
+        name: 'product_search',
         path: '/search',
         component: ProductSearchView,
+        props: true,
     },
     {
         path: '/shop',

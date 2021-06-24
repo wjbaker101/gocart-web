@@ -10,7 +10,12 @@
             <section class="zero-state" v-if="isShoppingListEmpty">
                 <BasketIcon massive />
                 <p><strong>Your shopping list is empty!</strong></p>
-                <p>Press 'Search' below, add some items and<br> I'll put them on your shopping list!</p>
+                <p>Let's get started, search your first item:</p>
+                <SearchComponent
+                    placeholder="Oreo Milkshake"
+                    :hasUserMessage="true"
+                    @search="onFirstProductSearch"
+                />
             </section>
             <div v-else>
                 <section class="flex align-center">
@@ -74,12 +79,14 @@
 
 <script lang="ts">
 import { computed, defineComponent, readonly, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { VueDraggableNext as VueDraggable } from 'vue-draggable-next';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ProductComponent from '@/component/ProductComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
+import SearchComponent from '@/component/SearchComponent.vue';
 import BasketIcon from '@/component/icon/BasketIcon.vue';
 import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/component/icon/ChevronUpIcon.vue';
@@ -100,6 +107,7 @@ export default defineComponent({
         PageContainerComponent,
         ProductComponent,
         ButtonComponent,
+        SearchComponent,
         BasketIcon,
         ChevronDownIcon,
         ChevronUpIcon,
@@ -107,6 +115,7 @@ export default defineComponent({
 
     setup() {
         const store = useStore<AppState>();
+        const router = useRouter();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
         const checkedSection = ref<HTMLElement | null>(null);
@@ -169,6 +178,9 @@ export default defineComponent({
             return `£${totalPrice.value.toFixed(2)}`
         });
 
+        const firstProductSearchTerm = ref<string>('');
+        const firstProductUserMessage = ref<string | null>(null);
+
         UseScrollPosition('ShoppingListView');
 
         return {
@@ -182,6 +194,8 @@ export default defineComponent({
             filteredDisplayChecked,
             isShoppingListEmpty,
             shoppingListSettings,
+            firstProductSearchTerm,
+            firstProductUserMessage,
 
             onCheckedTextBoxFocus() {
                 if (checkedSection.value === null)
@@ -199,6 +213,15 @@ export default defineComponent({
                 store.dispatch(StateKeys.SHOPPING_LIST_SETTINGS_SET, {
                     ...shoppingListSettings.value,
                     isCheckedItemsVisible: !shoppingListSettings.value.isCheckedItemsVisible,
+                });
+            },
+
+            onFirstProductSearch(searchTerm: string) {
+                router.push({
+                    name: 'product_search',
+                    params: {
+                        prePopulatedSearchTerm: searchTerm,
+                    },
                 });
             },
         }
@@ -230,6 +253,14 @@ export default defineComponent({
     .checked-items-visibility-container {
         margin-left: 0.5rem;
         cursor: pointer;
+    }
+
+    .first-search-button {
+        margin-left: 0.5rem;
+
+        .icon {
+            vertical-align: middle;
+        }
     }
 }
 </style>
