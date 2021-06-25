@@ -1,6 +1,8 @@
 <template>
     <div class="loading-component">
-        <LoadingIcon large />
+        <div class="logo-container">
+            <LogoIcon class="loading-logo" />
+        </div>
         <p v-if="label">{{ label }}</p>
         <slot />
     </div>
@@ -9,13 +11,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import LoadingIcon from '@/component/icon/LoadingIcon.vue';
+import LogoIcon from '@/component/icon/LogoIcon.vue';
 
 export default defineComponent({
     name: 'LoadingComponent',
 
     components: {
-        LoadingIcon,
+        LogoIcon,
     },
 
     props: {
@@ -29,9 +31,31 @@ export default defineComponent({
     padding: 2rem 0.5rem;
     text-align: center;
 
-    .icon-loading {
-        color: theme(primary);
-        filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+    .loading-logo {
+        margin-bottom: -1rem;
+        animation: loading-logo 3s infinite;
+    }
+
+    @keyframes loading-logo {
+        0% {
+            opacity: 0;
+            transform: translateX(-5rem);
+        }
+
+        40% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        60% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateX(5rem);
+        }
     }
 }
 </style>
