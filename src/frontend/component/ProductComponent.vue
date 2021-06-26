@@ -28,6 +28,9 @@
                 &times;{{ product.listQuantity }}
             </strong>
         </div>
+        <div v-else class="remove-button flex-auto" @click.stop="onRemove">
+            <CrossIcon />
+        </div>
         <div class="add-to-list-container flex-auto" v-if="forSearch">
             <div class="icon-container" @click.stop="isChecked = !isChecked">
                 <BinIcon v-if="isChecked" colour="url(#bin-grad)" />
@@ -44,6 +47,7 @@ import { useStore } from 'vuex';
 
 import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
 import BinIcon from '@/component/icon/BinIcon.vue';
+import CrossIcon from '@/component/icon/CrossIcon.vue';
 import CutleryIcon from '@/component/icon/CutleryIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
@@ -67,6 +71,7 @@ export default defineComponent({
     components: {
         CheckBoxComponent,
         BinIcon,
+        CrossIcon,
         CutleryIcon,
         PlusIcon,
     },
@@ -97,6 +102,10 @@ export default defineComponent({
             onSelect() {
                 store.dispatch(StateKeys.CURRENT_PRODUCT_SET, props.product);
                 router.push({ path: '/product', });
+            },
+
+            onRemove() {
+                store.dispatch(StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE, props.product.id);
             },
         }
     },
@@ -177,6 +186,19 @@ export default defineComponent({
 
         .icon {
             margin: auto;
+        }
+    }
+
+    .remove-button {
+        padding: 1rem;
+        margin: -1rem 0;
+        line-height: 0;
+        color: theme(grey-dark);
+        border-radius: layout(border-radius);
+
+        &:hover {
+            background-color: theme(grey);
+            color: theme(black);
         }
     }
 }
