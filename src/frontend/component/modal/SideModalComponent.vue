@@ -70,6 +70,7 @@ export default defineComponent({
     position: fixed;
     top: 50%;
     right: 0;
+    left: 0;
     opacity: 0;
     pointer-events: none;
     background-color: theme(grey);

@@ -46,6 +46,7 @@ export const ProductMapper = {
             healthScore: product.healthScore,
             nutrition: mapNutrition(product.nutrition),
 
+            isFreetext: false,
             listQuantity: 1,
             isChecked: false,
             addCount: 0,

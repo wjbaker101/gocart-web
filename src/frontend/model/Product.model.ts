@@ -25,6 +25,7 @@ export interface Product {
     healthScore?: number,
     nutrition?: ProductNutrition,
 
+    isFreetext: boolean,
     listQuantity: number,
     isChecked: boolean,
     addCount: number,

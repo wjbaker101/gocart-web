@@ -8,7 +8,7 @@
                 @click.stop="() => {}"
             />
         </div>
-        <div class="flex-auto">
+        <div v-if="!product.isFreetext" class="flex-auto">
             <img
                 width="50"
                 height="50"
@@ -16,10 +16,13 @@
                 :src="product.imageUrl"
             >
         </div>
+        <div v-else class="image-placeholder flex flex-auto">
+            <CutleryIcon />
+        </div>
         <div class="product-name flex-1">
             {{ product.name }}
         </div>
-        <div class="product-price flex-auto">
+        <div v-if="!product.isFreetext" class="product-price flex-auto">
             {{ displayPrice }}
             <strong v-if="product.listQuantity > 1">
                 &times;{{ product.listQuantity }}
@@ -41,6 +44,7 @@ import { useStore } from 'vuex';
 
 import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
 import BinIcon from '@/component/icon/BinIcon.vue';
+import CutleryIcon from '@/component/icon/CutleryIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
 import {
@@ -63,6 +67,7 @@ export default defineComponent({
     components: {
         CheckBoxComponent,
         BinIcon,
+        CutleryIcon,
         PlusIcon,
     },
 
@@ -162,6 +167,16 @@ export default defineComponent({
 
         .icon-bin {
             color: theme(negative);
+        }
+    }
+
+    .image-placeholder {
+        width: 50px;
+        height: 50px;
+        color: theme(primary-light);
+
+        .icon {
+            margin: auto;
         }
     }
 }
