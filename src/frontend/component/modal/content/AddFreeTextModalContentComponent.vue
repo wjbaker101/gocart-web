@@ -3,7 +3,7 @@
     <p>Include an item you would like without having to search for a specific product.</p>
     <label>
         <span>Item Name</span>
-        <input ref="freetextInput" type="text" v-model="freetext" placeholder="Dairy Free Pesto">
+        <input ref="freetextInput" type="text" v-model="freetext" placeholder="Dairy Free Pesto" @keyup.enter="onAdd">
     </label>
     <p></p>
     <ButtonComponent @click="onAdd">Add</ButtonComponent>
