@@ -93,12 +93,13 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import ButtonGroupComponent from '@/component/item/ButtonGroupComponent.vue';
 import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
+import AreYouSureModalContentComponent, { AreYouSureModalContentComponentProps } from '@/component/modal/content/AreYouSureModalContentComponent.vue';
 import ChevronRightIcon from '@/component/icon/ChevronRightIcon.vue';
 import NoProductFoundIcon from '@/component/icon/ExclamationCircleIcon.vue';
 
 import { AppStateMapper } from '@/store/AppStore';
-import { TescoService } from '@/service/Tesco.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { Event, eventService } from '@/service/Event.service';
 
 import { AppState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
@@ -161,9 +162,25 @@ export default defineComponent({
                         product.value);
                 }
                 else {
-                    store.dispatch(
-                        StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE,
-                        product.value.id);
+                    eventService.publish(Event.OPEN_MODAL, {
+                        content: AreYouSureModalContentComponent,
+                        props: <AreYouSureModalContentComponentProps>{
+                            message: `Remove <strong>${product.value.name}</strong> from your shopping list?`,
+                            yesMessage: 'Remove',
+                            noMessage: 'Cancel',
+                            yesAction: () => {
+                                if (product.value === null)
+                                    return;
+
+                                store.dispatch(
+                                    StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE,
+                                    product.value.id);
+                            },
+                            noAction: () => {
+                                isChecked.value = true;
+                            },
+                        },
+                    });
                 }
             });
         });
