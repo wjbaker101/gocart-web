@@ -32,7 +32,6 @@ export default defineComponent({
         const content = shallowRef<DefineComponent | null>(null);
 
         const onOpenModal = function (details: any) {
-            console.log('isopen');
             isOpen.value = true;
             content.value = details.content;
         };
