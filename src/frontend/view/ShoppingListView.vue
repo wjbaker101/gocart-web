@@ -85,7 +85,6 @@
             </div>
         </div>
     </PageContainerComponent>
-    <SideModalComponent />
 </template>
 
 <script lang="ts">
@@ -98,7 +97,6 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ProductComponent from '@/component/ProductComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import SearchComponent from '@/component/SearchComponent.vue';
-import SideModalComponent from '@/component/modal/SideModalComponent.vue';
 import AddFreeTextModalContentComponent from '@/component/modal/content/AddFreeTextModalContentComponent.vue';
 import BasketIcon from '@/component/icon/BasketIcon.vue';
 import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
@@ -123,7 +121,6 @@ export default defineComponent({
         ProductComponent,
         ButtonComponent,
         SearchComponent,
-        SideModalComponent,
         BasketIcon,
         ChevronDownIcon,
         ChevronUpIcon,

@@ -6,7 +6,7 @@
                 <CrossIcon />
             </div>
         </div>
-        <component v-if="content !== null" :is="content" />
+        <component v-if="content !== null" :is="content" v-bind="contentProps" />
     </div>
     <ModalBackdropComponent :isVisible="isOpen" @close="onBackdropClose" />
 </template>
@@ -30,8 +30,10 @@ export default defineComponent({
     setup() {
         const isOpen = ref<boolean>(false);
         const content = shallowRef<DefineComponent | null>(null);
+        const contentProps = ref<any>();
 
         const onOpenModal = function (details: any) {
+            contentProps.value = details.props;
             content.value = details.content;
             isOpen.value = true;
         };
@@ -53,6 +55,7 @@ export default defineComponent({
         return {
             isOpen,
             content,
+            contentProps,
 
             onBackdropClose() {
                 eventService.publish(Event.CLOSE_MODAL);
