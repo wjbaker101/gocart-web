@@ -32,13 +32,12 @@ export default defineComponent({
         const content = shallowRef<DefineComponent | null>(null);
 
         const onOpenModal = function (details: any) {
-            isOpen.value = true;
             content.value = details.content;
+            isOpen.value = true;
         };
 
         const onCloseModal = function () {
             isOpen.value = false;
-            content.value = null;
         };
 
         onMounted(() => {
@@ -76,13 +75,14 @@ export default defineComponent({
     background-color: theme(grey);
     border-top-left-radius: layout('border-radius');
     border-bottom-left-radius: layout('border-radius');
-    transform: translateY(-50%);
+    transform: translate(100%, -50%);
     z-index: 12;
+    transition: all animation(duration-long);
 
     &.is-open {
         opacity: 1;
         pointer-events: all;
-        animation: open animation(duration-long);
+        transform: translate(0, -50%);
     }
 
     & > h2 {
@@ -101,16 +101,6 @@ export default defineComponent({
         &:hover {
             color: theme(black);
             background-color: theme(grey-dark);
-        }
-    }
-
-    @keyframes open {
-        0% {
-            transform: translate(100%, -50%);
-        }
-
-        100% {
-            transform: translate(0, -50%);
         }
     }
 }
