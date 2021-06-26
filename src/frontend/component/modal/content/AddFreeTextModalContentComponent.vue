@@ -60,6 +60,8 @@ export default defineComponent({
 
                 store.dispatch(StateKeys.SHOPPING_LIST_PRODUCTS_ADD, newProduct);
 
+                freetext.value = '';
+
                 eventService.publish(Event.CLOSE_MODAL);
             },
         }
