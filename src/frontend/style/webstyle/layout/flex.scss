@@ -1,9 +1,17 @@
 .flex {
     display: flex;
-}
 
-.align-center {
-    align-items: center;
+    &.align-center {
+        align-items: center;
+    }
+
+    &.gap {
+        gap: 1rem;
+    }
+
+    &.gap-small {
+        gap: 0.5rem;
+    }
 }
 
 .flex-auto {

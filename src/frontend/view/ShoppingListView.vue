@@ -1,10 +1,20 @@
 <template>
     <PageContainerComponent>
         <template #header-right v-if="!isShoppingListEmpty">
-            <BasketIcon />
-            <span>
-                <strong>{{ displayTotalPrice }}</strong>
-            </span>
+            <div class="flex align-center gap">
+                <ButtonComponent @click="onAddFreetext">
+                    <AddIcon />
+                    <span>
+                        <small>Freetext</small>
+                    </span>
+                </ButtonComponent>
+                <div>
+                    <BasketIcon />
+                    <span>
+                        <strong>{{ displayTotalPrice }}</strong>
+                    </span>
+                </div>
+            </div>
         </template>
         <div class="shopping-list-view">
             <section class="zero-state" v-if="isShoppingListEmpty">
@@ -75,6 +85,7 @@
             </div>
         </div>
     </PageContainerComponent>
+    <SideModalComponent />
 </template>
 
 <script lang="ts">
@@ -87,9 +98,12 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ProductComponent from '@/component/ProductComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import SearchComponent from '@/component/SearchComponent.vue';
+import SideModalComponent from '@/component/modal/SideModalComponent.vue';
+import AddFreeTextModalContentComponent from '@/component/modal/content/AddFreeTextModalContentComponent.vue';
 import BasketIcon from '@/component/icon/BasketIcon.vue';
 import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/component/icon/ChevronUpIcon.vue';
+import AddIcon from '@/component/icon/PlusIcon.vue';
 
 import { AppStateMapper } from '@/store/AppStore';
 import { SortService } from '@/service/Sort.service';
@@ -98,6 +112,7 @@ import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { AppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
 import { StateKeys } from '@/store/type/StateKeys';
+import { Event, eventService } from '@/service/Event.service';
 
 export default defineComponent({
     name: 'ShoppingListView',
@@ -108,9 +123,11 @@ export default defineComponent({
         ProductComponent,
         ButtonComponent,
         SearchComponent,
+        SideModalComponent,
         BasketIcon,
         ChevronDownIcon,
         ChevronUpIcon,
+        AddIcon,
     },
 
     setup() {
@@ -222,6 +239,12 @@ export default defineComponent({
                     params: {
                         prePopulatedSearchTerm: searchTerm,
                     },
+                });
+            },
+
+            onAddFreetext() {
+                eventService.publish(Event.OPEN_MODAL, {
+                    content: AddFreeTextModalContentComponent,
                 });
             },
         }

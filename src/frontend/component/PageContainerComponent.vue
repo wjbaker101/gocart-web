@@ -9,7 +9,10 @@
                 <LeftArrowIcon mid />
             </div>
             <h1 class="flex-auto margin-auto">GoCart</h1>
-            <div class="header-right flex-1 margin-auto">
+            <div class="header-middle flex-1 margin-auto">
+                <slot name="header-middle" />
+            </div>
+            <div class="header-right flex-auto margin-auto">
                 <slot name="header-right" />
             </div>
         </div>
