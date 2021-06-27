@@ -325,10 +325,6 @@ export default defineComponent({
         }
     }
 
-    &-search-textbox {
-        text-transform: capitalize;
-    }
-
     &-reset-search-button {
         margin-left: 0.5rem;
         overflow: hidden;
