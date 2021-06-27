@@ -1,5 +1,5 @@
 <template>
-    <SideModalContentComponent @close="$emit('close')">
+    <SideModalContentComponent @close="$emit('close')" @open="onOpen">
         <h2>Add Freetext</h2>
         <p>Include an item you would like without having to search for a specific product.</p>
         <label>
@@ -89,6 +89,10 @@ export default defineComponent({
                 freetext.value = '';
 
                 eventService.publish(Event.CLOSE_MODAL);
+            },
+
+            onOpen() {
+                freetextInput.value?.focus();
             },
         }
     },

@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
 
 import ModalBackdropComponent from '@/component/modal/ModalBackdropComponent.vue';
 import CrossIcon from '@/component/icon/CrossIcon.vue';
@@ -26,6 +26,7 @@ export default defineComponent({
     },
 
     emits: [
+        'open',
         'close',
     ],
 
@@ -34,6 +35,15 @@ export default defineComponent({
             type: Boolean,
             required: true,
         },
+    },
+
+    setup(props, { emit }) {
+        watch(() => props.isOpen, () => {
+            if (!props.isOpen)
+                return;
+
+            emit('open');
+        });
     },
 })
 </script>
