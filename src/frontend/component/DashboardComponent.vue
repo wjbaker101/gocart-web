@@ -24,13 +24,13 @@
                 <component :is="dashboardPage.icon" />
                 <div>{{ dashboardPage.title }}</div>
             </router-link>
-            <a
+            <!-- <a
                 class="flex-1"
                 @click="isExpanded = !isExpanded"
             >
                 <CogIcon />
                 <div>Settings</div>
-            </a>
+            </a> -->
             <div class="current-page" :style="currentPageIndicatorStyle"></div>
         </div>
     </nav>
@@ -108,11 +108,11 @@ export default defineComponent({
                     break;
                 case '/search':
                     currentPageIndicator.isVisible = true;
-                    currentPageIndicator.position = '25%';
+                    currentPageIndicator.position = '33.333%';
                     break;
                 case '/shop':
                     currentPageIndicator.isVisible = true;
-                    currentPageIndicator.position = '50%';
+                    currentPageIndicator.position = '66.666%';
                     break;
                 default:
                     currentPageIndicator.isVisible = false;
@@ -179,7 +179,7 @@ nav[role=navigation] {
     }
 
     .current-page {
-        width: 25%;
+        width: 33.333%;
         height: 4px;
         position: absolute;
         bottom: 0;
