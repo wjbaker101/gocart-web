@@ -12,7 +12,7 @@
         <template #header-bottom>
             <div
                 class="product-search-view-sort-filter-container"
-                :class="{ 'is-visible': isSortAndFilterShown }"
+                v-if="isSortAndFilterShown"
             >
                 <ul>
                     <li
@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
+import { computed, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
 import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -96,7 +96,7 @@ import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { SortOption, SortOptionType } from '@/model/SortOption.model';
 
-export default defineComponent({
+export default {
     name: 'ProductSearchView',
 
     components: {
@@ -109,15 +109,7 @@ export default defineComponent({
         SortIcon,
     },
 
-    props: {
-        prePopulatedSearchTerm: {
-            type: String,
-            required: false,
-            default: '',
-        },
-    },
-
-    setup(props) {
+    setup() {
         const store = useStore<AppState>();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
@@ -181,41 +173,6 @@ export default defineComponent({
                 .sort(sortFunctions[currentSortOption.value.toString()]);
         });
 
-        const onSearch = async function () {
-            if (searchTerm.value === null)
-                return;
-
-            if (searchTerm.value.trim().length < 3)
-                return;
-
-            searchTextbox.value?.blur();
-
-            isSearching.value = true;
-
-            const searchProducts =
-                await TescoService.searchProducts(searchTerm.value);
-
-            isSearching.value = false;
-
-            if (searchProducts instanceof Error) {
-                products.value = null;
-
-                searchTextbox.value?.focus();
-            }
-            else {
-                products.value = searchProducts;
-
-                if (products.value.length === 0) {
-                    searchTextbox.value?.focus();
-                }
-
-                store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
-                    products: products.value,
-                    searchTerm: searchTerm.value,
-                });
-            }
-        };
-
         onBeforeMount(() => {
             const currentSearch = store.getters.currentSearch;
 
@@ -227,11 +184,6 @@ export default defineComponent({
         });
 
         onMounted(() => {
-            if (props.prePopulatedSearchTerm.length > 0) {
-                searchTerm.value = props.prePopulatedSearchTerm;
-                onSearch();
-            }
-
             if (searchTerm.value.length === 0)
                 searchTextbox.value?.focus();
         });
@@ -249,7 +201,40 @@ export default defineComponent({
             currentSortOption,
             displaySortOptions,
 
-            onSearch,
+            async onSearch() {
+                if (searchTerm.value === null)
+                    return;
+
+                if (searchTerm.value.trim().length < 3)
+                    return;
+
+                searchTextbox.value?.blur();
+
+                isSearching.value = true;
+
+                const searchProducts =
+                    await TescoService.searchProducts(searchTerm.value);
+
+                isSearching.value = false;
+
+                if (searchProducts instanceof Error) {
+                    products.value = null;
+
+                    searchTextbox.value?.focus();
+                }
+                else {
+                    products.value = searchProducts;
+
+                    if (products.value.length === 0) {
+                        searchTextbox.value?.focus();
+                    }
+
+                    store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
+                        products: products.value,
+                        searchTerm: searchTerm.value,
+                    });
+                }
+            },
 
             onClearSearch() {
                 searchTerm.value = '';
@@ -276,7 +261,7 @@ export default defineComponent({
             },
         }
     },
-})
+}
 </script>
 
 <style lang="scss">
@@ -287,19 +272,10 @@ export default defineComponent({
     }
 
     &-sort-filter-container {
-        overflow: hidden;
-
-        &.is-visible {
-            ul {
-                display: block;
-            }
-        }
-
         ul {
-            position: relative;
+            margin: 0;
             padding: 0;
             list-style: none;
-            display: none;
 
             li {
                 display: table;
@@ -323,6 +299,10 @@ export default defineComponent({
         .icon {
             vertical-align: middle;
         }
+    }
+
+    &-search-textbox {
+        text-transform: capitalize;
     }
 
     &-reset-search-button {
