@@ -14,7 +14,10 @@
             <UserMessageComponent :message="userMessage" />
         </label>
         <p></p>
-        <ButtonComponent @click="onAdd">Add</ButtonComponent>
+        <div class="flex gap-small">
+            <ButtonComponent @click="onAdd">Add Freetext</ButtonComponent>
+            <ButtonComponent isSecondary @click="$emit('close')">Cancel</ButtonComponent>
+        </div>
     </SideModalContentComponent>
 </template>
 
