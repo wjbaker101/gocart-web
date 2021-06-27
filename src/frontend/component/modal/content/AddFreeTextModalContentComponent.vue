@@ -1,19 +1,21 @@
 <template>
-    <h2>Add Freetext</h2>
-    <p>Include an item you would like without having to search for a specific product.</p>
-    <label>
-        <span>Item Name</span>
-        <input
-            ref="freetextInput"
-            type="text"
-            v-model="freetext"
-            placeholder="Dairy Free Pesto"
-            @keyup.enter="onAdd"
-        >
-        <UserMessageComponent :message="userMessage" />
-    </label>
-    <p></p>
-    <ButtonComponent @click="onAdd">Add</ButtonComponent>
+    <SideModalContentComponent @close="$emit('close')">
+        <h2>Add Freetext</h2>
+        <p>Include an item you would like without having to search for a specific product.</p>
+        <label>
+            <span>Item Name</span>
+            <input
+                ref="freetextInput"
+                type="text"
+                v-model="freetext"
+                placeholder="Dairy Free Pesto"
+                @keyup.enter="onAdd"
+            >
+            <UserMessageComponent :message="userMessage" />
+        </label>
+        <p></p>
+        <ButtonComponent @click="onAdd">Add</ButtonComponent>
+    </SideModalContentComponent>
 </template>
 
 <script lang="ts">
@@ -23,6 +25,7 @@ import { v4 as uuid } from 'uuid';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
+import SideModalContentComponent from '@/component/modal/SideModalContentComponent.vue';
 
 import { AppState } from '@/store/type/AppState.model';
 import { StateKeys } from '@/store/type/StateKeys';
@@ -37,6 +40,7 @@ export default defineComponent({
     components: {
         ButtonComponent,
         UserMessageComponent,
+        SideModalContentComponent,
     },
 
     setup() {

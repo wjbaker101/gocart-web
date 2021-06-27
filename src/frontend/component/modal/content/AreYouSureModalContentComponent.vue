@@ -1,17 +1,19 @@
 <template>
-    <h2>Are You Sure?</h2>
-    <p v-html="message"></p>
-    <div class="flex gap-small">
-        <ButtonComponent isSecondary @click="onYes">{{ yesMessage }}</ButtonComponent>
-        <ButtonComponent @click="onNo">{{ noMessage }}</ButtonComponent>
-    </div>
+    <SideModalContentComponent @close="onClose">
+        <h2>Are You Sure?</h2>
+        <p v-html="message"></p>
+        <div class="flex gap-small">
+            <ButtonComponent isSecondary @click="onYes">{{ yesMessage }}</ButtonComponent>
+            <ButtonComponent @click="onNo">{{ noMessage }}</ButtonComponent>
+        </div>
+    </SideModalContentComponent>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
-import { Event, eventService } from '@/service/Event.service';
+import SideModalContentComponent from '@/component/modal/SideModalContentComponent.vue';
 
 export interface AreYouSureModalContentComponentProps {
     message: string,
@@ -26,6 +28,7 @@ export default defineComponent({
 
     components: {
         ButtonComponent,
+        SideModalContentComponent,
     },
 
     props: {
@@ -51,9 +54,9 @@ export default defineComponent({
         },
     },
 
-    setup(props: AreYouSureModalContentComponentProps) {
+    setup(props: AreYouSureModalContentComponentProps, { emit }) {
         const sharedAction = function () {
-            eventService.publish(Event.CLOSE_MODAL);
+            emit('close');
         };
 
         return {
@@ -63,6 +66,11 @@ export default defineComponent({
             },
 
             onNo() {
+                sharedAction();
+                props.noAction();
+            },
+
+            onClose() {
                 sharedAction();
                 props.noAction();
             },
