@@ -1,8 +1,6 @@
 <template>
     <div class="user-message-component flex align-center" v-if="message.length > 0">
-        <div class="flex-auto">
-            <QuestionMarkCircleIcon />
-        </div>
+        <QuestionMarkCircleIcon />
         <div class="message text-left">
             {{ message }}
         </div>
