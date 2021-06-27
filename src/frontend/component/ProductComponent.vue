@@ -103,6 +103,9 @@ export default defineComponent({
             displayPrice,
 
             onSelect() {
+                if (props.product.isFreetext)
+                    return;
+
                 store.dispatch(StateKeys.CURRENT_PRODUCT_SET, props.product);
                 router.push({ path: '/product', });
             },
