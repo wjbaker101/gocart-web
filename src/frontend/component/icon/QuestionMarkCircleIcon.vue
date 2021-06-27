@@ -3,8 +3,6 @@
 </template>
 
 <script lang="ts">
-import { readonly } from 'vue';
-
 import { useIcon, useIconProps } from '@/use/UseIcon.use';
 
 export default {
