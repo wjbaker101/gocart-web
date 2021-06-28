@@ -1,16 +1,11 @@
-import { onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { onBeforeMount, onBeforeUnmount, onMounted, reactive } from 'vue';
 
-import { AppState } from '@/store/type/AppState.model';
+const scrollPositions = reactive(new Map<string, number>());
 
-export const UseScrollPosition = function (viewId: string) {
-    const store = useStore<AppState>();
-
-    const currentScrollPositions =
-        store.getters.currentScrollPositions as Map<string, number>;
+export function UseScrollPosition(viewId: string) {
 
     const scrollEventListener = () => {
-        currentScrollPositions.set(viewId, window.scrollY);
+        scrollPositions.set(viewId, window.scrollY);
     };
 
     onBeforeMount(() => {
@@ -18,7 +13,7 @@ export const UseScrollPosition = function (viewId: string) {
     });
 
     onMounted(() => {
-        window.scrollTo(0, currentScrollPositions.get(viewId) || 0);
+        window.scrollTo(0, scrollPositions.get(viewId) || 0);
     });
 
     onBeforeUnmount(() => {

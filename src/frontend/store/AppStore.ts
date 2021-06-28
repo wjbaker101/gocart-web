@@ -22,7 +22,6 @@ const AppStore = createStore<AppState>({
     state: {
         currentProduct: null,
         currentSearch: null,
-        currentScrollPositions: new Map<string, number>(),
 
         searchSettings: {
             sortOption: SortOptionType.ALPHABETICAL,
@@ -45,7 +44,6 @@ const AppStore = createStore<AppState>({
     getters: {
         currentProduct: state => state.currentProduct,
         currentSearch: state => state.currentSearch,
-        currentScrollPositions: state => state.currentScrollPositions,
 
         searchSortOption: state => state.searchSettings.sortOption,
 
