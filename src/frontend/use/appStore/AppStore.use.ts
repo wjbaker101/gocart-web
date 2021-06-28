@@ -20,7 +20,6 @@ const cacheStateKey = {
 export interface AppState {
 
     product: Product | null;
-    productSearchTerm: string | null;
 
     productSearch: ProductSearchState;
 
@@ -34,9 +33,10 @@ export interface AppState {
 const state: AppState = reactive<AppState>({
 
     product: null,
-    productSearchTerm: null,
 
     productSearch: {
+        searchTerm: null,
+        products: [],
         sortOption: SortOptionType.PRICE,
     },
 

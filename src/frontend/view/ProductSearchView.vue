@@ -90,6 +90,7 @@ import SortNumericIcon from '@/component/icon/SortNumericIcon.vue';
 
 import { TescoService } from '@/service/Tesco.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useAppStore } from '@/use/appStore/AppStore.use';
 
 import { AppState } from '@/store/type/AppState.model';
 import { StateKeys } from '@/store/type/StateKeys';
@@ -119,6 +120,7 @@ export default defineComponent({
 
     setup(props) {
         const store = useStore<AppState>();
+        const appStore = useAppStore();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
 
@@ -209,21 +211,19 @@ export default defineComponent({
                     searchTextbox.value?.focus();
                 }
 
-                store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
-                    products: products.value,
-                    searchTerm: searchTerm.value,
-                });
+                appStore.state.productSearch.searchTerm = searchTerm.value;
+                appStore.state.productSearch.products = products.value;
             }
         };
 
         onBeforeMount(() => {
-            const currentSearch = store.getters.currentSearch;
+            const existingSearch = appStore.state.productSearch.searchTerm;
+            if (existingSearch !== null)
+                searchTerm.value = existingSearch;
 
-            if (currentSearch === null)
-                return;
-
-            products.value = currentSearch.products;
-            searchTerm.value = currentSearch.searchTerm;
+            const existingProducts = appStore.state.productSearch.products;
+            if (existingProducts !== null)
+                products.value = existingProducts;
         });
 
         onMounted(() => {
@@ -255,10 +255,8 @@ export default defineComponent({
                 searchTerm.value = '';
                 searchTextbox.value?.focus();
 
-                store.dispatch(StateKeys.CURRENT_SEARCH_SET, {
-                    products: products.value,
-                    searchTerm: searchTerm.value,
-                });
+                appStore.state.productSearch.searchTerm = searchTerm.value;
+                appStore.state.productSearch.products = products.value;
             },
 
             onSortAndFilterToggle() {
