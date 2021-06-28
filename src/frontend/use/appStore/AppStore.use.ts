@@ -56,24 +56,42 @@ const state: AppState = reactive<AppState>({
     },
 });
 
+(async () => {
+    const productSearch = await CacheService.get<ProductSearchState>(cacheStateKey.PRODUCT_SEARCH);
+    if (productSearch !== null)
+        state.productSearch = productSearch;
+
+    const shoppingList = await CacheService.get<ShoppingListState>(cacheStateKey.SHOPPING_LIST);
+    if (shoppingList !== null)
+        state.shoppingList = shoppingList;
+
+    const shop = await CacheService.get<ShopState>(cacheStateKey.SHOP);
+    if (shop !== null)
+        state.shop = shop;
+
+    const user = await CacheService.get<UserState>(cacheStateKey.USER);
+    if (user !== null)
+        state.user = user;
+})();
+
 watch(state.productSearch, async (productSearch) => {
     console.log(productSearch);
-    // await CacheService.set(cacheStateKey.PRODUCT_SEARCH, productSearch);
+    await CacheService.set(cacheStateKey.PRODUCT_SEARCH, productSearch);
 });
 
 watch(state.shoppingList, async (shoppingList) => {
     console.log(shoppingList);
-    // await CacheService.set(cacheStateKey.SHOPPING_LIST, shoppingList);
+    await CacheService.set(cacheStateKey.SHOPPING_LIST, shoppingList);
 });
 
 watch(state.shop, async (shop) => {
     console.log(shop);
-    // await CacheService.set(cacheStateKey.SHOP, shop);
+    await CacheService.set(cacheStateKey.SHOP, shop);
 });
 
 watch(state.user, async (user) => {
     console.log(user);
-    // await CacheService.set(cacheStateKey.USER, user);
+    await CacheService.set(cacheStateKey.USER, user);
 });
 
 const shoppingList = {
