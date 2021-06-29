@@ -87,15 +87,19 @@ const productSearchSettings = {
 
 const shoppingList = {
 
-    add(product: Product) {
+    async add(product: Product) {
         state.shoppingList.list.push(product);
+
+        await CacheService.set(cacheStateKey.SHOPPING_LIST, state.shoppingList);
     },
 
-    remove(product: Product) {
+    async remove(product: Product) {
         state.shoppingList.list = state.shoppingList.list.filter(x => x.id !== product.id);
+
+        await CacheService.set(cacheStateKey.SHOPPING_LIST, state.shoppingList);
     },
 
-    update(product: Product) {
+    async update(product: Product) {
         const existingProduct = state.shoppingList.list.find(x => x.id === product.id);
 
         if (existingProduct === undefined)
@@ -118,6 +122,8 @@ const shoppingList = {
         existingProduct.listQuantity = product.listQuantity;
         existingProduct.isChecked = product.isChecked;
         existingProduct.addCount = product.addCount;
+
+        await CacheService.set(cacheStateKey.SHOPPING_LIST, state.shoppingList);
     },
 };
 
