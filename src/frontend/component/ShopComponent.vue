@@ -30,6 +30,7 @@ import ShopIcon from '@/component/icon/ShopIcon.vue';
 import { useAppStore } from '@/use/appStore/AppStore.use';
 
 import { Shop } from '@/model/Shop.model';
+import { API } from '@/api/API';
 
 interface ShopComponentProps {
     shop: Shop,
@@ -67,6 +68,13 @@ export default defineComponent({
             },
 
             async onChoose() {
+                const { longitude, latitude } = props.shop.location;
+                const previewImage = await API.getStaticMapLocation(longitude, latitude);
+                if (previewImage instanceof Error)
+                    return;
+
+                props.shop.location.mapImage = previewImage;
+
                 await appStore.shop.set(props.shop);
                 router.push({ path: '/shop', });
             },
