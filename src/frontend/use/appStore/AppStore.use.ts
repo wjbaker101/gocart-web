@@ -76,6 +76,13 @@ const state: AppState = reactive<AppState>({
         state.user = user;
 })();
 
+const productSearchSettings = {
+
+    setSortOption(sortOption: SortOptionType) {
+        state.productSearch.settings.sortOption = sortOption;
+    },
+};
+
 const shoppingList = {
 
     add(product: Product) {
@@ -116,6 +123,7 @@ export function useAppStore() {
     return {
         state,
 
+        productSearchSettings,
         shoppingList,
     }
 }
