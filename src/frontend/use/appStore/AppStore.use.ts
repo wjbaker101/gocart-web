@@ -3,7 +3,7 @@ import { reactive, watch } from 'vue';
 import { Product } from '@/model/Product.model';
 
 import { SortOptionType } from '@/model/SortOption.model';
-import { ProductSearchState } from '@/use/appStore/state/ProductSearch.state';
+import { ProductSearchSettingsState, ProductSearchState } from '@/use/appStore/state/ProductSearch.state';
 import { ShopState } from '@/use/appStore/state/Shop.state';
 import { ShoppingListState } from '@/use/appStore/state/ShoppingList.state';
 import { UserState } from '@/use/appStore/state/User.state';
@@ -37,7 +37,9 @@ const state: AppState = reactive<AppState>({
     productSearch: {
         searchTerm: null,
         products: [],
-        sortOption: SortOptionType.PRICE,
+        settings: {
+            sortOption: SortOptionType.PRICE,
+        },
     },
 
     shoppingList: {
@@ -57,9 +59,9 @@ const state: AppState = reactive<AppState>({
 });
 
 (async () => {
-    const productSearch = await CacheService.get<ProductSearchState>(cacheStateKey.PRODUCT_SEARCH);
+    const productSearch = await CacheService.get<ProductSearchSettingsState>(cacheStateKey.PRODUCT_SEARCH);
     if (productSearch !== null)
-        state.productSearch = productSearch;
+        state.productSearch.settings = productSearch;
 
     const shoppingList = await CacheService.get<ShoppingListState>(cacheStateKey.SHOPPING_LIST);
     if (shoppingList !== null)
@@ -74,23 +76,20 @@ const state: AppState = reactive<AppState>({
         state.user = user;
 })();
 
-watch(state.productSearch, async (productSearch) => {
+watch(state.productSearch.settings, async (productSearch) => {
     console.log(productSearch);
     await CacheService.set(cacheStateKey.PRODUCT_SEARCH, productSearch);
 });
 
 watch(state.shoppingList, async (shoppingList) => {
-    console.log(shoppingList);
     await CacheService.set(cacheStateKey.SHOPPING_LIST, shoppingList);
 });
 
 watch(state.shop, async (shop) => {
-    console.log(shop);
     await CacheService.set(cacheStateKey.SHOP, shop);
 });
 
 watch(state.user, async (user) => {
-    console.log(user);
     await CacheService.set(cacheStateKey.USER, user);
 });
 

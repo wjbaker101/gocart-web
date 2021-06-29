@@ -18,7 +18,7 @@
                     <li
                         :key="`sort-option-${index}`"
                         v-for="(sortOption, index) in displaySortOptions"
-                        :class="{ 'is-selected': sortOption.type === currentSortOption }"
+                        :class="{ 'is-selected': sortOption.type === productSearchSettings.sortOption }"
                         @click="onSortOption(sortOption.type)"
                     >
                         <component :is="sortOption.icon" />
@@ -75,7 +75,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onMounted, readonly, ref, shallowReadonly } from 'vue';
-import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
@@ -92,10 +91,9 @@ import { TescoService } from '@/service/Tesco.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { useAppStore } from '@/use/appStore/AppStore.use';
 
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { SortOption, SortOptionType } from '@/model/SortOption.model';
+import { ProductSearchSettingsState } from '@/use/appStore/state/ProductSearch.state';
 
 export default defineComponent({
     name: 'ProductSearchView',
@@ -119,7 +117,6 @@ export default defineComponent({
     },
 
     setup(props) {
-        const store = useStore<AppState>();
         const appStore = useAppStore();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
@@ -130,8 +127,7 @@ export default defineComponent({
 
         const isSortAndFilterShown = ref<boolean>(false);
 
-        const currentSortOption = ref<SortOptionType>(
-            store.getters.searchSortOption);
+        const productSearchSettings = computed<ProductSearchSettingsState>(() => appStore.state.productSearch.settings);
 
         const displaySortOptions = shallowReadonly<SortOption[]>([
             {
@@ -180,7 +176,7 @@ export default defineComponent({
                 return null;
 
             return products.value
-                .sort(sortFunctions[currentSortOption.value.toString()]);
+                .sort(sortFunctions[productSearchSettings.value.sortOption.toString()]);
         });
 
         const onSearch = async function () {
@@ -246,7 +242,7 @@ export default defineComponent({
             displayProducts,
 
             isSortAndFilterShown,
-            currentSortOption,
+            productSearchSettings,
             displaySortOptions,
 
             onSearch,
@@ -264,13 +260,8 @@ export default defineComponent({
             },
 
             onSortOption(sortOption: SortOptionType) {
-                currentSortOption.value = sortOption;
-
+                appStore.state.productSearch.settings.sortOption = sortOption;
                 isSortAndFilterShown.value = false;
-
-                store.dispatch(StateKeys.SEARCH_SETTINGS_SET, {
-                    sortOption,
-                });
             },
         }
     },
