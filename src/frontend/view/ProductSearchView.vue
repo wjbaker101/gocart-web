@@ -259,8 +259,8 @@ export default defineComponent({
                 isSortAndFilterShown.value = !isSortAndFilterShown.value;
             },
 
-            onSortOption(sortOption: SortOptionType) {
-                appStore.productSearchSettings.setSortOption(sortOption);
+            async onSortOption(sortOption: SortOptionType) {
+                await appStore.productSearchSettings.setSortOption(sortOption);
                 isSortAndFilterShown.value = false;
             },
         }

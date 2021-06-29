@@ -78,8 +78,10 @@ const state: AppState = reactive<AppState>({
 
 const productSearchSettings = {
 
-    setSortOption(sortOption: SortOptionType) {
+    async setSortOption(sortOption: SortOptionType) {
         state.productSearch.settings.sortOption = sortOption;
+
+        await CacheService.set(cacheStateKey.PRODUCT_SEARCH_SETTINGS, state.productSearch.settings);
     },
 };
 
