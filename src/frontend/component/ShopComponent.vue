@@ -23,16 +23,13 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, SetupContext } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { AppStateMapper } from '@/store/AppStore';
+import { useAppStore } from '@/use/appStore/AppStore.use';
 
-import { AppState } from '@/store/type/AppState.model';
 import { Shop } from '@/model/Shop.model';
-import { StateKeys } from '@/store/type/StateKeys';
 
 interface ShopComponentProps {
     shop: Shop,
@@ -40,7 +37,7 @@ interface ShopComponentProps {
 }
 
 export default defineComponent({
-    name: 'ProductComponent',
+    name: 'ShopComponent',
 
     components: {
         ButtonComponent,
@@ -57,7 +54,7 @@ export default defineComponent({
 
     setup(props: ShopComponentProps, context: SetupContext) {
         const router = useRouter();
-        const store = useStore<AppState>();
+        const appStore = useAppStore();
 
         const displayDistance = computed<string>(
             () => `${props.shop.distance.value.toFixed(1)} ${props.shop.distance.unit} away`);
@@ -69,8 +66,8 @@ export default defineComponent({
                 context.emit(props.isOpen ? 'close' : 'open', props.shop.name);
             },
 
-            onChoose() {
-                store.dispatch(StateKeys.SELECTED_SHOP_SET, props.shop);
+            async onChoose() {
+                await appStore.shop.set(props.shop);
                 router.push({ path: '/shop', });
             },
         }

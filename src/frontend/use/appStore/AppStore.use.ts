@@ -1,8 +1,9 @@
-import { reactive, watch } from 'vue';
+import { reactive } from 'vue';
 
 import { Product } from '@/model/Product.model';
-
+import { Shop } from '@/model/Shop.model';
 import { SortOptionType } from '@/model/SortOption.model';
+
 import { ProductSearchSettingsState, ProductSearchState } from '@/use/appStore/state/ProductSearch.state';
 import { ShopState } from '@/use/appStore/state/Shop.state';
 import { ShoppingListState } from '@/use/appStore/state/ShoppingList.state';
@@ -127,11 +128,21 @@ const shoppingList = {
     },
 };
 
+const shop = {
+
+    async set(shop: Shop) {
+        state.shop.shop = shop;
+
+        await CacheService.set(cacheStateKey.SHOP, state.shop);
+    },
+};
+
 export function useAppStore() {
     return {
         state,
 
         productSearchSettings,
         shoppingList,
+        shop,
     }
 }

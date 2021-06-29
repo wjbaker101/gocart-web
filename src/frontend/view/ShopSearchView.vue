@@ -52,7 +52,6 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
@@ -64,11 +63,10 @@ import SearchIcon from '@/component/icon/SearchIcon.vue';
 import { TescoService } from '@/service/Tesco.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-import { AppState } from '@/store/type/AppState.model';
 import { Shop } from '@/model/Shop.model';
 
 export default defineComponent({
-    name: 'ProductSearchView',
+    name: 'ShopSearchView',
 
     components: {
         PageContainerComponent,
@@ -80,8 +78,6 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
-
         const searchTextbox = ref<HTMLInputElement | null>(null);
 
         const searchTerm = ref<string>('');

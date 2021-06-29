@@ -1,5 +1,4 @@
 import { Product } from '@/model/Product.model';
-import { Shop } from '@/model/Shop.model';
 import { SortOptionType } from '@/model/SortOption.model';
 import { User } from '@/model/User.model';
 
@@ -30,8 +29,6 @@ export interface AppState {
     searchSettings: SearchAppState,
 
     shoppingList: ShoppingListAppState,
-
-    selectedShop: Shop | null,
 
     user: User | null,
 }

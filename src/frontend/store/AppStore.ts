@@ -36,8 +36,6 @@ const AppStore = createStore<AppState>({
             },
         },
 
-        selectedShop: null,
-
         user: null,
     },
 
@@ -51,8 +49,6 @@ const AppStore = createStore<AppState>({
         uncheckedProductList: state => state.shoppingList.unchecked,
         checkedProductList: state => state.shoppingList.checked,
         shoppingListSettings: state => state.shoppingList.settings,
-
-        selectedShop: state => state.selectedShop,
 
         user: state => state.user,
     },
@@ -108,10 +104,6 @@ const AppStore = createStore<AppState>({
             state.currentProduct = product;
         },
 
-        [StateKeys.SELECTED_SHOP_SET](state: AppState, shop: Shop) {
-            state.selectedShop = shop;
-        },
-
         [StateKeys.USER_SET](state: AppState, user: User | null) {
             state.user = user;
         },
@@ -143,12 +135,6 @@ const AppStore = createStore<AppState>({
 
             if (shoppingListSettings !== null) {
                 commit(StateKeys.SHOPPING_LIST_SETTINGS_SET, shoppingListSettings);
-            }
-
-            const currentShop = await StateCacheService.getSelectedShop();
-
-            if (currentShop !== null) {
-                commit(StateKeys.SELECTED_SHOP_SET, currentShop);
             }
 
             const searchSettings = await StateCacheService.getSearchSettings();
@@ -284,20 +270,6 @@ const AppStore = createStore<AppState>({
             commit(StateKeys.SHOPPING_LIST_SETTINGS_SET, settings);
 
             await StateCacheService.setShoppingListSettings(settings);
-        },
-
-        async [StateKeys.SELECTED_SHOP_SET]({ commit }, shop: Shop) {
-            commit(StateKeys.SELECTED_SHOP_SET, shop);
-
-            const { longitude, latitude } = shop.location;
-
-            const map = await API.getStaticMapLocation(longitude, latitude);
-
-            if (!(map instanceof Error)) {
-                shop.location.mapImage = map;
-            }
-
-            await StateCacheService.setSelectedShop(shop);
         },
 
         async [StateKeys.USER_SET]({ commit }, user: User | null) {

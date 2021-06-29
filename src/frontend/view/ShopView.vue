@@ -89,16 +89,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, readonly } from 'vue';
-import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
 import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
+import { useAppStore } from '@/use/appStore/AppStore.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-import { AppState } from '@/store/type/AppState.model';
 import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
 
 export default defineComponent({
@@ -112,9 +111,9 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
+        const appStore = useAppStore();
 
-        const shop = computed<Shop | null>(() => store.getters.selectedShop);
+        const shop = computed<Shop | null>(() => appStore.state.shop.shop);
 
         const allowedFacilities = readonly<Record<string, string>>({
             'ATM': 'ATM',
