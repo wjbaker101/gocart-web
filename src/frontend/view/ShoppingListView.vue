@@ -1,6 +1,6 @@
 <template>
     <PageContainerComponent>
-        <template #header-right v-if="!isShoppingListEmpty">
+        <template #header-right>
             <div class="flex align-center gap">
                 <ButtonComponent @click="onAddFreetext">
                     <AddIcon />
@@ -8,7 +8,7 @@
                         <small>Freetext</small>
                     </span>
                 </ButtonComponent>
-                <div>
+                <div v-if="!isShoppingListEmpty">
                     <BasketIcon />
                     <span>
                         <strong>{{ displayTotalPrice }}</strong>
