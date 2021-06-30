@@ -52,7 +52,7 @@ import CrossIcon from '@/component/icon/CrossIcon.vue';
 import CutleryIcon from '@/component/icon/CutleryIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
-import { useAppStore } from '@/use/appStore/AppStore.use';
+import { useCurrentProduct } from '@/use/CurrentProduct.use';
 import {
     UseShoppingListChecked,
     UseForSeachChecked,
@@ -91,7 +91,7 @@ export default defineComponent({
     setup(props: ProductComponentProps) {
         const router = useRouter();
         const store = useStore<AppState>();
-        const appStore = useAppStore();
+        const currentProduct = useCurrentProduct();
 
         const isChecked = props.forSearch
             ? UseForSeachChecked(props.product).isChecked
@@ -108,7 +108,7 @@ export default defineComponent({
                 if (props.product.isFreetext)
                     return;
 
-                appStore.product.set(props.product);
+                currentProduct.product.value = props.product;
                 router.push({ path: '/product', });
             },
 

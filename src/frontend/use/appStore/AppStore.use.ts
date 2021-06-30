@@ -20,8 +20,6 @@ const cacheStateKey = {
 
 export interface AppState {
 
-    product: Product | null;
-
     productSearch: ProductSearchState;
 
     shoppingList: ShoppingListState;
@@ -32,8 +30,6 @@ export interface AppState {
 };
 
 const state: AppState = reactive<AppState>({
-
-    product: null,
 
     productSearch: {
         searchTerm: null,
@@ -83,13 +79,6 @@ const productSearchSettings = {
         state.productSearch.settings.sortOption = sortOption;
 
         await CacheService.set(cacheStateKey.PRODUCT_SEARCH_SETTINGS, state.productSearch.settings);
-    },
-};
-
-const product = {
-
-    set(product: Product) {
-        state.product = product;
     },
 };
 
@@ -148,7 +137,6 @@ export function useAppStore() {
     return {
         state,
 
-        product,
         productSearchSettings,
         shoppingList,
         shop,
