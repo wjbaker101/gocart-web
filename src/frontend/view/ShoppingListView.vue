@@ -8,7 +8,7 @@
                         <small>Freetext</small>
                     </span>
                 </ButtonComponent>
-                <div v-if="!isShoppingListEmpty">
+                <div>
                     <BasketIcon />
                     <span>
                         <strong>{{ displayTotalPrice }}</strong>
@@ -143,13 +143,14 @@ export default defineComponent({
             ghostClass: 'is-dragged',
         });
 
+        const shoppingList = computed<Record<string, Product>>(() => store.getters.shoppingList);
         const shoppingListSettings = computed<ShoppingListSettingsState>(() => store.getters.shoppingListSettings);
 
         const displayUnchecked = computed<Product[]>({
             get: () => Array.from<string>(store.getters
                 .uncheckedProductList
                 .keys())
-                .map(x => store.getters.shoppingList[x]),
+                .map(x => shoppingList.value[x]),
             set: (value: Product[]) => {
                 store.dispatch(
                     StateKeys.SHOPPING_LIST_UNCHECKED_SET,
@@ -164,7 +165,7 @@ export default defineComponent({
             () => Array.from<string>(store.getters
                 .checkedProductList
                 .keys())
-                .map(x => store.getters.shoppingList[x])
+                .map(x => shoppingList.value[x])
                 .sort((a: Product, b: Product) =>
                     SortService.alphabeticalAsc(a.name, b.name))
                 .sort((a: Product, b: Product) =>
@@ -186,7 +187,7 @@ export default defineComponent({
                     acc + (product.price * product.listQuantity), 0));
 
         const displayTotalPrice = computed<string>(() => {
-            if (totalPrice.value === 0)
+            if (displayUnchecked.value.length === 0 && displayChecked.value.length === 0)
                 return 'Empty!';
 
             return `£${totalPrice.value.toFixed(2)}`
