@@ -89,11 +89,10 @@ import SortNumericIcon from '@/component/icon/SortNumericIcon.vue';
 
 import { TescoService } from '@/service/Tesco.service';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
-import { useAppStore } from '@/use/appStore/AppStore.use';
+import { ProductSearchSettings, useProductSearch } from '@/use/state/ProductSearch.use';
 
 import { Product } from '@/model/Product.model';
 import { SortOption, SortOptionType } from '@/model/SortOption.model';
-import { ProductSearchSettingsState } from '@/use/appStore/state/ProductSearch.state';
 
 export default defineComponent({
     name: 'ProductSearchView',
@@ -117,7 +116,7 @@ export default defineComponent({
     },
 
     setup(props) {
-        const appStore = useAppStore();
+        const productSearch = useProductSearch();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
 
@@ -127,7 +126,7 @@ export default defineComponent({
 
         const isSortAndFilterShown = ref<boolean>(false);
 
-        const productSearchSettings = computed<ProductSearchSettingsState>(() => appStore.state.productSearch.settings);
+        const productSearchSettings = computed<ProductSearchSettings>(() => productSearch.settings.value);
 
         const displaySortOptions = shallowReadonly<SortOption[]>([
             {
@@ -207,17 +206,17 @@ export default defineComponent({
                     searchTextbox.value?.focus();
                 }
 
-                appStore.state.productSearch.searchTerm = searchTerm.value;
-                appStore.state.productSearch.products = products.value;
+                productSearch.searchTerm.value = searchTerm.value;
+                productSearch.products.value = products.value;
             }
         };
 
         onBeforeMount(() => {
-            const existingSearch = appStore.state.productSearch.searchTerm;
+            const existingSearch = productSearch.searchTerm.value;
             if (existingSearch !== null)
                 searchTerm.value = existingSearch;
 
-            const existingProducts = appStore.state.productSearch.products;
+            const existingProducts = productSearch.products.value;
             if (existingProducts !== null)
                 products.value = existingProducts;
         });
@@ -251,16 +250,16 @@ export default defineComponent({
                 searchTerm.value = '';
                 searchTextbox.value?.focus();
 
-                appStore.state.productSearch.searchTerm = searchTerm.value;
-                appStore.state.productSearch.products = products.value;
+                productSearch.searchTerm.value = searchTerm.value;
+                productSearch.products.value = products.value;
             },
 
             onSortAndFilterToggle() {
                 isSortAndFilterShown.value = !isSortAndFilterShown.value;
             },
 
-            async onSortOption(sortOption: SortOptionType) {
-                await appStore.productSearchSettings.setSortOption(sortOption);
+            onSortOption(sortOption: SortOptionType) {
+                productSearch.settings.value.sortOption = sortOption;
                 isSortAndFilterShown.value = false;
             },
         }
