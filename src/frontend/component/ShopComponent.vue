@@ -27,7 +27,7 @@ import { useRouter } from 'vue-router';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { useAppStore } from '@/use/appStore/AppStore.use';
+import { UseShop } from '@/use/state/Shop.use';
 
 import { Shop } from '@/model/Shop.model';
 import { API } from '@/api/API';
@@ -55,7 +55,7 @@ export default defineComponent({
 
     setup(props: ShopComponentProps, context: SetupContext) {
         const router = useRouter();
-        const appStore = useAppStore();
+        const useShop = UseShop();
 
         const displayDistance = computed<string>(
             () => `${props.shop.distance.value.toFixed(1)} ${props.shop.distance.unit} away`);
@@ -75,7 +75,7 @@ export default defineComponent({
 
                 props.shop.location.mapImage = previewImage;
 
-                await appStore.shop.set(props.shop);
+                useShop.shop.value = props.shop;
                 router.push({ path: '/shop', });
             },
         }

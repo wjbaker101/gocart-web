@@ -96,6 +96,7 @@ import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
 import { useAppStore } from '@/use/appStore/AppStore.use';
+import { UseShop } from '@/use/state/Shop.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
@@ -111,9 +112,9 @@ export default defineComponent({
     },
 
     setup() {
-        const appStore = useAppStore();
+        const useShop = UseShop();
 
-        const shop = computed<Shop | null>(() => appStore.state.shop.shop);
+        const shop = computed<Shop | null>(() => useShop.shop.value);
 
         const allowedFacilities = readonly<Record<string, string>>({
             'ATM': 'ATM',
