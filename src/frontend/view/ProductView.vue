@@ -98,6 +98,7 @@ import ChevronRightIcon from '@/component/icon/ChevronRightIcon.vue';
 import NoProductFoundIcon from '@/component/icon/ExclamationCircleIcon.vue';
 
 import { AppStateMapper } from '@/store/AppStore';
+import { useAppStore } from '@/use/appStore/AppStore.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { Event, eventService } from '@/service/Event.service';
 
@@ -119,9 +120,9 @@ export default defineComponent({
 
     setup() {
         const store = useStore<AppState>();
+        const appStore = useAppStore();
 
-        const product = computed<Product | null>(
-            () => store.getters.currentProduct);
+        const product = computed<Product | null>(() => appStore.state.product);
 
         const isChecked = ref<boolean>(false);
 

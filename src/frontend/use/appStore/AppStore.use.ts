@@ -86,6 +86,13 @@ const productSearchSettings = {
     },
 };
 
+const product = {
+
+    set(product: Product) {
+        state.product = product;
+    },
+};
+
 const shoppingList = {
 
     async add(product: Product) {
@@ -141,6 +148,7 @@ export function useAppStore() {
     return {
         state,
 
+        product,
         productSearchSettings,
         shoppingList,
         shop,

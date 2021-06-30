@@ -23,7 +23,6 @@ export interface SearchAppState {
 }
 
 export interface AppState {
-    currentProduct: Product | null,
     currentSearch: CurrentSearchAppState | null,
 
     searchSettings: SearchAppState,

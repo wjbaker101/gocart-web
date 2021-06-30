@@ -1,12 +1,10 @@
 import { createStore } from 'vuex';
 
-import { API } from '@/api/API';
 import { StateCacheService } from '@/service/StateCache.service';
 
-import { AppState, CurrentSearchAppState, SearchAppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
+import { AppState, SearchAppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
-import { Shop } from '@/model/Shop.model';
 import { SortOptionType } from '@/model/SortOption.model';
 import { User } from '@/model/User.model';
 
@@ -20,7 +18,6 @@ export const AppStateMapper = {
 const AppStore = createStore<AppState>({
 
     state: {
-        currentProduct: null,
         currentSearch: null,
 
         searchSettings: {
@@ -40,7 +37,6 @@ const AppStore = createStore<AppState>({
     },
 
     getters: {
-        currentProduct: state => state.currentProduct,
         currentSearch: state => state.currentSearch,
 
         searchSortOption: state => state.searchSettings.sortOption,
@@ -54,12 +50,6 @@ const AppStore = createStore<AppState>({
     },
 
     mutations: {
-        [StateKeys.CURRENT_SEARCH_SET](
-            state: AppState, search: CurrentSearchAppState) {
-
-            state.currentSearch = search;
-        },
-
         [StateKeys.SEARCH_SETTINGS_SET](
             state: AppState, search: SearchAppState) {
 
@@ -98,10 +88,6 @@ const AppStore = createStore<AppState>({
             state: AppState, settings: ShoppingListSettingsState) {
 
             state.shoppingList.settings = settings;
-        },
-
-        [StateKeys.CURRENT_PRODUCT_SET](state: AppState, product: Product) {
-            state.currentProduct = product;
         },
 
         [StateKeys.USER_SET](state: AppState, user: User | null) {
@@ -148,16 +134,6 @@ const AppStore = createStore<AppState>({
             if (user !== null) {
                 commit(StateKeys.USER_SET, user);
             }
-        },
-
-        [StateKeys.CURRENT_SEARCH_SET](
-            { commit }, search: CurrentSearchAppState) {
-
-            commit(StateKeys.CURRENT_SEARCH_SET, search);
-        },
-
-        [StateKeys.CURRENT_PRODUCT_SET]({ commit }, product: Product) {
-            commit(StateKeys.CURRENT_PRODUCT_SET, product);
         },
 
         async [StateKeys.SEARCH_SETTINGS_SET](
