@@ -98,7 +98,7 @@ import ChevronRightIcon from '@/component/icon/ChevronRightIcon.vue';
 import NoProductFoundIcon from '@/component/icon/ExclamationCircleIcon.vue';
 
 import { AppStateMapper } from '@/store/AppStore';
-import { useCurrentProduct } from '@/use/CurrentProduct.use';
+import { useCurrentProduct } from '@/use/state/CurrentProduct.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 import { Event, eventService } from '@/service/Event.service';
 

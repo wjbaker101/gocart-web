@@ -52,7 +52,7 @@ import CrossIcon from '@/component/icon/CrossIcon.vue';
 import CutleryIcon from '@/component/icon/CutleryIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
-import { useCurrentProduct } from '@/use/CurrentProduct.use';
+import { useCurrentProduct } from '@/use/state/CurrentProduct.use';
 import {
     UseShoppingListChecked,
     UseForSeachChecked,
