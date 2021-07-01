@@ -95,7 +95,6 @@ import LoadingComponent from '@/component/LoadingComponent.vue';
 import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { useAppStore } from '@/use/appStore/AppStore.use';
 import { UseShop } from '@/use/state/Shop.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 

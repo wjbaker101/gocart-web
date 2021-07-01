@@ -1,7 +1,7 @@
 import { CacheService } from '@/service/Cache.service';
 
 import { StateKeys } from '@/store/type/StateKeys';
-import { SearchAppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
+import { ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
 import { User } from '@/model/User.model';
 
@@ -17,15 +17,6 @@ export const StateCacheService = {
 
         return await CacheService.set(
             StateKeys.SHOPPING_LIST_PRODUCTS, products);
-    },
-
-    async getSearchSettings(): Promise<SearchAppState | null> {
-        return await CacheService.get<SearchAppState>(
-            StateKeys.SEARCH_SETTINGS);
-    },
-
-    async setSearchSettings(search: SearchAppState): Promise<void> {
-        return await CacheService.set(StateKeys.SEARCH_SETTINGS, search);
     },
 
     async getShoppingListUnchecked(): Promise<Set<string> | null> {

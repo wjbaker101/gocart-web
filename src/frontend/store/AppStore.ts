@@ -2,10 +2,9 @@ import { createStore } from 'vuex';
 
 import { StateCacheService } from '@/service/StateCache.service';
 
-import { AppState, SearchAppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
+import { AppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
-import { SortOptionType } from '@/model/SortOption.model';
 import { User } from '@/model/User.model';
 
 export const AppStateMapper = {
@@ -18,12 +17,6 @@ export const AppStateMapper = {
 const AppStore = createStore<AppState>({
 
     state: {
-        currentSearch: null,
-
-        searchSettings: {
-            sortOption: SortOptionType.ALPHABETICAL,
-        },
-
         shoppingList: {
             products: {},
             unchecked: new Set<string>(),
@@ -37,10 +30,6 @@ const AppStore = createStore<AppState>({
     },
 
     getters: {
-        currentSearch: state => state.currentSearch,
-
-        searchSortOption: state => state.searchSettings.sortOption,
-
         shoppingList: state => state.shoppingList.products,
         uncheckedProductList: state => state.shoppingList.unchecked,
         checkedProductList: state => state.shoppingList.checked,
@@ -50,12 +39,6 @@ const AppStore = createStore<AppState>({
     },
 
     mutations: {
-        [StateKeys.SEARCH_SETTINGS_SET](
-            state: AppState, search: SearchAppState) {
-
-            state.searchSettings = search;
-        },
-
         [StateKeys.SHOPPING_LIST_PRODUCTS_ADD](
             state: AppState, product: Product) {
 
@@ -123,25 +106,11 @@ const AppStore = createStore<AppState>({
                 commit(StateKeys.SHOPPING_LIST_SETTINGS_SET, shoppingListSettings);
             }
 
-            const searchSettings = await StateCacheService.getSearchSettings();
-
-            if (searchSettings !== null) {
-                commit(StateKeys.SEARCH_SETTINGS_SET, searchSettings);
-            }
-
             const user = await StateCacheService.getUser();
 
             if (user !== null) {
                 commit(StateKeys.USER_SET, user);
             }
-        },
-
-        async [StateKeys.SEARCH_SETTINGS_SET](
-            { commit }, search: SearchAppState) {
-
-            commit(StateKeys.SEARCH_SETTINGS_SET, search);
-
-            await StateCacheService.setSearchSettings(search);
         },
 
         async [StateKeys.SHOPPING_LIST_PRODUCT_UPDATE](
