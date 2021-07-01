@@ -95,7 +95,7 @@ import LoadingComponent from '@/component/LoadingComponent.vue';
 import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { UseShop } from '@/use/state/Shop.use';
+import { useSelectedShop } from '@/use/state/SelectedShop.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
@@ -111,9 +111,9 @@ export default defineComponent({
     },
 
     setup() {
-        const useShop = UseShop();
+        const selectedShop = useSelectedShop();
 
-        const shop = computed<Shop | null>(() => useShop.shop.value);
+        const shop = computed<Shop | null>(() => selectedShop.shop.value);
 
         const allowedFacilities = readonly<Record<string, string>>({
             'ATM': 'ATM',

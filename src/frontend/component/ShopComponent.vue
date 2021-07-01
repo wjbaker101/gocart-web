@@ -27,7 +27,7 @@ import { useRouter } from 'vue-router';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { UseShop } from '@/use/state/Shop.use';
+import { useSelectedShop } from '@/use/state/SelectedShop.use';
 
 import { Shop } from '@/model/Shop.model';
 import { API } from '@/api/API';
@@ -55,7 +55,7 @@ export default defineComponent({
 
     setup(props: ShopComponentProps, context: SetupContext) {
         const router = useRouter();
-        const useShop = UseShop();
+        const selectedShop = useSelectedShop();
 
         const displayDistance = computed<string>(
             () => `${props.shop.distance.value.toFixed(1)} ${props.shop.distance.unit} away`);
@@ -75,7 +75,7 @@ export default defineComponent({
 
                 props.shop.location.mapImage = previewImage;
 
-                useShop.shop.value = props.shop;
+                selectedShop.shop.value = props.shop;
                 router.push({ path: '/shop', });
             },
         }

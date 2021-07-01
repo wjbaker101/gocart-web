@@ -18,7 +18,7 @@ watch(shop, async (shop) => {
     deep: true,
 });
 
-export function UseShop() {
+export function useSelectedShop() {
     return {
         shop,
     }
