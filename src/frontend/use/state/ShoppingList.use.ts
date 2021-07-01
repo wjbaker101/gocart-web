@@ -9,15 +9,15 @@ export interface ShoppingListSettings {
 }
 
 const shoppingListCacheKey = 'SHOPPING_LIST';
-const shoppingList = ref<Array<Product>>([]);
+const list = ref<Array<Product>>([]);
 
 (async () => {
-    const cachedShoppingList = await CacheService.get<Array<Product>>(shoppingListCacheKey);
-    if (cachedShoppingList !== null)
-        shoppingList.value = cachedShoppingList;
+    const cachedList = await CacheService.get<Array<Product>>(shoppingListCacheKey);
+    if (cachedList !== null)
+        list.value = cachedList;
 })();
 
-watch(shoppingList, async (shoppingList) => {
+watch(list, async (shoppingList) => {
     await CacheService.set(shoppingListCacheKey, shoppingList);
 });
 
@@ -36,25 +36,25 @@ watch(settings, async (settings) => {
     await CacheService.set(settingsListCacheKey, settings);
 });
 
-export function UseShoppingList() {
+export function useShoppingList() {
     return {
-        shoppingList,
+        shoppingList: list,
         settings,
 
         async add(product: Product) {
-            shoppingList.value.push(product);
+            list.value.push(product);
 
-            await CacheService.set(shoppingListCacheKey, shoppingList.value);
+            await CacheService.set(shoppingListCacheKey, list.value);
         },
 
         async remove(product: Product) {
-            shoppingList.value = shoppingList.value.filter(x => x.id !== product.id);
+            list.value = list.value.filter(x => x.id !== product.id);
 
-            await CacheService.set(shoppingListCacheKey, shoppingList.value);
+            await CacheService.set(shoppingListCacheKey, list.value);
         },
 
         async update(product: Product) {
-            const existingProduct = shoppingList.value.find(x => x.id === product.id);
+            const existingProduct = list.value.find(x => x.id === product.id);
 
             if (existingProduct === undefined)
                 return;
@@ -77,7 +77,7 @@ export function UseShoppingList() {
             existingProduct.isChecked = product.isChecked;
             existingProduct.addCount = product.addCount;
 
-            await CacheService.set(shoppingListCacheKey, shoppingList.value);
+            await CacheService.set(shoppingListCacheKey, list.value);
         },
     }
 }
