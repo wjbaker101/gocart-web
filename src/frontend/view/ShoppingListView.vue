@@ -152,8 +152,17 @@ export default defineComponent({
                 shoppingList.unchecked.value = ids;
             },
         });
+
         const checked = computed<Array<string>>(() => {
-            return shoppingList.checked.value;;
+            return shoppingList.checked.value
+                .sort((a, b) => {
+                    const productA = products.value[a];
+                    const productB = products.value[b];
+
+                    if (productA.addCount < productB.addCount) return 1;
+                    if (productA.addCount > productB.addCount) return -1;
+                    return 0;
+                });
         });
 
         const isShoppingListEmpty = computed<boolean>(() => unchecked.value.length === 0 &&checked.value.length === 0);
