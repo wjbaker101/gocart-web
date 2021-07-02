@@ -13,7 +13,7 @@
             </ButtonComponent>
         </div>
     </div>
-    <UserMessageComponent v-if="hasUserMessage" :message="userMessage" />
+    <UserMessageComponent v-if="hasUserMessage" :message="onSearchMessage" />
 </template>
 
 <script lang="ts">
@@ -23,7 +23,7 @@ import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 
-import { UseUserMessage } from '@/use/UserMessage.use';
+import { useUserMessage } from '@/use/UserMessage.use';
 
 export default defineComponent({
     name: 'SearchComponent',
@@ -51,18 +51,18 @@ export default defineComponent({
     },
 
     setup(_, { emit }) {
-        const useUserMessage = UseUserMessage();
+        const userMessage = useUserMessage();
 
-        const userMessage = ref<string>('');
+        const onSearchMessage = ref<string>('');
         const searchTerm = ref<string>('');
 
         return {
-            userMessage,
+            onSearchMessage,
             searchTerm,
 
             onSearch() {
                 if (searchTerm.value.length < 3) {
-                    useUserMessage.set(userMessage, 'Search term is too short, please try another.');
+                    userMessage.set(onSearchMessage, 'Search term is too short, please try another.');
                     return;
                 }
 

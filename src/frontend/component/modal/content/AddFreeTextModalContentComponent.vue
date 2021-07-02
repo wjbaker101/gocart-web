@@ -11,7 +11,7 @@
                 placeholder="Dairy Free Pesto"
                 @keyup.enter="onAdd"
             >
-            <UserMessageComponent :message="userMessage" />
+            <UserMessageComponent :message="onAddMessage" />
         </label>
         <p></p>
         <div class="flex gap-small">
@@ -31,7 +31,7 @@ import SideModalContentComponent from '@/component/modal/SideModalContentCompone
 
 import { Product } from '@/model/Product.model';
 
-import { UseUserMessage } from '@/use/UserMessage.use';
+import { useUserMessage } from '@/use/UserMessage.use';
 import { Event, eventService } from '@/service/Event.service';
 import { useShoppingList } from '@/use/state/ShoppingList.use';
 
@@ -45,12 +45,12 @@ export default defineComponent({
     },
 
     setup() {
-        const useUserMessage = UseUserMessage();
+        const userMessage = useUserMessage();
         const shoppingList = useShoppingList();
 
         const freetextInput = ref<HTMLInputElement | null>(null);
         const freetext = ref<string>('');
-        const userMessage = ref<string>('');
+        const onAddMessage = ref<string>('');
 
         onMounted(() => {
             freetextInput.value?.focus();
@@ -59,11 +59,11 @@ export default defineComponent({
         return {
             freetextInput,
             freetext,
-            userMessage,
+            onAddMessage,
 
             onAdd() {
                 if (freetext.value.length < 2) {
-                    useUserMessage.set(userMessage, 'Freetext should be at least 2 characters long, please try again.');
+                    userMessage.set(onAddMessage, 'Freetext should be at least 2 characters long, please try again.');
                     return;
                 }
 
