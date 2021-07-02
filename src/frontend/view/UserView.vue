@@ -40,7 +40,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -48,10 +47,10 @@ import LoadingComponent from '@/component/LoadingComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useCurrentUser } from '@/use/state/CurrentUser.use';
 
 import { API } from '@/api/API';
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
+
 import { User } from '@/model/User.model';
 
 export default defineComponent({
@@ -65,9 +64,9 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
+        const currentUser = useCurrentUser();
 
-        const user = computed<User | null>(() => store.getters.user);
+        const user = computed<User | null>(() => currentUser.user.value);
 
         const userMessage = ref<string | null>(null);
 
@@ -87,7 +86,7 @@ export default defineComponent({
                     return;
                 }
 
-                store.dispatch(StateKeys.USER_SET, null);
+                currentUser.user.value = null;
             },
         }
     },

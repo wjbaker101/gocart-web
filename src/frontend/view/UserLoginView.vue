@@ -24,17 +24,17 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 
+import { useCurrentUser } from '@/use/state/CurrentUser.use';
+
 import { API } from '@/api/API';
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
+
 import { User } from '@/model/User.model';
-import router from '@/router/AppRouter';
 
 export default defineComponent({
     name: 'UserView',
@@ -46,9 +46,10 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
+        const router = useRouter();
+        const currentUser = useCurrentUser();
 
-        const user = computed<User | null>(() => store.getters.user);
+        const user = computed<User | null>(() => currentUser.user.value);
 
         const username = ref<string>('');
         const password = ref<string>('');
@@ -73,18 +74,17 @@ export default defineComponent({
 
                 userMessage.value = null;
 
-                const loginResponse =
-                    await API.login(username.value, password.value);
+                const loginResponse = await API.login(username.value, password.value);
 
                 if (loginResponse instanceof Error) {
                     userMessage.value = loginResponse.message;
                     return;
                 }
 
-                store.dispatch(StateKeys.USER_SET, <User>{
+                currentUser.user.value = {
                     username: loginResponse.username,
                     loginToken: loginResponse.loginToken,
-                });
+                };
 
                 router.push({ path: '/user' });
             },
