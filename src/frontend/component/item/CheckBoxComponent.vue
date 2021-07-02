@@ -74,14 +74,15 @@ export default defineComponent({
             }
 
             span {
+                padding-left: 0.5rem;
                 font-weight: normal;
             }
 
             .icon-tick {
                 position: absolute;
                 top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                left: 4px;
+                transform: translateY(-50%);
                 color: theme(white);
 
                 path {
