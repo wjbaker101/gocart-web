@@ -85,17 +85,17 @@ export default defineComponent({
                 transform: translateY(-50%);
                 color: theme(white);
 
-                path {
-                    stroke-dasharray: 600;
-                    stroke-dashoffset: 600;
-                    animation: tick-open animation(duration-mid) linear forwards;
-                }
+                // path {
+                //     stroke-dasharray: 600;
+                //     stroke-dashoffset: 600;
+                //     animation: tick-open animation(duration-mid) linear forwards;
+                // }
 
-                @keyframes tick-open {
-                    to {
-                        stroke-dashoffset: 0;
-                    }
-                }
+                // @keyframes tick-open {
+                //     to {
+                //         stroke-dashoffset: 0;
+                //     }
+                // }
             }
 
             &::before {
