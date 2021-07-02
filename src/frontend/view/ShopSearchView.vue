@@ -61,7 +61,7 @@ import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue'
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 
 import { TescoService } from '@/service/Tesco.service';
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Shop } from '@/model/Shop.model';
 
@@ -78,6 +78,8 @@ export default defineComponent({
     },
 
     setup() {
+        useScrollPosition('ShopSearchView');
+
         const searchTextbox = ref<HTMLInputElement | null>(null);
 
         const searchTerm = ref<string>('');
@@ -89,8 +91,6 @@ export default defineComponent({
         onMounted(() => {
             searchTextbox.value?.focus();
         });
-
-        UseScrollPosition('ShopSearchView');
 
         return {
             searchTextbox,

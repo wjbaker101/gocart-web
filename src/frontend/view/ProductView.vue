@@ -97,7 +97,7 @@ import ChevronRightIcon from '@/component/icon/ChevronRightIcon.vue';
 import NoProductFoundIcon from '@/component/icon/ExclamationCircleIcon.vue';
 
 import { useCurrentProduct } from '@/use/state/CurrentProduct.use';
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 import { useShoppingList } from '@/use/state/ShoppingList.use';
 import { Event, eventService } from '@/service/Event.service';
 
@@ -116,6 +116,7 @@ export default defineComponent({
     },
 
     setup() {
+        useScrollPosition('ProductView');
         const currentProduct = useCurrentProduct();
         const shoppingList = useShoppingList();
 
@@ -176,8 +177,6 @@ export default defineComponent({
                 }
             });
         });
-
-        UseScrollPosition('ProductView');
 
         return {
             product,

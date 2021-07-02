@@ -102,8 +102,8 @@ import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/component/icon/ChevronUpIcon.vue';
 import AddIcon from '@/component/icon/PlusIcon.vue';
 
-import { ShoppingListSettings, useShoppingList } from '@/use/state/ShoppingList.use';
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Product } from '@/model/Product.model';
 import { Event, eventService } from '@/service/Event.service';
@@ -124,6 +124,7 @@ export default defineComponent({
     },
 
     setup() {
+        useScrollPosition('ShoppingListView');
         const router = useRouter();
         const shoppingList = useShoppingList();
 
@@ -170,8 +171,6 @@ export default defineComponent({
 
         const firstProductSearchTerm = ref<string>('');
         const firstProductUserMessage = ref<string | null>(null);
-
-        UseScrollPosition('ShoppingListView');
 
         return {
             searchTextbox,

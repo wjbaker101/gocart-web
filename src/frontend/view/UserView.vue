@@ -46,7 +46,7 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 import { useCurrentUser } from '@/use/state/CurrentUser.use';
 
 import { API } from '@/api/API';
@@ -64,13 +64,12 @@ export default defineComponent({
     },
 
     setup() {
+        useScrollPosition('UserView');
         const currentUser = useCurrentUser();
 
         const user = computed<User | null>(() => currentUser.user.value);
 
         const userMessage = ref<string | null>(null);
-
-        UseScrollPosition('UserView');
 
         return {
             user,

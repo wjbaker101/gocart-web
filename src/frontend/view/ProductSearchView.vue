@@ -88,7 +88,7 @@ import SortListIcon from '@/component/icon/SortListIcon.vue';
 import SortNumericIcon from '@/component/icon/SortNumericIcon.vue';
 
 import { TescoService } from '@/service/Tesco.service';
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 import { ProductSearchSettings, useProductSearch } from '@/use/state/ProductSearch.use';
 
 import { Product } from '@/model/Product.model';
@@ -116,6 +116,7 @@ export default defineComponent({
     },
 
     setup(props) {
+        useScrollPosition('ProductSearchView');
         const productSearch = useProductSearch();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
@@ -230,8 +231,6 @@ export default defineComponent({
             if (searchTerm.value.length === 0)
                 searchTextbox.value?.focus();
         });
-
-        UseScrollPosition('ProductSearchView');
 
         return {
             searchTextbox,

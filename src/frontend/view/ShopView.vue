@@ -96,7 +96,7 @@ import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
 import { useSelectedShop } from '@/use/state/SelectedShop.use';
-import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
 
@@ -111,6 +111,7 @@ export default defineComponent({
     },
 
     setup() {
+        useScrollPosition('ShopView');
         const selectedShop = useSelectedShop();
 
         const shop = computed<Shop | null>(() => selectedShop.shop.value);
@@ -172,8 +173,6 @@ export default defineComponent({
 
             return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
         };
-
-        UseScrollPosition('ShopView');
 
         return {
             shop,

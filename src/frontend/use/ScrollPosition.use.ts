@@ -2,7 +2,7 @@ import { onBeforeMount, onBeforeUnmount, onMounted, reactive } from 'vue';
 
 const scrollPositions = reactive(new Map<string, number>());
 
-export function UseScrollPosition(viewId: string) {
+export function useScrollPosition(viewId: string) {
 
     const scrollEventListener = () => {
         scrollPositions.set(viewId, window.scrollY);
