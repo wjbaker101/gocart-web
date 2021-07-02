@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 import { Product } from '@/model/Product.model';
 
@@ -8,17 +8,46 @@ export interface ShoppingListSettings {
     isCheckedProductsVisible: boolean;
 }
 
-const shoppingListCacheKey = 'SHOPPING_LIST';
-const list = ref<Array<Product>>([]);
+const mapId = (id: string) => `id-${id}`;
+
+const productsCacheKey = 'SHOPPING_LIST_PRODUCTS';
+const uncheckedCacheKey = 'SHOPPING_LIST_UNCHECKED';
+const checkedCacheKey = 'SHOPPING_LIST_CHECKED';
+
+const products = ref<Record<string, Product>>({});
+const unchecked = ref<Array<string>>([]);
+const checked = ref<Array<string>>([]);
 
 (async () => {
-    const cachedList = await CacheService.get<Array<Product>>(shoppingListCacheKey);
-    if (cachedList !== null)
-        list.value = cachedList;
+    const cachedProducts = await CacheService.get<Record<string, Product>>(productsCacheKey);
+    if (cachedProducts !== null)
+        products.value = cachedProducts;
+
+    const cachedUnchecked = await CacheService.get<Array<string>>(uncheckedCacheKey);
+    if (cachedUnchecked !== null)
+        unchecked.value = cachedUnchecked;
+
+    const cachedChecked = await CacheService.get<Array<string>>(checkedCacheKey);
+    if (cachedChecked !== null)
+        checked.value = cachedChecked;
 })();
 
-watch(list, async (shoppingList) => {
-    await CacheService.set(shoppingListCacheKey, shoppingList);
+watch(products, async (products) => {
+    await CacheService.set(productsCacheKey, products);
+}, {
+    deep: true,
+});
+
+watch(unchecked, async (unchecked) => {
+    await CacheService.set(uncheckedCacheKey, unchecked);
+}, {
+    deep: true,
+});
+
+watch(checked, async (checked) => {
+    await CacheService.set(checkedCacheKey, checked);
+}, {
+    deep: true,
 });
 
 const settingsListCacheKey = 'SHOPPING_LIST_SETTINGS';
@@ -34,50 +63,70 @@ const settings = ref<ShoppingListSettings>({
 
 watch(settings, async (settings) => {
     await CacheService.set(settingsListCacheKey, settings);
+}, {
+    deep: true,
 });
 
 export function useShoppingList() {
     return {
-        shoppingList: list,
+        products,
+        unchecked,
+        checked,
         settings,
 
         async add(product: Product) {
-            list.value.push(product);
+            const id = mapId(product.id);
 
-            await CacheService.set(shoppingListCacheKey, list.value);
+            products.value[id] = product;
+            unchecked.value.push(id);
+
+            await CacheService.set(productsCacheKey, products.value);
+            await CacheService.set(uncheckedCacheKey, unchecked.value);
         },
 
         async remove(product: Product) {
-            list.value = list.value.filter(x => x.id !== product.id);
+            const id = mapId(product.id);
 
-            await CacheService.set(shoppingListCacheKey, list.value);
+            delete products.value[id];
+            unchecked.value = unchecked.value.filter(x => x !== id);
+            checked.value = checked.value.filter(x => x !== id);
+
+            await CacheService.set(productsCacheKey, products.value);
+            await CacheService.set(uncheckedCacheKey, unchecked.value);
+            await CacheService.set(checkedCacheKey, checked.value);
         },
 
         async update(product: Product) {
-            const existingProduct = list.value.find(x => x.id === product.id);
+            const id = mapId(product.id);
 
-            if (existingProduct === undefined)
-                return;
+            products.value[id] = product;
 
-            existingProduct.name = product.name;
-            existingProduct.price = product.price;
-            existingProduct.imageUrl = product.imageUrl;
-            existingProduct.description = product.description;
-            existingProduct.department = product.department;
-            existingProduct.superDepartment = product.superDepartment;
+            await CacheService.set(productsCacheKey, products.value);
+        },
 
-            existingProduct.barcodeId = product.barcodeId;
-            existingProduct.brand = product.brand;
-            existingProduct.ingredients = product.ingredients;
-            existingProduct.healthScore = product.healthScore;
-            existingProduct.nutrition = product.nutrition;
+        isInShoppingList(product: Product) {
+            const id = mapId(product.id);
 
-            existingProduct.isFreetext = product.isFreetext;
-            existingProduct.listQuantity = product.listQuantity;
-            existingProduct.isChecked = product.isChecked;
-            existingProduct.addCount = product.addCount;
+            return id in products.value;
+        },
 
-            await CacheService.set(shoppingListCacheKey, list.value);
+        isInUnchecked(product: Product) {
+            const id = mapId(product.id);
+
+            return unchecked.value.indexOf(id) > -1;
+        },
+
+        async toggleChecked(product: Product) {
+            const id = mapId(product.id);
+
+            if (unchecked.value.indexOf(id) > -1) {
+                unchecked.value = unchecked.value.filter(x => x !== id);
+                checked.value.push(id);
+            }
+            else {
+                checked.value = checked.value.filter(x => x !== id);
+                unchecked.value.push(id);
+            }
         },
     }
 }

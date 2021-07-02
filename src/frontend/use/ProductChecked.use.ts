@@ -1,27 +1,21 @@
 import { computed } from 'vue';
-import { useStore } from 'vuex';
 
-import { AppStateMapper } from '@/store/AppStore';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
 
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 
 export const UseShoppingListChecked = function (product: Product) {
-    const store = useStore<AppState>();
+    const shoppingList = useShoppingList();
 
     const isShoppingListChecked = computed<boolean>({
-        get: () => product.isChecked,
+        get() {
+            return !shoppingList.isInUnchecked(product);
+        },
         set(newIsChecked: boolean) {
-            product.isChecked = newIsChecked;
+            shoppingList.toggleChecked(product);
 
-            if (!newIsChecked) {
+            if (!newIsChecked)
                 product.addCount++;
-            }
-
-            store.dispatch(
-                StateKeys.SHOPPING_LIST_PRODUCT_UPDATE,
-                product);
         },
     });
 
@@ -31,24 +25,17 @@ export const UseShoppingListChecked = function (product: Product) {
 }
 
 export const UseForSeachChecked = function(product: Product) {
-    const store = useStore<AppState>();
-
-    const shoppingList = computed<Record<string, Product>>(
-        () => store.getters.shoppingList);
+    const shoppingList = useShoppingList();
 
     const isForSearchChecked = computed<boolean>({
-        get: () => AppStateMapper.mapProductId(product.id) in shoppingList.value,
+        get() {
+            return shoppingList.isInShoppingList(product);
+        },
         set(newIsInShoppingList: boolean) {
-            if (newIsInShoppingList) {
-                store.dispatch(
-                    StateKeys.SHOPPING_LIST_PRODUCTS_ADD,
-                    product);
-            }
-            else {
-                store.dispatch(
-                    StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE,
-                    product.id);
-            }
+            if (newIsInShoppingList)
+                shoppingList.add(product);
+            else
+                shoppingList.remove(product);
         },
     });
 

@@ -23,19 +23,17 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { useStore } from 'vuex';
 import { v4 as uuid } from 'uuid';
 
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import UserMessageComponent from '@/component/item/UserMessageComponent.vue';
 import SideModalContentComponent from '@/component/modal/SideModalContentComponent.vue';
 
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { Event, eventService } from '@/service/Event.service';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
 
 export default defineComponent({
     name: 'AddFreetextModalContentComponent',
@@ -47,8 +45,8 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
         const useUserMessage = UseUserMessage();
+        const shoppingList = useShoppingList();
 
         const freetextInput = ref<HTMLInputElement | null>(null);
         const freetext = ref<string>('');
@@ -84,7 +82,7 @@ export default defineComponent({
                     superDepartment: '',
                 };
 
-                store.dispatch(StateKeys.SHOPPING_LIST_PRODUCTS_ADD, newProduct);
+                shoppingList.add(newProduct);
 
                 freetext.value = '';
 

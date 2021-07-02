@@ -43,7 +43,6 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
 import CheckBoxComponent from '@/component/item/CheckBoxComponent.vue';
 import AreYouSureModalContentComponent, { AreYouSureModalContentComponentProps } from '@/component/modal/content/AreYouSureModalContentComponent.vue';
@@ -53,13 +52,9 @@ import CutleryIcon from '@/component/icon/CutleryIcon.vue';
 import PlusIcon from '@/component/icon/PlusIcon.vue';
 
 import { useCurrentProduct } from '@/use/state/CurrentProduct.use';
-import {
-    UseShoppingListChecked,
-    UseForSeachChecked,
-} from '@/use/ProductChecked.use';
+import { UseShoppingListChecked, UseForSeachChecked } from '@/use/ProductChecked.use';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
 
-import { AppState } from '@/store/type/AppState.model';
-import { StateKeys } from '@/store/type/StateKeys';
 import { Product } from '@/model/Product.model';
 import { Event, eventService } from '@/service/Event.service';
 
@@ -90,8 +85,8 @@ export default defineComponent({
 
     setup(props: ProductComponentProps) {
         const router = useRouter();
-        const store = useStore<AppState>();
         const currentProduct = useCurrentProduct();
+        const shoppingList = useShoppingList();
 
         const isChecked = props.forSearch
             ? UseForSeachChecked(props.product).isChecked
@@ -119,10 +114,10 @@ export default defineComponent({
                         message: `Remove <strong>${props.product.name}</strong> from your shopping list?`,
                         yesMessage: 'Delete Freetext',
                         noMessage: 'Cancel',
-                        yesAction: () => {
-                            store.dispatch(StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE, props.product.id);
+                        yesAction() {
+                            shoppingList.remove(props.product);
                         },
-                        noAction: () => {},
+                        noAction() {},
                     },
                 });
             },

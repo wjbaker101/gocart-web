@@ -87,7 +87,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, readonly, ref, watch } from 'vue';
-import { useStore } from 'vuex';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
@@ -97,14 +96,12 @@ import AreYouSureModalContentComponent, { AreYouSureModalContentComponentProps }
 import ChevronRightIcon from '@/component/icon/ChevronRightIcon.vue';
 import NoProductFoundIcon from '@/component/icon/ExclamationCircleIcon.vue';
 
-import { AppStateMapper } from '@/store/AppStore';
 import { useCurrentProduct } from '@/use/state/CurrentProduct.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
 import { Event, eventService } from '@/service/Event.service';
 
-import { AppState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
-import { StateKeys } from '@/store/type/StateKeys';
 
 export default defineComponent({
     name: 'ProductView',
@@ -119,8 +116,8 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
         const currentProduct = useCurrentProduct();
+        const shoppingList = useShoppingList();
 
         const product = computed<Product | null>(() => currentProduct.product.value);
 
@@ -148,19 +145,15 @@ export default defineComponent({
         });
 
         onBeforeMount(() => {
-            if (product.value !== null) {
-                isChecked.value = AppStateMapper.mapProductId(product.value.id)
-                    in store.state.shoppingList.products;
-            }
+            if (product.value !== null)
+                isChecked.value = shoppingList.isInShoppingList(product.value);
 
             watch(isChecked, () => {
                 if (product.value === null)
                     return;
 
                 if (isChecked.value) {
-                    store.dispatch(
-                        StateKeys.SHOPPING_LIST_PRODUCTS_ADD,
-                        product.value);
+                    shoppingList.add(product.value);
                 }
                 else {
                     eventService.publish(Event.OPEN_MODAL, {
@@ -173,9 +166,7 @@ export default defineComponent({
                                 if (product.value === null)
                                     return;
 
-                                store.dispatch(
-                                    StateKeys.SHOPPING_LIST_PRODUCTS_REMOVE,
-                                    product.value.id);
+                                shoppingList.remove(product.value);
                             },
                             noAction: () => {
                                 isChecked.value = true;
@@ -212,9 +203,7 @@ export default defineComponent({
 
                 product.value.listQuantity = newQuantity;
 
-                store.dispatch(
-                    StateKeys.SHOPPING_LIST_PRODUCT_UPDATE,
-                    product.value);
+                shoppingList.update(product.value);
             },
         }
     },

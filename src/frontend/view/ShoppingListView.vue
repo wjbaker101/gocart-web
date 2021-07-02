@@ -30,32 +30,32 @@
             <div v-else>
                 <section class="flex align-center">
                     <h3 class="flex-1">Shopping List</h3>
-                    <p class="flex-auto">({{ displayUnchecked.length }})</p>
+                    <p class="flex-auto">({{ unchecked.length }})</p>
                 </section>
                 <div>
                     <VueDraggable
-                        v-model="displayUnchecked"
+                        v-model="unchecked"
                         v-bind="draggableOptions"
                     >
                         <ProductComponent
-                            :key="`product-${product.id}`"
-                            v-for="product in displayUnchecked"
-                            :product="product"
+                            :key="productId"
+                            v-for="productId in unchecked"
+                            :product="products[productId]"
                         />
                     </VueDraggable>
                 </div>
                 <section ref="checkedSection" class="flex align-center">
-                    <h3 class="flex-1">Checked Items <small v-if="!shoppingListSettings.isCheckedItemsVisible"><em>(Hidden)</em></small></h3>
-                    <p class="flex-auto">({{ displayChecked.length }})</p>
+                    <h3 class="flex-1">Checked Items <small v-if="!isCheckedProductsVisible"><em>(Hidden)</em></small></h3>
+                    <p class="flex-auto">({{ checked.length }})</p>
                     <div class="checked-items-visibility-container flex flex-auto align-center" @click="toggleCheckedItemsVisibility">
-                        <ChevronUpIcon v-if="shoppingListSettings.isCheckedItemsVisible" />
+                        <ChevronUpIcon v-if="isCheckedProductsVisible" />
                         <ChevronDownIcon v-else />
                     </div>
                 </section>
-                <div v-if="shoppingListSettings.isCheckedItemsVisible">
+                <div v-if="isCheckedProductsVisible">
                     <section
                         class="search-checked-container flex flex-animate"
-                        v-if="displayChecked.length > 5"
+                        v-if="checked.length > 5"
                     >
                         <input
                             ref="searchTextbox"
@@ -77,9 +77,9 @@
                         </ButtonComponent>
                     </section>
                     <ProductComponent
-                        :key="`product-${product.id}`"
-                        v-for="product in filteredDisplayChecked"
-                        :product="product"
+                        :key="productId"
+                        v-for="productId in checked"
+                        :product="products[productId]"
                     />
                 </div>
             </div>
@@ -90,7 +90,6 @@
 <script lang="ts">
 import { computed, defineComponent, readonly, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import { VueDraggableNext as VueDraggable } from 'vue-draggable-next';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
@@ -103,13 +102,10 @@ import ChevronDownIcon from '@/component/icon/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/component/icon/ChevronUpIcon.vue';
 import AddIcon from '@/component/icon/PlusIcon.vue';
 
-import { AppStateMapper } from '@/store/AppStore';
-import { SortService } from '@/service/Sort.service';
+import { ShoppingListSettings, useShoppingList } from '@/use/state/ShoppingList.use';
 import { UseScrollPosition } from '@/use/ScrollPosition.use';
 
-import { AppState, ShoppingListSettingsState } from '@/store/type/AppState.model';
 import { Product } from '@/model/Product.model';
-import { StateKeys } from '@/store/type/StateKeys';
 import { Event, eventService } from '@/service/Event.service';
 
 export default defineComponent({
@@ -128,8 +124,8 @@ export default defineComponent({
     },
 
     setup() {
-        const store = useStore<AppState>();
         const router = useRouter();
+        const shoppingList = useShoppingList();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
         const checkedSection = ref<HTMLElement | null>(null);
@@ -143,51 +139,30 @@ export default defineComponent({
             ghostClass: 'is-dragged',
         });
 
-        const shoppingList = computed<Record<string, Product>>(() => store.getters.shoppingList);
-        const shoppingListSettings = computed<ShoppingListSettingsState>(() => store.getters.shoppingListSettings);
+        const isCheckedProductsVisible = computed<boolean>(() => shoppingList.settings.value.isCheckedProductsVisible);
 
-        const displayUnchecked = computed<Product[]>({
-            get: () => Array.from<string>(store.getters
-                .uncheckedProductList
-                .keys())
-                .map(x => shoppingList.value[x]),
-            set: (value: Product[]) => {
-                store.dispatch(
-                    StateKeys.SHOPPING_LIST_UNCHECKED_SET,
-                    new Set([ ...value
-                        .map(x => AppStateMapper.mapProductId(x.id))
-                    ])
-                );
+        const products = computed<Record<string, Product>>(() => shoppingList.products.value);
+
+        const unchecked = computed<Array<string>>({
+            get() {
+                return shoppingList.unchecked.value;
+            },
+            set(ids: Array<string>) {
+                shoppingList.unchecked.value = ids;
             },
         });
+        const checked = computed<Array<string>>(() => {
+            return shoppingList.checked.value;;
+        });
 
-        const displayChecked = computed<Product[]>(
-            () => Array.from<string>(store.getters
-                .checkedProductList
-                .keys())
-                .map(x => shoppingList.value[x])
-                .sort((a: Product, b: Product) =>
-                    SortService.alphabeticalAsc(a.name, b.name))
-                .sort((a: Product, b: Product) =>
-                    SortService.numericalDesc(a.addCount, b.addCount)));
+        const isShoppingListEmpty = computed<boolean>(() => unchecked.value.length === 0 &&checked.value.length === 0);
 
-        const filteredDisplayChecked = computed<Product[]>(
-            () => displayChecked.value
-                .filter((x: Product) => x.name
-                .toLowerCase()
-                .indexOf(checkedSearchTerm.value.toLowerCase()) > -1));
-
-        const isShoppingListEmpty = computed<boolean>(
-            () => displayUnchecked.value.length === 0 &&
-                displayChecked.value.length === 0);
-
-        const totalPrice = computed<number>(
-            () => displayUnchecked.value
-                .reduce((acc, product) =>
-                    acc + (product.price * product.listQuantity), 0));
+        const totalPrice = computed<number>(() => unchecked.value
+            .map(x => products.value[x])
+            .reduce((total, product) => total + (product.price * product.listQuantity), 0.0));
 
         const displayTotalPrice = computed<string>(() => {
-            if (displayUnchecked.value.length === 0 && displayChecked.value.length === 0)
+            if (isShoppingListEmpty.value)
                 return 'Empty!';
 
             return `£${totalPrice.value.toFixed(2)}`
@@ -203,12 +178,12 @@ export default defineComponent({
             checkedSection,
             checkedSearchTerm,
             draggableOptions,
+            isCheckedProductsVisible,
+            products,
+            unchecked,
+            checked,
             displayTotalPrice,
-            displayUnchecked,
-            displayChecked,
-            filteredDisplayChecked,
             isShoppingListEmpty,
-            shoppingListSettings,
             firstProductSearchTerm,
             firstProductUserMessage,
 
@@ -225,10 +200,7 @@ export default defineComponent({
             },
 
             toggleCheckedItemsVisibility() {
-                store.dispatch(StateKeys.SHOPPING_LIST_SETTINGS_SET, {
-                    ...shoppingListSettings.value,
-                    isCheckedItemsVisible: !shoppingListSettings.value.isCheckedItemsVisible,
-                });
+                shoppingList.settings.value.isCheckedProductsVisible = !shoppingList.settings.value.isCheckedProductsVisible;
             },
 
             onFirstProductSearch(searchTerm: string) {
