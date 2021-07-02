@@ -8,12 +8,18 @@
 import DashboardComponent from '@/component/DashboardComponent.vue';
 import SideModalComponent from '@/component/modal/SideModalComponent.vue';
 
+import { usePwaInstallPrompt } from '@/use/PwaInstallPrompt.use';
+
 export default {
     name: 'App',
 
     components: {
         DashboardComponent,
         SideModalComponent,
+    },
+
+    setup() {
+        usePwaInstallPrompt();
     },
 }
 </script>
