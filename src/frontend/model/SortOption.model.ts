@@ -5,7 +5,7 @@ export enum SortOptionType {
 }
 
 export interface SortOption {
-    title: string,
-    type: SortOptionType,
-    icon: any,
+    title: string;
+    type: SortOptionType;
+    icon: any;
 }
