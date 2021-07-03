@@ -26,24 +26,12 @@
                     </li>
                 </ul>
             </div>
-            <div class="flex flex-animate">
-                <input
-                    ref="searchTextbox"
-                    type="search"
-                    placeholder="Apple Strudel"
-                    class="product-search-view-search-textbox flex-1"
-                    v-model="searchTerm"
-                    @keyup.enter="onSearch"
-                >
-                <ButtonComponent
-                    class="product-search-view-reset-search-button flex-auto"
-                    :class="{ 'is-visible': searchTerm.length > 0 }"
-                    @click="onClearSearch"
-                    isSecondary
-                >
-                    &times;
-                </ButtonComponent>
-            </div>
+            <SearchComponent
+                ref="searchComponent"
+                placeholder="Apple Strudel"
+                :prePopulatedSearchTerm="searchComponentSearchTerm"
+                @search="onSearch"
+            />
         </template>
         <div class="product-search-view">
             <section v-if="isSearching">
@@ -80,6 +68,7 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
 import ProductComponent from '@/component/ProductComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
+import SearchComponent from '@/component/SearchComponent.vue';
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 import SortAlphaIcon from '@/component/icon/SortAlphaIcon.vue';
@@ -100,6 +89,7 @@ export default defineComponent({
     components: {
         PageContainerComponent,
         ButtonComponent,
+        SearchComponent,
         LoadingComponent,
         ProductComponent,
         QuestionMarkCircleIcon,
@@ -119,15 +109,18 @@ export default defineComponent({
         useScrollPosition('ProductSearchView');
         const productSearch = useProductSearch();
 
-        const searchTextbox = ref<HTMLInputElement | null>(null);
+        const searchComponent = ref<typeof SearchComponent | null>(null);
 
-        const searchTerm = ref<string>('');
         const isSearching = ref<boolean>(false);
         const products = ref<Product[] | null>(null);
 
         const isSortAndFilterShown = ref<boolean>(false);
 
         const productSearchSettings = computed<ProductSearchSettings>(() => productSearch.settings.value);
+
+        const searchComponentSearchTerm = props.prePopulatedSearchTerm.length > 0
+            ? props.prePopulatedSearchTerm
+            : productSearch.searchTerm.value ?? '';
 
         const displaySortOptions = shallowReadonly<SortOption[]>([
             {
@@ -179,63 +172,56 @@ export default defineComponent({
                 .sort(sortFunctions[productSearchSettings.value.sortOption.toString()]);
         });
 
-        const onSearch = async function () {
-            if (searchTerm.value === null)
+        const onSearch = async function (searchTerm: string) {
+            if (searchTerm === null)
                 return;
 
-            if (searchTerm.value.trim().length < 3)
+            if (searchTerm.trim().length < 3)
                 return;
 
-            searchTextbox.value?.blur();
+            searchComponent.value?.blur();
 
             isSearching.value = true;
 
-            const searchProducts =
-                await TescoService.searchProducts(searchTerm.value);
+            const searchProducts = await TescoService.searchProducts(searchTerm);
 
             isSearching.value = false;
 
             if (searchProducts instanceof Error) {
                 products.value = null;
 
-                searchTextbox.value?.focus();
+                searchComponent.value?.focus();
             }
             else {
                 products.value = searchProducts;
 
                 if (products.value.length === 0) {
-                    searchTextbox.value?.focus();
+                    searchComponent.value?.focus();
                 }
 
-                productSearch.searchTerm.value = searchTerm.value;
+                productSearch.searchTerm.value = searchTerm;
                 productSearch.products.value = products.value;
             }
         };
 
         onBeforeMount(() => {
-            const existingSearch = productSearch.searchTerm.value;
-            if (existingSearch !== null)
-                searchTerm.value = existingSearch;
-
             const existingProducts = productSearch.products.value;
             if (existingProducts !== null)
                 products.value = existingProducts;
         });
 
         onMounted(() => {
-            if (props.prePopulatedSearchTerm.length > 0) {
-                searchTerm.value = props.prePopulatedSearchTerm;
-                onSearch();
-            }
+            if (props.prePopulatedSearchTerm.length > 0)
+                onSearch(props.prePopulatedSearchTerm);
 
-            if (searchTerm.value.length === 0)
-                searchTextbox.value?.focus();
+            if (searchComponentSearchTerm.length === 0)
+                searchComponent.value?.focus();
         });
 
         return {
-            searchTextbox,
+            searchComponent,
 
-            searchTerm,
+            searchComponentSearchTerm,
             isSearching,
             displayProducts,
 
@@ -244,14 +230,6 @@ export default defineComponent({
             displaySortOptions,
 
             onSearch,
-
-            onClearSearch() {
-                searchTerm.value = '';
-                searchTextbox.value?.focus();
-
-                productSearch.searchTerm.value = searchTerm.value;
-                productSearch.products.value = products.value;
-            },
 
             onSortAndFilterToggle() {
                 isSortAndFilterShown.value = !isSortAndFilterShown.value;
@@ -309,17 +287,6 @@ export default defineComponent({
         span,
         .icon {
             vertical-align: middle;
-        }
-    }
-
-    &-reset-search-button {
-        margin-left: 0.5rem;
-        overflow: hidden;
-
-        &:not(.is-visible) {
-            flex: 0;
-            padding: 0;
-            margin: 0;
         }
     }
 

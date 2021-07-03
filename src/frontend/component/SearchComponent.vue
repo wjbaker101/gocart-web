@@ -2,6 +2,7 @@
     <div class="search-component flex align-center">
         <div class="flex-1">
             <input
+                ref="searchTermInput"
                 :placeholder="placeholder"
                 v-model="searchTerm"
                 @keyup.enter="onSearch"
@@ -29,6 +30,11 @@ export default defineComponent({
     name: 'SearchComponent',
 
     props: {
+        prePopulatedSearchTerm: {
+            type: String,
+            required: false,
+            default: '',
+        },
         hasUserMessage: {
             type: Boolean,
             required: false,
@@ -50,13 +56,16 @@ export default defineComponent({
         SearchIcon,
     },
 
-    setup(_, { emit }) {
+    setup(props, { emit }) {
         const userMessage = useUserMessage();
 
+        const searchTermInput = ref<HTMLInputElement | null>(null);
+
         const onSearchMessage = ref<string>('');
-        const searchTerm = ref<string>('');
+        const searchTerm = ref<string>(props.prePopulatedSearchTerm);
 
         return {
+            searchTermInput,
             onSearchMessage,
             searchTerm,
 
@@ -67,6 +76,14 @@ export default defineComponent({
                 }
 
                 emit('search', searchTerm.value);
+            },
+
+            focus() {
+                searchTermInput.value?.focus();
+            },
+
+            blur() {
+                searchTermInput.value?.blur();
             },
         }
     },
