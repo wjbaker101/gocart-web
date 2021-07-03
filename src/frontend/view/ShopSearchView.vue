@@ -1,24 +1,7 @@
 <template>
     <PageContainerComponent backButton>
         <template #header-bottom>
-            <div class="flex flex-animate">
-                <input
-                    ref="searchTextbox"
-                    type="search"
-                    placeholder="London"
-                    class="shop-search-view-search-textbox"
-                    v-model="searchTerm"
-                    @keyup.enter="onSearch"
-                >
-                <ButtonComponent
-                    class="flex-auto shop-search-view-reset-search-button"
-                    :class="{ 'is-visible': searchTerm.length > 0 }"
-                    @click="onClearSearch"
-                    isSecondary
-                >
-                    &times;
-                </ButtonComponent>
-            </div>
+            <SearchComponent ref="searchComponent" placeholder="London" @search="onSearch" />
         </template>
         <div class="shop-search-view">
             <section v-if="isSearching">
@@ -57,6 +40,7 @@ import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
 import ShopComponent from '@/component/ShopComponent.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
+import SearchComponent from '@/component/SearchComponent.vue';
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 
@@ -73,6 +57,7 @@ export default defineComponent({
         LoadingComponent,
         ShopComponent,
         ButtonComponent,
+        SearchComponent,
         QuestionMarkCircleIcon,
         SearchIcon,
     },
@@ -80,58 +65,46 @@ export default defineComponent({
     setup() {
         useScrollPosition('ShopSearchView');
 
-        const searchTextbox = ref<HTMLInputElement | null>(null);
+        const searchComponent = ref<typeof SearchComponent | null>(null);
 
-        const searchTerm = ref<string>('');
         const isSearching = ref<boolean>(false);
         const shops = ref<Shop[] | null>(null);
 
         const openShop = ref<string>('');
 
         onMounted(() => {
-            searchTextbox.value?.focus();
+            searchComponent.value?.focus();
         });
 
         return {
-            searchTextbox,
-            searchTerm,
+            searchComponent,
             isSearching,
             shops,
             openShop,
 
-            async onSearch() {
-                if (searchTerm.value === null)
+            async onSearch(searchTerm: string) {
+                if (searchTerm.trim().length < 3)
                     return;
 
-                if (searchTerm.value.trim().length < 3)
-                    return;
-
-                searchTextbox.value?.blur();
+                searchComponent.value?.blur();
 
                 isSearching.value = true;
 
-                const searchShops =
-                    await TescoService.getNearbyShops(searchTerm.value);
+                const searchShops = await TescoService.getNearbyShops(searchTerm);
 
                 isSearching.value = false;
 
                 if (searchShops instanceof Error) {
                     shops.value = null;
 
-                    searchTextbox.value?.focus();
+                    searchComponent.value?.focus();
                 }
                 else {
                     shops.value = searchShops;
 
-                    if (shops.value.length === 0) {
-                        searchTextbox.value?.focus();
-                    }
+                    if (shops.value.length === 0)
+                        searchComponent.value?.focus();
                 }
-            },
-
-            onClearSearch() {
-                searchTerm.value = '';
-                searchTextbox.value?.focus();
             },
 
             onOpen(shopName: string) {
@@ -140,7 +113,7 @@ export default defineComponent({
 
             onClose() {
                 openShop.value = '';
-                searchTextbox.value?.focus();
+                searchComponent.value?.focus();
             },
         }
     },
@@ -149,21 +122,6 @@ export default defineComponent({
 
 <style lang="scss">
 .shop-search-view {
-
-    &-search-textbox {
-        text-transform: capitalize;
-    }
-
-    &-reset-search-button {
-        margin-left: 0.5rem;
-        overflow: hidden;
-
-        &:not(.is-visible) {
-            flex: 0;
-            padding: 0;
-            margin: 0;
-        }
-    }
 
     .shop-list {
         padding-top: 0.5rem;
