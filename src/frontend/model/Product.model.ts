@@ -27,6 +27,5 @@ export interface Product {
 
     isFreetext: boolean,
     listQuantity: number,
-    isChecked: boolean,
     addCount: number,
 }

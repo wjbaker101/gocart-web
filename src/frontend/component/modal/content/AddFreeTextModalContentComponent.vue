@@ -72,7 +72,6 @@ export default defineComponent({
                     name: freetext.value,
                     isFreetext: true,
                     listQuantity: 1,
-                    isChecked: false,
                     addCount: 1,
 
                     price: 0,

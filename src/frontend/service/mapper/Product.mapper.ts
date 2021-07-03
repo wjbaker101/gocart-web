@@ -48,7 +48,6 @@ export const ProductMapper = {
 
             isFreetext: false,
             listQuantity: 1,
-            isChecked: false,
             addCount: 0,
         }
     },
