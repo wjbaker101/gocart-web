@@ -27,5 +27,6 @@ export interface Product {
 
     isFreetext: boolean;
     listQuantity: number;
+    listPosition: number;
     addCount: number;
 }

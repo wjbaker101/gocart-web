@@ -72,6 +72,7 @@ export default defineComponent({
                     name: freetext.value,
                     isFreetext: true,
                     listQuantity: 1,
+                    listPosition: shoppingList.unchecked.value.length,
                     addCount: 1,
 
                     price: 0,

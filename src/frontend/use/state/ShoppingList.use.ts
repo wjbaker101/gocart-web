@@ -118,14 +118,18 @@ export function useShoppingList() {
 
         async toggleChecked(product: Product) {
             const id = mapId(product.id);
+            const productIndex = unchecked.value.indexOf(id);
 
-            if (unchecked.value.indexOf(id) > -1) {
+            if (productIndex > -1) {
                 unchecked.value = unchecked.value.filter(x => x !== id);
                 checked.value.push(id);
+
+                product.listPosition = productIndex;
+                this.update(product);
             }
             else {
                 checked.value = checked.value.filter(x => x !== id);
-                unchecked.value.push(id);
+                unchecked.value.splice(product.listPosition, 0, id);
             }
         },
     }
