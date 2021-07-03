@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { useIcon, useIconProps } from '@/use/UseIcon.use';
+import { useIcon, useIconProps } from '@/use/Icon.use';
 
 export default {
     name: 'TickIcon',
