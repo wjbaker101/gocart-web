@@ -33,8 +33,8 @@ public class TescoApiClient {
         this.offset = 0;
     }
 
-    public ResponseEntity<List<SearchProduct>> grocerySearch(final String searchTerm) {
-        var url = String.format("/grocery/products?query=%s&limit=%d&offset=%d", searchTerm, this.limit, this.offset);
+    public ResponseEntity<List<SearchProduct>> grocerySearch(final String searchTerm, final int offset) {
+        var url = String.format("/grocery/products?query=%s&limit=%d&offset=%d", searchTerm, this.limit, offset);
 
         var response = this.restTemplate.getForEntity(url, GrocerySearchResponse.class);
 

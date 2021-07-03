@@ -7,8 +7,8 @@ import { Shop } from '@/model/Shop.model';
 
 export const TescoService = {
 
-    async searchProducts(searchTerm: string): Promise<Product[] | Error> {
-        const products = await API.grocerySearch(searchTerm);
+    async searchProducts(searchTerm: string, page: number): Promise<Product[] | Error> {
+        const products = await API.grocerySearch(searchTerm, page);
 
         if (products instanceof Error) {
             return products;

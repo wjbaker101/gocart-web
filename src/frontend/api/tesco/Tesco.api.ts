@@ -12,12 +12,11 @@ const tescoApi = axios.create({
 
 export const TescoApi = {
 
-    async grocerySearch(searchTerm: string): Promise<SearchProduct[] | Error> {
+    async grocerySearch(searchTerm: string, page: number): Promise<SearchProduct[] | Error> {
         try {
-            const url = `/product/search/${searchTerm}`;
+            const url = `/product/search/${searchTerm}/${page}`;
 
-            const response =
-                await tescoApi.get<ApiResponse<SearchProduct[]>>(url);
+            const response = await tescoApi.get<ApiResponse<SearchProduct[]>>(url);
 
             return response.data.result;
         }

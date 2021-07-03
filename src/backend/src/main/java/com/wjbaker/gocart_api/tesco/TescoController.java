@@ -16,8 +16,6 @@ import static org.apache.logging.log4j.LogManager.getLogger;
 @RequestMapping("/api/tesco")
 public class TescoController {
 
-    private final Logger logger = getLogger(TescoController.class);
-
     private final TescoService tescoService;
 
     @Autowired
@@ -32,9 +30,12 @@ public class TescoController {
         return ApiResponse.result(product);
     }
 
-    @GetMapping("/product/search/{searchTerm}")
-    public ApiResponse<List<SearchProduct>> searchProducts(@PathVariable final String searchTerm) {
-        var products = this.tescoService.searchProducts(searchTerm);
+    @GetMapping("/product/search/{searchTerm}/{page}")
+    public ApiResponse<List<SearchProduct>> searchProducts(
+        @PathVariable final String searchTerm,
+        @PathVariable final int page) {
+
+        var products = this.tescoService.searchProducts(searchTerm, page);
 
         return ApiResponse.result(products);
     }

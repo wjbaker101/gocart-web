@@ -22,8 +22,8 @@ public class TescoService {
         this.tescoApiClient = tescoApiClient;
     }
 
-    public List<SearchProduct> searchProducts(final String searchTerm) {
-        var response = Optional.ofNullable(this.tescoApiClient.grocerySearch(searchTerm).getBody());
+    public List<SearchProduct> searchProducts(final String searchTerm, final int page) {
+        var response = Optional.ofNullable(this.tescoApiClient.grocerySearch(searchTerm, page - 1).getBody());
 
         if (response.isEmpty())
             return null;

@@ -183,7 +183,7 @@ export default defineComponent({
 
             isSearching.value = true;
 
-            const searchProducts = await TescoService.searchProducts(searchTerm);
+            const searchProducts = await TescoService.searchProducts(searchTerm, 1);
 
             isSearching.value = false;
 
