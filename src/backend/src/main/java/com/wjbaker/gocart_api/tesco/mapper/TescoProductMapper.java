@@ -1,5 +1,6 @@
 package com.wjbaker.gocart_api.tesco.mapper;
 
+import com.wjbaker.gocart_api.tesco.type.GdaRating;
 import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 
@@ -133,15 +134,15 @@ public abstract class TescoProductMapper {
             .collect(Collectors.toList());
     }
 
-    private static TescoProduct.GdaRating mapGdaRating(final String data) {
+    private static GdaRating mapGdaRating(final String data) {
         if ("low".equals(data))
-            return TescoProduct.GdaRating.LOW;
+            return GdaRating.LOW;
 
         if ("medium".equals(data))
-            return TescoProduct.GdaRating.MEDIUM;
+            return GdaRating.MEDIUM;
 
         if ("high".equals(data))
-            return TescoProduct.GdaRating.HIGH;
+            return GdaRating.HIGH;
 
         return null;
     }

@@ -40,13 +40,6 @@ public class TescoProduct {
         }
     }
 
-    public enum GdaRating {
-
-        LOW,
-        MEDIUM,
-        HIGH,
-    }
-
     @Getter
     @Setter
     public static class GuidelineDailyAmounts {

@@ -1,6 +1,7 @@
 package com.wjbaker.gocart_api.tesco.mapper;
 
 import com.wjbaker.gocart_api.tesco.type.GrocerySearchResponse;
+import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
 import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 
@@ -44,6 +45,7 @@ public abstract class SearchProductsMapper {
         product.setIngredients(tescoProduct.getIngredients());
         product.setHealthScore(tescoProduct.getHealthScore());
         product.setNutrition(mapNutrition(tescoProduct.getNutrition()));
+        product.setGuidelineDailyAmounts(mapGda(tescoProduct.getGuidelineDailyAmounts()));
 
         return product;
     }
@@ -105,5 +107,38 @@ public abstract class SearchProductsMapper {
                 .valuePer100g(nutrient.getValuePer100g())
                 .valuePerServing(nutrient.getValuePerServing())
                 .build();
+    }
+
+    private static SearchProduct.GuidelineDailyAmounts mapGda(
+        final TescoProduct.GuidelineDailyAmounts data) {
+
+        if (data == null)
+            return null;
+
+        var gda = new SearchProduct.GuidelineDailyAmounts();
+        gda.setHeaders(data.getHeaders());
+        gda.setFooters(data.getFooters());
+        gda.setAmounts(mapGdaAmounts(data.getAmounts()));
+
+        return gda;
+    }
+
+    private static List<SearchProduct.GuidelineDailyAmounts.GdaAmount> mapGdaAmounts(
+        final List<TescoProduct.GuidelineDailyAmounts.GdaAmount> data) {
+
+        if (data == null)
+            return null;
+
+        return data.stream()
+            .map(x -> {
+                var amount = new SearchProduct.GuidelineDailyAmounts.GdaAmount();
+                amount.setName(x.getName());
+                amount.setPercent(x.getPercent());
+                amount.setRating(x.getRating());
+                amount.setValues(x.getValues());
+
+                return amount;
+            })
+            .collect(Collectors.toList());
     }
 }
