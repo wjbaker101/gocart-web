@@ -37,6 +37,7 @@ public abstract class TescoProductMapper {
                 .healthScore(mapHealthScore(product.getProductCharacteristics()))
                 .ingredients(mapIngredients(product.getIngredients()))
                 .nutrition(mapNutrition(product.getCalcNutrition()))
+                .guidelineDailyAmounts(mapGda(product.getGda()))
                 .build();
     }
 
@@ -92,5 +93,56 @@ public abstract class TescoProductMapper {
                 .valuePer100g(nutrient.getValuePer100())
                 .valuePerServing(nutrient.getValuePerServing())
                 .build();
+    }
+
+    private static TescoProduct.GuidelineDailyAmounts mapGda(
+        final ProductDataResponse.Product.GuidelineDailyAmounts data) {
+
+        if (data == null)
+            return null;
+
+        if (data.getGdaRefs() == null || data.getGdaRefs().isEmpty())
+            return null;
+
+        var firstGda = data.getGdaRefs().get(0);
+
+        var gda = new TescoProduct.GuidelineDailyAmounts();
+        gda.setHeaders(firstGda.getHeaders());
+        gda.setFooters(firstGda.getFooters());
+        gda.setAmounts(mapGdaAmounts(firstGda.getValues()));
+
+        return gda;
+    }
+
+    private static List<TescoProduct.GuidelineDailyAmounts.GdaAmount> mapGdaAmounts(
+        final List<ProductDataResponse.Product.GuidelineDailyAmounts.GdaReferences.GdaValue> data) {
+
+        if (data == null)
+            return null;
+
+        return data.stream()
+            .map(x -> {
+                var amount = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+                amount.setName(x.getName());
+                amount.setPercent(x.getPercent());
+                amount.setRating(mapGdaRating(x.getRating()));
+                amount.setValues(x.getValues());
+
+                return amount;
+            })
+            .collect(Collectors.toList());
+    }
+
+    private static TescoProduct.GdaRating mapGdaRating(final String data) {
+        if ("low".equals(data))
+            return TescoProduct.GdaRating.LOW;
+
+        if ("medium".equals(data))
+            return TescoProduct.GdaRating.MEDIUM;
+
+        if ("high".equals(data))
+            return TescoProduct.GdaRating.HIGH;
+
+        return null;
     }
 }

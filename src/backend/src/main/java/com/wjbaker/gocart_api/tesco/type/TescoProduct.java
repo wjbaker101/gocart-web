@@ -7,52 +7,62 @@ import lombok.Setter;
 import java.util.List;
 
 @Builder
+@Getter
+@Setter
 public class TescoProduct {
 
-    @Getter @Setter
     private String id;
-
-    @Getter @Setter
     private String barcodeId;
-
-    @Getter @Setter
     private String description;
-
-    @Getter @Setter
     private String brand;
-
-    @Getter @Setter
     private List<String> ingredients;
-
-    @Getter @Setter
     private Integer healthScore;
-
-    @Getter @Setter
     private Nutrition nutrition;
+    private GuidelineDailyAmounts guidelineDailyAmounts;
 
     @Builder
+    @Getter
+    @Setter
     public static class Nutrition {
 
-        @Getter @Setter
         private String per100gHeader;
-
-        @Getter @Setter
         private String perServingHeader;
-
-        @Getter @Setter
         private List<Nutrient> nutrients;
 
         @Builder
+        @Getter
+        @Setter
         public static class Nutrient {
 
-            @Getter @Setter
             private String name;
-
-            @Getter @Setter
             private float valuePer100g;
-
-            @Getter @Setter
             private float valuePerServing;
+        }
+    }
+
+    public enum GdaRating {
+
+        LOW,
+        MEDIUM,
+        HIGH,
+    }
+
+    @Getter
+    @Setter
+    public static class GuidelineDailyAmounts {
+
+        private List<String> headers;
+        private List<String> footers;
+        private List<GdaAmount> amounts;
+
+        @Getter
+        @Setter
+        public static class GdaAmount {
+
+            private String name;
+            private List<String> values;
+            private String percent;
+            private GdaRating rating;
         }
     }
 }
