@@ -10,6 +10,19 @@ export interface SearchProductNutrition {
     nutrients: SearchProductNutrient[],
 }
 
+export interface SearchProductGuidelineDailyAmounts {
+    headers: Array<string>;
+    footers: Array<string>;
+    amounts: Array<SearchProductGuidelineDailyAmountsAmount>;
+}
+
+export interface SearchProductGuidelineDailyAmountsAmount {
+    name: string;
+    values: Array<string>;
+    percent: string;
+    rating: 'LOW' | 'MEDIUM' | 'HIGH';
+}
+
 export interface SearchProduct {
     id: string,
     name: string,
@@ -23,4 +36,5 @@ export interface SearchProduct {
     ingredients?: string[],
     healthScore?: number,
     nutrition?: SearchProductNutrition,
+    guidelineDailyAmounts: SearchProductGuidelineDailyAmounts;
 }
