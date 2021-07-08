@@ -1,5 +1,6 @@
 package com.wjbaker.gocart_api.tesco;
 
+import com.wjbaker.gocart_api.client.open_food_facts.OpenFoodFactsClient;
 import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class TescoService {
 
     private final TescoApiClient tescoApiClient;
+    private final OpenFoodFactsClient openFoodFacts;
 
     @Autowired
-    public TescoService(final TescoApiClient tescoApiClient) {
+    public TescoService(final TescoApiClient tescoApiClient, final OpenFoodFactsClient openFoodFacts) {
         this.tescoApiClient = tescoApiClient;
+        this.openFoodFacts = openFoodFacts;
     }
 
     public List<SearchProduct> searchProducts(final String searchTerm, final int page) {
@@ -28,7 +31,7 @@ public class TescoService {
         if (response.isEmpty())
             return null;
 
-        List<TescoProduct> productData = this.productDataList(response.get()
+        var productData = this.productDataList(response.get()
                 .stream()
                 .map(SearchProduct::getId)
                 .collect(Collectors.toList()));
@@ -51,18 +54,33 @@ public class TescoService {
     }
 
     public TescoProduct productData(final String productId) {
-        var productIdAsList = Collections.singletonList(productId);
+        var productData = this.productDataList(Collections.singletonList(productId));
+        if (productData == null)
+            return null;
 
-        var response = Optional.ofNullable(this.tescoApiClient.productData(productIdAsList).getBody());
-
-        return response
-                .map(products -> products.get(0))
-                .orElse(null);
+        return productData.get(0);
     }
 
     public List<TescoProduct> productDataList(final List<String> productIds) {
-        var response = Optional.ofNullable(this.tescoApiClient.productData(productIds).getBody());
+        var response = this.tescoApiClient.productData(productIds).getBody();
+        if (response == null)
+            return null;
 
-        return response.orElse(null);
+        for (var product : response) {
+            if (product.getIngredients() != null)
+                continue;
+
+            var ingredientsResult = this.openFoodFacts.getProduct(product.getBarcodeId());
+            if (ingredientsResult.isError())
+                continue;
+
+            var extraProduct = ingredientsResult.value();
+            if (extraProduct.getProduct() == null)
+                continue;
+
+            product.setIngredients(Collections.singletonList(extraProduct.getProduct().getIngredients()));
+        }
+
+        return response;
     }
 }
