@@ -10,6 +10,19 @@ export interface ProductNutrition {
     nutrients: ProductNutrient[];
 }
 
+export interface ProductGuidelineDailyAmounts {
+    headers: Array<string>;
+    footers: Array<string>;
+    amounts: Array<ProductGuidelineDailyAmountsAmount>;
+}
+
+export interface ProductGuidelineDailyAmountsAmount {
+    name: string;
+    values: Array<string>;
+    percent: string;
+    rating: 'LOW' | 'MEDIUM' | 'HIGH';
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -24,6 +37,7 @@ export interface Product {
     ingredients?: string[];
     healthScore?: number;
     nutrition?: ProductNutrition;
+    guidelineDailyAmounts?: ProductGuidelineDailyAmounts;
 
     isFreetext: boolean;
     listQuantity: number;

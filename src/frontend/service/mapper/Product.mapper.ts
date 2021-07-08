@@ -1,11 +1,15 @@
 import {
     SearchProduct,
+    SearchProductGuidelineDailyAmounts,
+    SearchProductGuidelineDailyAmountsAmount,
     SearchProductNutrient,
     SearchProductNutrition,
 } from '@/api/tesco/type/SearchProduct';
 
 import {
     Product,
+    ProductGuidelineDailyAmounts,
+    ProductGuidelineDailyAmountsAmount,
     ProductNutrient,
     ProductNutrition,
 } from '@/model/Product.model';
@@ -29,6 +33,26 @@ const mapNutrition = (nutrition?: SearchProductNutrition): ProductNutrition | un
     }
 };
 
+const mapGdaAmounts = (amounts: Array<SearchProductGuidelineDailyAmountsAmount>): Array<ProductGuidelineDailyAmountsAmount> => {
+    return amounts.map(x => ({
+        name: x.name,
+        percent: x.percent,
+        rating: x.rating,
+        values: x.values,
+    }));
+};
+
+const mapGda = (gda?: SearchProductGuidelineDailyAmounts): ProductGuidelineDailyAmounts | undefined => {
+    if (!gda)
+        return undefined;
+
+    return {
+        headers: gda.headers,
+        footers: gda.footers,
+        amounts: mapGdaAmounts(gda.amounts),
+    }
+};
+
 export const ProductMapper = {
 
     map(product: SearchProduct): Product {
@@ -45,6 +69,7 @@ export const ProductMapper = {
             ingredients: product.ingredients,
             healthScore: product.healthScore,
             nutrition: mapNutrition(product.nutrition),
+            guidelineDailyAmounts: mapGda(product.guidelineDailyAmounts),
 
             isFreetext: false,
             listQuantity: 1,

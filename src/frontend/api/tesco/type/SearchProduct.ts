@@ -36,5 +36,5 @@ export interface SearchProduct {
     ingredients?: string[],
     healthScore?: number,
     nutrition?: SearchProductNutrition,
-    guidelineDailyAmounts: SearchProductGuidelineDailyAmounts;
+    guidelineDailyAmounts?: SearchProductGuidelineDailyAmounts;
 }
