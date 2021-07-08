@@ -28,11 +28,15 @@ watch(settings, async (settings) => {
 
 const searchTerm = ref<string | null>(null);
 const products = ref<Array<Product> | null>(null);
+const currentPage = ref<number>(1);
+const haveAllProductsLoaded = ref<boolean>(false);
 
 export function useProductSearch() {
     return {
+        settings,
         searchTerm,
         products,
-        settings,
+        currentPage,
+        haveAllProductsLoaded,
     }
 }

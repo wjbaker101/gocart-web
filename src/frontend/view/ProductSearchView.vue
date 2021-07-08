@@ -56,6 +56,13 @@
                     forSearch
                     :product="product"
                 />
+                <section class="zero-state" v-if="!haveAllProductsLoaded">
+                    <ButtonComponent @click="onLoadMore">Load More</ButtonComponent>
+                </section>
+                <section class="zero-state" v-else>
+                    <p>That's everything I could find!</p>
+                    <ButtonComponent @click="onBackToTop">Back to Top</ButtonComponent>
+                </section>
             </div>
         </div>
     </PageContainerComponent>
@@ -122,6 +129,9 @@ export default defineComponent({
             ? props.prePopulatedSearchTerm
             : productSearch.searchTerm.value ?? '';
 
+        const currentPage = productSearch.currentPage;
+        const haveAllProductsLoaded = productSearch.haveAllProductsLoaded;
+
         const displaySortOptions = shallowReadonly<SortOption[]>([
             {
                 title: 'Alphabetical (A - Z)',
@@ -141,19 +151,19 @@ export default defineComponent({
         ]);
 
         const sortFunctions = readonly({
-            [SortOptionType.ALPHABETICAL.toString()](a: Product, b: Product): number {
+            [SortOptionType.ALPHABETICAL](a: Product, b: Product): number {
                 if (a.name > b.name) return 1;
                 if (a.name < b.name) return -1;
 
                 return 0;
             },
-            [SortOptionType.PRICE.toString()](a: Product, b: Product): number {
+            [SortOptionType.PRICE](a: Product, b: Product): number {
                 if (a.price > b.price) return 1;
                 if (a.price < b.price) return -1;
 
                 return 0;
             },
-            [SortOptionType.HEALTH_SCORE.toString()](a: Product, b: Product): number {
+            [SortOptionType.HEALTH_SCORE](a: Product, b: Product): number {
                 if (!a.healthScore || !b.healthScore)
                     return 0;
 
@@ -169,7 +179,7 @@ export default defineComponent({
                 return null;
 
             return products.value
-                .sort(sortFunctions[productSearchSettings.value.sortOption.toString()]);
+                .sort(sortFunctions[productSearchSettings.value.sortOption]);
         });
 
         const onSearch = async function (searchTerm: string) {
@@ -181,9 +191,11 @@ export default defineComponent({
 
             searchComponent.value?.blur();
 
+            haveAllProductsLoaded.value = false;
+            currentPage.value = 1;
             isSearching.value = true;
 
-            const searchProducts = await TescoService.searchProducts(searchTerm, 1);
+            const searchProducts = await TescoService.searchProducts(searchTerm, currentPage.value);
 
             isSearching.value = false;
 
@@ -225,6 +237,8 @@ export default defineComponent({
             isSearching,
             displayProducts,
 
+            haveAllProductsLoaded,
+
             isSortAndFilterShown,
             productSearchSettings,
             displaySortOptions,
@@ -238,6 +252,33 @@ export default defineComponent({
             onSortOption(sortOption: SortOptionType) {
                 productSearch.settings.value.sortOption = sortOption;
                 isSortAndFilterShown.value = false;
+            },
+
+            async onLoadMore() {
+                if (productSearch.searchTerm.value === null)
+                    return;
+
+                currentPage.value++;
+
+                const moreSearchProducts = await TescoService.searchProducts(productSearch.searchTerm.value, currentPage.value);
+
+                if (moreSearchProducts instanceof Error)
+                    return;
+
+                if (products.value === null)
+                    return;
+
+                if (moreSearchProducts.length === 0) {
+                    haveAllProductsLoaded.value = true;
+                    return;
+                }
+
+                products.value = products.value.concat(moreSearchProducts);
+                productSearch.products.value = products.value;
+            },
+
+            onBackToTop() {
+                window.scrollTo(0, 0);
             },
         }
     },
