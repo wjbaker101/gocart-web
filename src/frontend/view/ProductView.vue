@@ -73,7 +73,7 @@
                         </div>
                         <div>
                             <div class="gda-blob" :class="{ [amount.rating?.toLowerCase() ?? 'no-rating']: true }">
-                                {{ amount.percent }}%
+                                <span v-if="amount.percent">{{ amount.percent }}%</span>
                             </div>
                             <p>{{ amount.values.join(' / ') }}</p>
                         </div>
