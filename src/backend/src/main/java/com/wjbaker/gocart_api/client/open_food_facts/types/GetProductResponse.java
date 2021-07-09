@@ -20,5 +20,21 @@ public final class GetProductResponse {
         private String ingredients;
 
         private Map<String, String> nutriments;
+
+        @JsonProperty("nutrient_levels")
+        private NutrientLevels nutrientLevels;
+
+        @Getter
+        @Setter
+        public static final class NutrientLevels {
+
+            private String fat;
+            private String salt;
+
+            @JsonProperty("saturated-fat")
+            private String saturatedFat;
+
+            private String sugars;
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.wjbaker.gocart_api.tesco;
 
-import com.wjbaker.gocart_api.client.open_food_facts.OpenFoodFactsClient;
 import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
@@ -17,12 +16,15 @@ import java.util.stream.Collectors;
 public class TescoService {
 
     private final TescoApiClient tescoApiClient;
-    private final OpenFoodFactsClient openFoodFacts;
+    private final MissingProductDataService missingProductDataService;
 
     @Autowired
-    public TescoService(final TescoApiClient tescoApiClient, final OpenFoodFactsClient openFoodFacts) {
+    public TescoService(
+        final TescoApiClient tescoApiClient,
+        final MissingProductDataService missingProductDataService) {
+
         this.tescoApiClient = tescoApiClient;
-        this.openFoodFacts = openFoodFacts;
+        this.missingProductDataService = missingProductDataService;
     }
 
     public List<SearchProduct> searchProducts(final String searchTerm, final int page) {
@@ -67,18 +69,10 @@ public class TescoService {
             return null;
 
         for (var product : response) {
-            if (product.getIngredients() != null)
+            if (product.getIngredients() != null && product.getGuidelineDailyAmounts() != null)
                 continue;
 
-            var ingredientsResult = this.openFoodFacts.getProduct(product.getBarcodeId());
-            if (ingredientsResult.isError())
-                continue;
-
-            var extraProduct = ingredientsResult.value();
-            if (extraProduct.getProduct() == null)
-                continue;
-
-            product.setIngredients(Collections.singletonList(extraProduct.getProduct().getIngredients()));
+            this.missingProductDataService.populate(product);
         }
 
         return response;

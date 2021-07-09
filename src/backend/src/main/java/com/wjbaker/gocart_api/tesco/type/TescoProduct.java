@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -44,6 +45,12 @@ public class TescoProduct {
     @Setter
     public static class GuidelineDailyAmounts {
 
+        public GuidelineDailyAmounts() {
+            this.headers = new ArrayList<>();
+            this.footers = new ArrayList<>();
+            this.amounts = new ArrayList<>();
+        }
+
         private List<String> headers;
         private List<String> footers;
         private List<GdaAmount> amounts;
@@ -51,6 +58,10 @@ public class TescoProduct {
         @Getter
         @Setter
         public static class GdaAmount {
+
+            public GdaAmount() {
+                this.values = new ArrayList<>();
+            }
 
             private String name;
             private List<String> values;
