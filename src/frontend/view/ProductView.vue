@@ -58,6 +58,28 @@
                     </div>
                 </div>
             </section>
+            <section class="background" v-if="product.guidelineDailyAmounts">
+                <p :key="`gda-header-${index}`" v-for="(header, index) in product.guidelineDailyAmounts.headers">
+                    <small>{{ header }}:</small>
+                </p>
+                <div class="flex text-centered">
+                    <div
+                        class="flex-1"
+                        :key="`gda-${index}`"
+                        v-for="(amount, index) in product.guidelineDailyAmounts.amounts"
+                    >
+                        <div>
+                            <strong>{{ amount.name }}</strong>
+                        </div>
+                        <div>
+                            <div class="gda-blob" :class="{ [amount.rating?.toLowerCase() ?? 'no-rating']: true }">
+                                {{ amount.percent }}%
+                            </div>
+                            <p>{{ amount.values.join(' / ') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section class="background" v-if="displayIngredients">
                 <h2>Ingredients</h2>
                 <p v-html="product.ingredients"></p>
@@ -248,6 +270,42 @@ export default defineComponent({
 
     .add-quantity-button {
         width: 64px;
+    }
+
+    .gda-blob {
+        width: 3rem;
+        height: 3rem;
+        display: table;
+        margin: 0.5rem auto;
+        border-radius: 50%;
+        color: theme(white);
+        line-height: 3rem;
+
+        &.no-rating {
+            color: theme(black);
+            box-shadow: 0 0 2px #222;
+        }
+
+        &.low {
+            $colour: #44b827;
+
+            background-color: $colour;
+            box-shadow: 0 0 1px $colour;
+        }
+
+        &.medium {
+            $colour: #b87927;
+
+            background-color: $colour;
+            box-shadow: 0 0 1px $colour;
+        }
+
+        &.medium {
+            $colour: #b82727;
+
+            background-color: $colour;
+            box-shadow: 0 0 1px $colour;
+        }
     }
 }
 </style>

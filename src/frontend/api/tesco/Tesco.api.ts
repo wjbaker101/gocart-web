@@ -18,8 +18,6 @@ export const TescoApi = {
 
             const response = await tescoApi.get<ApiResponse<SearchProduct[]>>(url);
 
-            console.log(response.data);
-
             return response.data.result;
         }
         catch (exception) {
