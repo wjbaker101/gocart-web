@@ -78,7 +78,7 @@
                     </section>
                     <ProductComponent
                         :key="productId"
-                        v-for="productId in checked"
+                        v-for="productId in displayChecked"
                         :product="products[productId]"
                     />
                 </div>
@@ -153,8 +153,11 @@ export default defineComponent({
             },
         });
 
-        const checked = computed<Array<string>>(() => {
-            return shoppingList.checked.value
+        const checked = shoppingList.checked;
+
+        const displayChecked = computed<Array<string>>(() => {
+            return checked.value
+                .filter(x => products.value[x].name.toLowerCase().indexOf(checkedSearchTerm.value.toLowerCase()) > -1)
                 .sort((a, b) => {
                     const productA = products.value[a];
                     const productB = products.value[b];
@@ -190,6 +193,7 @@ export default defineComponent({
             products,
             unchecked,
             checked,
+            displayChecked,
             displayTotalPrice,
             isShoppingListEmpty,
             firstProductSearchTerm,
