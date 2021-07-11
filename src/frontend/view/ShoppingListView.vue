@@ -126,7 +126,13 @@ export default defineComponent({
     setup() {
         useScrollPosition('ShoppingListView');
         const router = useRouter();
-        const shoppingList = useShoppingList();
+
+        const {
+            products,
+            checked,
+            settings,
+            ...shoppingList
+        } = useShoppingList();
 
         const searchTextbox = ref<HTMLInputElement | null>(null);
         const checkedSection = ref<HTMLElement | null>(null);
@@ -140,9 +146,7 @@ export default defineComponent({
             ghostClass: 'is-dragged',
         });
 
-        const isCheckedProductsVisible = computed<boolean>(() => shoppingList.settings.value.isCheckedProductsVisible);
-
-        const products = computed<Record<string, Product>>(() => shoppingList.products.value);
+        const isCheckedProductsVisible = computed<boolean>(() => settings.value.isCheckedProductsVisible);
 
         const unchecked = computed<Array<string>>({
             get() {
@@ -152,8 +156,6 @@ export default defineComponent({
                 shoppingList.unchecked.value = ids;
             },
         });
-
-        const checked = shoppingList.checked;
 
         const displayChecked = computed<Array<string>>(() => {
             return checked.value
@@ -168,7 +170,7 @@ export default defineComponent({
                 });
         });
 
-        const isShoppingListEmpty = computed<boolean>(() => unchecked.value.length === 0 &&checked.value.length === 0);
+        const isShoppingListEmpty = computed<boolean>(() => unchecked.value.length === 0 && checked.value.length === 0);
 
         const totalPrice = computed<number>(() => unchecked.value
             .map(x => products.value[x])
@@ -212,7 +214,7 @@ export default defineComponent({
             },
 
             toggleCheckedItemsVisibility() {
-                shoppingList.settings.value.isCheckedProductsVisible = !shoppingList.settings.value.isCheckedProductsVisible;
+                settings.value.isCheckedProductsVisible = !settings.value.isCheckedProductsVisible;
             },
 
             onFirstProductSearch(searchTerm: string) {
