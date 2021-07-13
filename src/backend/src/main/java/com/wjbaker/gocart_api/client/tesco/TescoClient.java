@@ -34,7 +34,7 @@ public final class TescoClient {
         final var limit = 10;
 
         var response = this.restTemplate.getForEntity(
-            "/grocery/products?query={}&limit={}&offset={}",
+            "/grocery/products?query={searchTerm}&limit={limit}&offset={offset}",
             GrocerySearchResponse.class,
             searchTerm,
             limit,
@@ -50,7 +50,7 @@ public final class TescoClient {
         final var limit = 10;
 
         var response = this.restTemplate.getForEntity(
-            "/locations/search?sort=near:\"{}, UK\"&limit={}&offset={}",
+            "/locations/search?sort=near:\"{searchTerm}, UK\"&limit={limit}&offset={offset}",
             ShopSearchResponse.class,
             searchTerm,
             limit,
@@ -67,7 +67,7 @@ public final class TescoClient {
             .map(id -> "tpnc=" + id)
             .collect(Collectors.joining("&"));
 
-        var response = this.restTemplate.getForEntity("/product/?{}", GetProductDataResponse.class, joinedTpncList);
+        var response = this.restTemplate.getForEntity("/product/?{joinedTpncList}", GetProductDataResponse.class, joinedTpncList);
 
         if (response.getStatusCode() != HttpStatus.OK)
             return Result.error("Received a non-OK response from the Tesco Api during getProductData.");
