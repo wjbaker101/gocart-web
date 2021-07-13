@@ -1,16 +1,13 @@
 package com.wjbaker.gocart_api.tesco;
 
 import com.wjbaker.gocart_api.api.type.ApiResponse;
+import com.wjbaker.gocart_api.tesco.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.tesco.type.SearchProduct;
 import com.wjbaker.gocart_api.tesco.type.TescoProduct;
-import com.wjbaker.gocart_api.tesco.type.TescoShop;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.apache.logging.log4j.LogManager.getLogger;
 
 @RestController
 @RequestMapping("/api/tesco")
@@ -41,10 +38,12 @@ public class TescoController {
     }
 
     @GetMapping("/shop/search/{searchTerm}")
-    public ApiResponse<List<TescoShop>> nearbyShops(@PathVariable final String searchTerm) {
-        var nearbyShops = this.tescoService.nearbyShops(searchTerm);
+    public ApiResponse<List<GetNearbyShopsResponseShop>> getNearbyShops(@PathVariable final String searchTerm) {
+        var getNearbyShopsResult = this.tescoService.getNearbyShops(searchTerm);
+        if (getNearbyShopsResult.isError())
+            return ApiResponse.error(getNearbyShopsResult.getError());
 
-        return ApiResponse.result(nearbyShops);
+        return ApiResponse.result(getNearbyShopsResult.value());
     }
 
     @ExceptionHandler

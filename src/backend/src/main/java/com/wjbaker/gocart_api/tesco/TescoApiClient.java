@@ -3,8 +3,10 @@ package com.wjbaker.gocart_api.tesco;
 import com.wjbaker.gocart_api.config.type.TescoApiConfig;
 import com.wjbaker.gocart_api.tesco.mapper.SearchProductsMapper;
 import com.wjbaker.gocart_api.tesco.mapper.TescoProductMapper;
-import com.wjbaker.gocart_api.tesco.mapper.TescoShopMapper;
-import com.wjbaker.gocart_api.tesco.type.*;
+import com.wjbaker.gocart_api.tesco.type.GrocerySearchResponse;
+import com.wjbaker.gocart_api.tesco.type.ProductDataResponse;
+import com.wjbaker.gocart_api.tesco.type.SearchProduct;
+import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -41,17 +43,6 @@ public class TescoApiClient {
         return ResponseEntity
                 .status(response.getStatusCode())
                 .body(SearchProductsMapper.map(response.getBody(), null));
-    }
-
-    public ResponseEntity<List<TescoShop>> storeLocation(final String searchTerm) {
-        var near = String.format("near:\"%s, UK\"", searchTerm);
-        var url = String.format("/locations/search?sort=%s&limit=%d&offset=%d", near, this.limit, this.offset);
-
-        var response = this.restTemplate.getForEntity(url, StoreLocationResponse.class);
-
-        return ResponseEntity
-                .status(response.getStatusCode())
-                .body(TescoShopMapper.map(response.getBody()));
     }
 
     public ResponseEntity<List<TescoProduct>> productData(final List<String> productIds) {
