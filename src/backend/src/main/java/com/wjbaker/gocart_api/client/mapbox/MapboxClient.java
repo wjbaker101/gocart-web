@@ -1,26 +1,30 @@
-package com.wjbaker.gocart_api.api.map;
+package com.wjbaker.gocart_api.client.mapbox;
 
-import com.wjbaker.gocart_api.config.type.MapboxApiConfig;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class MapboxApiClient {
+public class MapboxClient {
 
     private final RestTemplate restTemplate;
 
     private final String accessToken;
 
     @Autowired
-    public MapboxApiClient(final RestTemplateBuilder restTemplateBuilder, final MapboxApiConfig apiConfig) {
-        this.restTemplate = restTemplateBuilder
-                .rootUri(apiConfig.getBaseUrl())
-                .build();
+    public MapboxClient(
+        final RestTemplateBuilder restTemplateBuilder,
+        @Value("${mapbox-api.base-url}") final String baseUrl,
+        @Value("${mapbox-api.access-token}") final String accessToken) {
 
-        this.accessToken = apiConfig.getAccessToken();
+        this.restTemplate = restTemplateBuilder
+            .rootUri(baseUrl)
+            .build();
+
+        this.accessToken = accessToken;
     }
 
     public String staticMap(
@@ -30,7 +34,9 @@ public class MapboxApiClient {
             final int width,
             final int height) {
 
-        var marker = String.format("pin-s+129490(%f,%f)", longitude, latitude);
+        final var markerColour = "176bc0";
+        var marker = String.format("pin-s+%s(%f,%f)", markerColour, longitude, latitude);
+
         var url = String.format("/static/%s/%f,%f,%f,0/%dx%d?access_token=%s&logo=false&attribution=false",
                 marker,
                 longitude,
