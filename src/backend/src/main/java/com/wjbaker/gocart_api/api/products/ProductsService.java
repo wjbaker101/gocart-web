@@ -59,9 +59,11 @@ public class ProductsService {
             responseProduct.setName(product.getName());
             responseProduct.setPrice(product.getPrice());
             responseProduct.setImageUrl(product.getImageUrl());
-            responseProduct.setDescription(String.join("<br>", product.getDescription()));
             responseProduct.setDepartment(product.getDepartment());
             responseProduct.setSuperDepartment(product.getSuperDepartment());
+
+            if (product.getDescription() != null)
+                responseProduct.setDescription(String.join("<br>", product.getDescription()));
 
             var matchingProductData = productData.value().getProducts()
                 .stream()
