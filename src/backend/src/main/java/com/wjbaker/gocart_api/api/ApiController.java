@@ -1,6 +1,6 @@
 package com.wjbaker.gocart_api.api;
 
-import com.wjbaker.gocart_api.api.type.ApiResponse;
+import com.wjbaker.gocart_api.type.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,6 @@
 package com.wjbaker.gocart_api.tesco;
 
-import com.wjbaker.gocart_api.api.type.ApiResponse;
+import com.wjbaker.gocart_api.type.ApiResponse;
 import com.wjbaker.gocart_api.tesco.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.tesco.type.SearchForProductsResponseProduct;
 import org.springframework.beans.factory.annotation.Autowired;

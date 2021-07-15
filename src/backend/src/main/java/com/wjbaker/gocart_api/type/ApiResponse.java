@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.api.type;
+package com.wjbaker.gocart_api.type;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
