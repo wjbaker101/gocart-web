@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.mapbox;
+package com.wjbaker.gocart_api.api.map;
 
 import com.wjbaker.gocart_api.type.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/maps")
-public class MapboxController {
+public class MapController {
 
-    private final MapboxService mapboxService;
+    private final MapService mapService;
 
     @Autowired
-    public MapboxController(final MapboxService mapboxService) {
-        this.mapboxService = mapboxService;
+    public MapController(final MapService mapService) {
+        this.mapService = mapService;
     }
 
     @GetMapping("/static/{longitude}/{latitude}")
@@ -20,7 +20,7 @@ public class MapboxController {
             @PathVariable final double longitude,
             @PathVariable final double latitude) {
 
-        var mapAsBase64 = this.mapboxService.getStaticMapAsBase64(longitude, latitude);
+        var mapAsBase64 = this.mapService.getStaticMapAsBase64(longitude, latitude);
 
         return ApiResponse.result(mapAsBase64);
     }

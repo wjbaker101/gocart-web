@@ -1,15 +1,15 @@
-package com.wjbaker.gocart_api.mapbox;
+package com.wjbaker.gocart_api.api.map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MapboxService {
+public class MapService {
 
     private final MapboxApiClient mapboxApiClient;
 
     @Autowired
-    public MapboxService(final MapboxApiClient mapboxApiClient) {
+    public MapService(final MapboxApiClient mapboxApiClient) {
         this.mapboxApiClient = mapboxApiClient;
     }
 
