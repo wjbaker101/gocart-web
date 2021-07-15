@@ -3,11 +3,16 @@ package com.wjbaker.gocart_api.tesco.type;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.List;
 
 @Getter
 @Setter
 public final class SearchForProductsResponseProduct {
+
+    public SearchForProductsResponseProduct() {
+        this.ingredients = Collections.emptyList();
+    }
 
     private String id;
     private String name;
@@ -25,6 +30,10 @@ public final class SearchForProductsResponseProduct {
     @Getter
     @Setter
     public static final class Nutrition {
+
+        public Nutrition() {
+            this.nutrients = Collections.emptyList();
+        }
 
         private String per100gHeader;
         private String perServingHeader;
@@ -44,6 +53,12 @@ public final class SearchForProductsResponseProduct {
     @Setter
     public static final class GuidelineDailyAmounts {
 
+        public GuidelineDailyAmounts() {
+            this.headers = Collections.emptyList();
+            this.footers = Collections.emptyList();
+            this.amounts = Collections.emptyList();
+        }
+
         private List<String> headers;
         private List<String> footers;
         private List<GdaAmount> amounts;
@@ -51,6 +66,10 @@ public final class SearchForProductsResponseProduct {
         @Getter
         @Setter
         public static final class GdaAmount {
+
+            public GdaAmount() {
+                this.values = Collections.emptyList();
+            }
 
             private String name;
             private List<String> values;
