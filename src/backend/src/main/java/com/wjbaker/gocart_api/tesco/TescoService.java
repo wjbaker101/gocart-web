@@ -6,21 +6,18 @@ import com.wjbaker.gocart_api.client.tesco.types.ShopSearchResponse;
 import com.wjbaker.gocart_api.tesco.type.GdaRating;
 import com.wjbaker.gocart_api.tesco.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.tesco.type.SearchForProductsResponseProduct;
-import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 import com.wjbaker.gocart_api.type.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class TescoService {
 
-    private final TescoApiClient tescoApiClient;
     private final TescoClient tescoClient;
     private final MissingProductDataService missingProductDataService;
 
@@ -33,11 +30,9 @@ public class TescoService {
 
     @Autowired
     public TescoService(
-        final TescoApiClient tescoApiClient,
         final TescoClient tescoClient,
         final MissingProductDataService missingProductDataService) {
 
-        this.tescoApiClient = tescoApiClient;
         this.tescoClient = tescoClient;
         this.missingProductDataService = missingProductDataService;
     }
@@ -254,28 +249,5 @@ public class TescoService {
         }
 
         return Result.from(shops);
-    }
-
-    public TescoProduct productData(final String productId) {
-        var productData = this.productDataList(Collections.singletonList(productId));
-        if (productData == null)
-            return null;
-
-        return productData.get(0);
-    }
-
-    public List<TescoProduct> productDataList(final List<String> productIds) {
-        var response = this.tescoApiClient.productData(productIds).getBody();
-        if (response == null)
-            return null;
-
-        for (var product : response) {
-            if (product.getIngredients() != null && product.getGuidelineDailyAmounts() != null)
-                continue;
-
-            this.missingProductDataService.populate(null);
-        }
-
-        return response;
     }
 }

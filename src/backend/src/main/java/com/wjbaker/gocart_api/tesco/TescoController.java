@@ -3,7 +3,6 @@ package com.wjbaker.gocart_api.tesco;
 import com.wjbaker.gocart_api.api.type.ApiResponse;
 import com.wjbaker.gocart_api.tesco.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.tesco.type.SearchForProductsResponseProduct;
-import com.wjbaker.gocart_api.tesco.type.TescoProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +17,6 @@ public class TescoController {
     @Autowired
     public TescoController(final TescoService tescoService) {
         this.tescoService = tescoService;
-    }
-
-    @GetMapping("/product/{productId}")
-    public ApiResponse<TescoProduct> productData(@PathVariable final String productId) {
-        var product = this.tescoService.productData(productId);
-
-        return ApiResponse.result(product);
     }
 
     @GetMapping("/product/search/{searchTerm}/{page}")
