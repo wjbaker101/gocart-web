@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.tesco.type;
+package com.wjbaker.gocart_api.api.products.type;
 
 public enum GdaRating {
 

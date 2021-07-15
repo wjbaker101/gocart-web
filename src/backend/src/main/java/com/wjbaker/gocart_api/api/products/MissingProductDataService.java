@@ -1,9 +1,9 @@
-package com.wjbaker.gocart_api.tesco;
+package com.wjbaker.gocart_api.api.products;
 
 import com.wjbaker.gocart_api.client.open_food_facts.OpenFoodFactsClient;
 import com.wjbaker.gocart_api.client.open_food_facts.types.GetProductResponse;
-import com.wjbaker.gocart_api.tesco.type.GdaRating;
-import com.wjbaker.gocart_api.tesco.type.SearchForProductsResponseProduct;
+import com.wjbaker.gocart_api.api.products.type.GdaRating;
+import com.wjbaker.gocart_api.api.products.type.SearchForProductsResponseProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
