@@ -1,4 +1,4 @@
-package com.wjbaker.gocart_api.api.products.type;
+package com.wjbaker.gocart_api.api.shops.type;
 
 import lombok.Getter;
 import lombok.Setter;

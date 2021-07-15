@@ -1,7 +1,6 @@
 package com.wjbaker.gocart_api.api.products;
 
 import com.wjbaker.gocart_api.type.ApiResponse;
-import com.wjbaker.gocart_api.api.products.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.api.products.type.SearchForProductsResponseProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

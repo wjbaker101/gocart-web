@@ -1,6 +1,6 @@
 package com.wjbaker.gocart_api.api.shops;
 
-import com.wjbaker.gocart_api.api.products.type.GetNearbyShopsResponseShop;
+import com.wjbaker.gocart_api.api.shops.type.GetNearbyShopsResponseShop;
 import com.wjbaker.gocart_api.client.tesco.TescoClient;
 import com.wjbaker.gocart_api.client.tesco.types.ShopSearchResponse;
 import com.wjbaker.gocart_api.type.Result;
