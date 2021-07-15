@@ -3,10 +3,9 @@ package com.wjbaker.gocart_api.tesco;
 import com.wjbaker.gocart_api.client.open_food_facts.OpenFoodFactsClient;
 import com.wjbaker.gocart_api.client.open_food_facts.types.GetProductResponse;
 import com.wjbaker.gocart_api.tesco.type.GdaRating;
-import com.wjbaker.gocart_api.tesco.type.TescoProduct;
+import com.wjbaker.gocart_api.tesco.type.SearchForProductsResponseProduct;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -19,7 +18,7 @@ public final class MissingProductDataService {
         this.openFoodFacts = openFoodFacts;
     }
 
-    public void populate(final TescoProduct product) {
+    public void populate(final SearchForProductsResponseProduct product) {
         var extraProductResult = this.openFoodFacts.getProduct(product.getBarcodeId());
         if (extraProductResult.isError())
             return;
@@ -35,11 +34,11 @@ public final class MissingProductDataService {
             this.populateGda(product, extraProduct);
     }
 
-    private void populateIngredients(final TescoProduct product, final GetProductResponse extraProduct) {
+    private void populateIngredients(final SearchForProductsResponseProduct product, final GetProductResponse extraProduct) {
         product.setIngredients(Collections.singletonList(extraProduct.getProduct().getIngredients()));
     }
 
-    private void populateGda(final TescoProduct product, final GetProductResponse extraProduct) {
+    private void populateGda(final SearchForProductsResponseProduct product, final GetProductResponse extraProduct) {
         var nutrientLevels = extraProduct.getProduct().getNutrientLevels();
         if (nutrientLevels == null)
             return;
@@ -51,27 +50,27 @@ public final class MissingProductDataService {
         if (allNotPresent)
             return;
 
-        var amountEnergy = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+        var amountEnergy = new SearchForProductsResponseProduct.GuidelineDailyAmounts.GdaAmount();
         amountEnergy.setName("Energy");
         amountEnergy.setRating(null);
 
-        var amountFat = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+        var amountFat = new SearchForProductsResponseProduct.GuidelineDailyAmounts.GdaAmount();
         amountFat.setName("Fat");
         amountFat.setRating(mapRating(nutrientLevels.getFat()));
 
-        var amountSaturatedFat = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+        var amountSaturatedFat = new SearchForProductsResponseProduct.GuidelineDailyAmounts.GdaAmount();
         amountSaturatedFat.setName("Saturates");
         amountSaturatedFat.setRating(mapRating(nutrientLevels.getSaturatedFat()));
 
-        var amountSugars = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+        var amountSugars = new SearchForProductsResponseProduct.GuidelineDailyAmounts.GdaAmount();
         amountSugars.setName("Sugars");
         amountSugars.setRating(mapRating(nutrientLevels.getSugars()));
 
-        var amountSalt = new TescoProduct.GuidelineDailyAmounts.GdaAmount();
+        var amountSalt = new SearchForProductsResponseProduct.GuidelineDailyAmounts.GdaAmount();
         amountSalt.setName("Salt");
         amountSalt.setRating(mapRating(nutrientLevels.getSalt()));
 
-        var gda = new TescoProduct.GuidelineDailyAmounts();
+        var gda = new SearchForProductsResponseProduct.GuidelineDailyAmounts();
         gda.setAmounts(Arrays.asList(amountEnergy, amountFat, amountSaturatedFat, amountSugars, amountSalt));
 
         product.setGuidelineDailyAmounts(gda);
