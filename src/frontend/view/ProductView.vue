@@ -123,8 +123,6 @@ import { useScrollPosition } from '@/use/ScrollPosition.use';
 import { useShoppingList } from '@/use/state/ShoppingList.use';
 import { Event, eventService } from '@/service/Event.service';
 
-import { Product } from '@/model/Product.model';
-
 export default defineComponent({
     name: 'ProductView',
 
@@ -142,7 +140,7 @@ export default defineComponent({
         const currentProduct = useCurrentProduct();
         const shoppingList = useShoppingList();
 
-        const product = computed<Product | null>(() => currentProduct.product.value);
+        const product = currentProduct.product;
 
         const isChecked = ref<boolean>(false);
 
@@ -300,7 +298,7 @@ export default defineComponent({
             box-shadow: 0 0 1px $colour;
         }
 
-        &.medium {
+        &.high {
             $colour: #b82727;
 
             background-color: $colour;
