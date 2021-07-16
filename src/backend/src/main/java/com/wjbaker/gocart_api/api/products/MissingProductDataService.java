@@ -4,6 +4,7 @@ import com.wjbaker.gocart_api.client.open_food_facts.OpenFoodFactsClient;
 import com.wjbaker.gocart_api.client.open_food_facts.types.GetProductResponse;
 import com.wjbaker.gocart_api.api.products.type.GdaRating;
 import com.wjbaker.gocart_api.api.products.type.SearchForProductsResponseProduct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ public final class MissingProductDataService {
 
     private final OpenFoodFactsClient openFoodFacts;
 
+    @Autowired
     public MissingProductDataService(final OpenFoodFactsClient openFoodFacts) {
         this.openFoodFacts = openFoodFacts;
     }

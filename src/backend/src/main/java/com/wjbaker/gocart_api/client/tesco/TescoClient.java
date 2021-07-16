@@ -5,6 +5,7 @@ import com.wjbaker.gocart_api.client.tesco.types.GrocerySearchResponse;
 import com.wjbaker.gocart_api.client.tesco.types.ShopSearchResponse;
 import com.wjbaker.gocart_api.type.Client;
 import com.wjbaker.gocart_api.type.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public final class TescoClient {
 
     private final RestTemplate restTemplate;
 
+    @Autowired
     public TescoClient(
         final RestTemplateBuilder restTemplateBuilder,
         @Value("${tesco-api.base-url}") final String baseUrl,

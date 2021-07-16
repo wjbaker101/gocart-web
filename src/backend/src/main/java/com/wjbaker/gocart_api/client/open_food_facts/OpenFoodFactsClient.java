@@ -2,6 +2,7 @@ package com.wjbaker.gocart_api.client.open_food_facts;
 
 import com.wjbaker.gocart_api.client.open_food_facts.types.GetProductResponse;
 import com.wjbaker.gocart_api.type.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ public final class OpenFoodFactsClient {
 
     private final RestTemplate openFoodFactsApi;
 
+    @Autowired
     public OpenFoodFactsClient(
         final RestTemplateBuilder restTemplateBuilder,
         @Value("${open-food-facts-api.base-url}") final String baseUrl) {
