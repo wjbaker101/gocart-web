@@ -88,17 +88,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, readonly } from 'vue';
+import { computed, defineComponent, onMounted, readonly, ref } from 'vue';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
 import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
+import { mapApi } from '@/api/maps/Map.api';
 import { useSelectedShop } from '@/use/state/SelectedShop.use';
 import { useScrollPosition } from '@/use/ScrollPosition.use';
+import { useUserMessage } from '@/use/UserMessage.use';
 
-import { Shop, ShopOpeningHourHours } from '@/model/Shop.model';
+import { ShopOpeningHourHours } from '@/model/Shop.model';
 
 export default defineComponent({
     name: 'ShopView',
@@ -113,8 +115,9 @@ export default defineComponent({
     setup() {
         useScrollPosition('ShopView');
         const selectedShop = useSelectedShop();
+        const userMessage = useUserMessage();
 
-        const shop = computed<Shop | null>(() => selectedShop.shop.value);
+        const shop = selectedShop.shop;
 
         const allowedFacilities = readonly<Record<string, string>>({
             'ATM': 'ATM',
@@ -173,6 +176,25 @@ export default defineComponent({
 
             return `${hour12Hour}:${minutesFormatted}${hourPostfix}`;
         };
+
+        const previewImageErrorMessage = ref<string>('');
+
+        onMounted(async () => {
+            if (shop.value == null)
+                return;
+            if (shop.value.location.mapImage)
+                return;
+
+            const { longitude, latitude } = shop.value.location;
+
+            const previewImage = await mapApi.getStaticMap(longitude, latitude);
+            if (previewImage instanceof Error) {
+                userMessage.set(previewImageErrorMessage, previewImage.message);
+                return;
+            }
+
+            shop.value.location.mapImage = previewImage;
+        });
 
         return {
             shop,
