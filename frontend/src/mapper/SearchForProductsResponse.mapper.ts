@@ -8,10 +8,10 @@ const shoppingList = useShoppingList();
 class SearchForProductsResponseMapper {
 
     public map(products: SearchForProductsResponse): Array<Product> {
-        return products.map(this.mapProduct);
+        return products.map(SearchForProductsResponseMapper.mapProduct);
     }
 
-    private mapProduct(product: SearchProduct): Product {
+    private static mapProduct(product: SearchProduct): Product {
         return {
             id: product.id,
             name: product.name,
@@ -26,8 +26,8 @@ class SearchForProductsResponseMapper {
             ingredients: product.ingredients,
             healthScore: product.healthScore,
 
-            nutrition: this.mapNutrition(product.nutrition),
-            guidelineDailyAmounts: this.mapGda(product.guidelineDailyAmounts),
+            nutrition: SearchForProductsResponseMapper.mapNutrition(product.nutrition),
+            guidelineDailyAmounts: SearchForProductsResponseMapper.mapGda(product.guidelineDailyAmounts),
 
             addCount: 1,
             isFreetext: false,
@@ -36,18 +36,18 @@ class SearchForProductsResponseMapper {
         }
     }
 
-    private mapNutrition(nutrition?: SearchProductNutrition): ProductNutrition | undefined {
+    private static mapNutrition(nutrition?: SearchProductNutrition): ProductNutrition | undefined {
         if (!nutrition)
             return undefined;
 
         return {
             per100gHeader: nutrition.per100gHeader,
             perServingHeader: nutrition.perServingHeader,
-            nutrients: nutrition.nutrients.map(this.mapNutrient),
+            nutrients: nutrition.nutrients.map(SearchForProductsResponseMapper.mapNutrient),
         }
     }
 
-    private mapNutrient(nutrient: SearchProductNutrient): ProductNutrient {
+    private static mapNutrient(nutrient: SearchProductNutrient): ProductNutrient {
         return {
             valuePer100g: nutrient.valuePer100g,
             valuePerServing: nutrient.valuePerServing,
@@ -55,18 +55,18 @@ class SearchForProductsResponseMapper {
         }
     }
 
-    private mapGda(gda?: SearchProductGuidelineDailyAmounts): ProductGuidelineDailyAmounts | undefined {
+    private static mapGda(gda?: SearchProductGuidelineDailyAmounts): ProductGuidelineDailyAmounts | undefined {
         if (!gda)
             return undefined;
 
         return {
             headers: gda.headers,
             footers: gda.footers,
-            amounts: gda.amounts.map(this.mapGdaAmount),
+            amounts: gda.amounts.map(SearchForProductsResponseMapper.mapGdaAmount),
         }
     }
 
-    private mapGdaAmount(gdaAmount: SearchProductGuidelineDailyAmountsAmount): ProductGuidelineDailyAmountsAmount {
+    private static mapGdaAmount(gdaAmount: SearchProductGuidelineDailyAmountsAmount): ProductGuidelineDailyAmountsAmount {
         return {
             name: gdaAmount.name,
             percent: gdaAmount.percent,
