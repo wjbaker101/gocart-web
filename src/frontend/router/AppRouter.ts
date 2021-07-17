@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-import ProductSearchView from '@/view/ProductSearchView.vue';
-import ProductView from '@/view/ProductView.vue';
-import ShoppingListView from '@/view/ShoppingListView.vue';
-import ShopSearchView from '@/view/ShopSearchView.vue';
-import ShopView from '@/view/ShopView.vue';
-import UserView from '@/view/UserView.vue';
-import UserLoginView from '@/view/UserLoginView.vue';
+import ProductView from '@/view/product/Product.view.vue';
+import ProductSearchView from '@/view/product-search/ProductSearch.view.vue';
+import ShopView from '@/view/shop/Shop.view.vue';
+import ShopSearchView from '@/view/shop-search/ShopSearch.view.vue';
+import ShoppingListView from '@/view/shopping-list/ShoppingList.view.vue';
+import UserView from '@/view/user/User.view.vue';
+import UserLoginView from '@/view/user-login/UserLogin.view.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
