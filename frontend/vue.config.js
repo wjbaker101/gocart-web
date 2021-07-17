@@ -1,15 +1,15 @@
-const config = require('./src/frontend/config/properties.json');
+const config = require('./src/config/properties.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    outputDir: './backend/src/main/resources/public',
+    outputDir: '../backend/src/main/resources/public',
 
     chainWebpack(config) {
         config.module.rules.delete('svg');
 
         config.plugin('html')
             .tap(args => {
-                args[0].template = './src/frontend/public/index.html';
+                args[0].template = './src/public/index.html';
                 return args;
             });
     },
@@ -25,16 +25,16 @@ module.exports = {
         },
         resolve: {
             alias: {
-                '@': __dirname + '/src/frontend',
+                '@': __dirname + '/src',
             },
         },
         entry: {
-            app: './src/frontend/main.ts',
+            app: './src/main.ts',
         },
         plugins: [
             new CopyWebpackPlugin({
                 patterns: [{
-                    from: 'src/frontend/public/',
+                    from: 'src/public/',
                     to: '',
                 }],
             }),
@@ -56,7 +56,7 @@ module.exports = {
     css: {
         loaderOptions: {
             sass: {
-                prependData: `@import 'src/frontend/style/global-inject.scss';`,
+                prependData: `@import 'src/style/global-inject.scss';`,
             },
         },
     },
