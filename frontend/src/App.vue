@@ -5,12 +5,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
+
 import DashboardComponent from '@/component/DashboardComponent.vue';
 import SideModalComponent from '@/component/modal/SideModalComponent.vue';
 
 import { usePwaInstallPrompt } from '@/use/PwaInstallPrompt.use';
 
-export default {
+export default defineComponent({
     name: 'App',
 
     components: {
@@ -21,7 +23,7 @@ export default {
     setup() {
         usePwaInstallPrompt();
     },
-}
+})
 </script>
 
 <style lang="scss">
