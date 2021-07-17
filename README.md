@@ -12,7 +12,7 @@ Tesco only provides additional data, such as ingredients and nutritional values,
 
 ## Frontend
 
-Written in Vue.js, can be found in the `/src/frontend` directory (but also in the root directory).
+Written in Vue.js, can be found in the `/frontend` directory (but also in the root directory).
 
 ### Dev & Build
 
@@ -24,4 +24,4 @@ Written in Vue.js, can be found in the `/src/frontend` directory (but also in th
 
 The backend takes care of communication with the various APIs that are used to make GoCart work.
 
-Written in Java using the Spring Boot framework, can be found in the `/src/backend` directory.
+Written in Java using the Spring Boot framework, can be found in the `/backend` directory.
