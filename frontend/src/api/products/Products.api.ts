@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import { responseHelper } from '@/api/ResponseHelper';
 
 import { ApiResponse } from '@/api/type/ApiResponse';
-import { SearchForProductsResponse } from './model/SearchForProductsResponse.model';
+import { SearchForProductsResponse } from '@/api/products/model/SearchForProductsResponse.model';
 
 class ProductsApi {
 

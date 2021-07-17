@@ -95,7 +95,7 @@ import LoadingComponent from '@/component/LoadingComponent.vue';
 import EditIcon from '@/component/icon/PencilIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
 
-import { mapApi } from '@/api/maps/Map.api';
+import { mapApi } from '@/api/map/Map.api';
 import { useSelectedShop } from '@/use/state/SelectedShop.use';
 import { useScrollPosition } from '@/use/ScrollPosition.use';
 import { useUserMessage } from '@/use/UserMessage.use';
