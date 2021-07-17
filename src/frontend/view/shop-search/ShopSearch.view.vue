@@ -20,7 +20,7 @@
                 <br>Try something different!</p>
             </section>
             <div class="shop-list" v-else>
-                <ShopComponent
+                <ShopResultComponent
                     :key="`shop-${index}`"
                     v-for="(shop, index) in shops"
                     :shop="shop"
@@ -38,7 +38,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 
 import PageContainerComponent from '@/component/PageContainerComponent.vue';
 import LoadingComponent from '@/component/LoadingComponent.vue';
-import ShopComponent from '@/component/ShopComponent.vue';
+import ShopResultComponent from '@/view/shop-search/component/ShopResult.component.vue';
 import ButtonComponent from '@/component/item/ButtonComponent.vue';
 import SearchComponent from '@/component/SearchComponent.vue';
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
@@ -55,7 +55,7 @@ export default defineComponent({
     components: {
         PageContainerComponent,
         LoadingComponent,
-        ShopComponent,
+        ShopResultComponent,
         ButtonComponent,
         SearchComponent,
         QuestionMarkCircleIcon,

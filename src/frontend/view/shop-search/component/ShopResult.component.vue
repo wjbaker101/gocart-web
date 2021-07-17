@@ -37,7 +37,7 @@ interface ShopComponentProps {
 }
 
 export default defineComponent({
-    name: 'ShopComponent',
+    name: 'ShopResultComponent',
 
     components: {
         ButtonComponent,
