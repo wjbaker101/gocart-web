@@ -2,7 +2,7 @@ const config = require('./src/frontend/config/properties.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    outputDir: './src/backend/src/main/resources/public',
+    outputDir: './backend/src/main/resources/public',
 
     chainWebpack(config) {
         config.module.rules.delete('svg');

@@ -18,7 +18,7 @@ Written in Vue.js, can be found in the `/src/frontend` directory (but also in th
 
 1. In the root folder: `npm install`.
 2. To dev: `npm run serve`.
-3. To production build: `npm run build`. This will place files in the `/src/backend/src/main/resources/public` directory.
+3. To production build: `npm run build`. This will place files in the `/backend/src/main/resources/public` directory.
 
 ## Backend
 
