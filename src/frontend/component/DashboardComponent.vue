@@ -49,7 +49,6 @@ import CogIcon from '@/component/icon/CogIcon.vue';
 import ListIcon from '@/component/icon/ListIcon.vue';
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 import ShopIcon from '@/component/icon/ShopIcon.vue';
-import UserIcon from '@/component/icon/UserIcon.vue';
 
 interface DashboardPage {
     title: string,
@@ -85,13 +84,7 @@ export default defineComponent({
             },
         ]);
 
-        const expandedPages = shallowReadonly<DashboardPage[]>([
-            {
-                title: 'Your User',
-                link: '/user',
-                icon: UserIcon,
-            },
-        ]);
+        const expandedPages = shallowReadonly<DashboardPage[]>([]);
 
         const currentPageIndicator = reactive({
             position: '0px',

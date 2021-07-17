@@ -5,8 +5,6 @@ import ProductSearchView from '@/view/product-search/ProductSearch.view.vue';
 import ShopView from '@/view/shop/Shop.view.vue';
 import ShopSearchView from '@/view/shop-search/ShopSearch.view.vue';
 import ShoppingListView from '@/view/shopping-list/ShoppingList.view.vue';
-import UserView from '@/view/user/User.view.vue';
-import UserLoginView from '@/view/user-login/UserLogin.view.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -30,14 +28,6 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/shop/search',
         component: ShopSearchView,
-    },
-    {
-        path: '/user',
-        component: UserView,
-    },
-    {
-        path: '/user/login',
-        component: UserLoginView,
     },
 ];
 
