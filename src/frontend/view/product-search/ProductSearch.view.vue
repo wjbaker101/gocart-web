@@ -83,8 +83,10 @@ import SortIcon from '@/component/icon/SortIcon.vue';
 import SortListIcon from '@/component/icon/SortListIcon.vue';
 import SortNumericIcon from '@/component/icon/SortNumericIcon.vue';
 
-import { TescoService } from '@/service/Tesco.service';
+import { searchForProductsResponseMapper } from '@/mapper/SearchForProductsResponse.mapper';
+import { productsApi } from '@/api/products/Products.api';
 import { useScrollPosition } from '@/use/ScrollPosition.use';
+import { useShoppingList } from '@/use/state/ShoppingList.use';
 import { ProductSearchSettings, useProductSearch } from '@/use/state/ProductSearch.use';
 
 import { Product } from '@/model/Product.model';
@@ -115,6 +117,7 @@ export default defineComponent({
     setup(props) {
         useScrollPosition('ProductSearchView');
         const productSearch = useProductSearch();
+        const shoppingList = useShoppingList();
 
         const searchComponent = ref<typeof SearchComponent | null>(null);
 
@@ -195,7 +198,7 @@ export default defineComponent({
             currentPage.value = 1;
             isSearching.value = true;
 
-            const searchProducts = await TescoService.searchProducts(searchTerm, currentPage.value);
+            const searchProducts = await productsApi.searchForProducts(searchTerm, currentPage.value);
 
             isSearching.value = false;
 
@@ -205,7 +208,7 @@ export default defineComponent({
                 searchComponent.value?.focus();
             }
             else {
-                products.value = searchProducts;
+                products.value = searchForProductsResponseMapper.map(searchProducts);
 
                 if (products.value.length === 0) {
                     searchComponent.value?.focus();
@@ -260,7 +263,7 @@ export default defineComponent({
 
                 currentPage.value++;
 
-                const moreSearchProducts = await TescoService.searchProducts(productSearch.searchTerm.value, currentPage.value);
+                const moreSearchProducts = await productsApi.searchForProducts(productSearch.searchTerm.value, currentPage.value);
 
                 if (moreSearchProducts instanceof Error)
                     return;
@@ -273,7 +276,7 @@ export default defineComponent({
                     return;
                 }
 
-                products.value = products.value.concat(moreSearchProducts);
+                products.value = products.value.concat(searchForProductsResponseMapper.map(moreSearchProducts));
                 productSearch.products.value = products.value;
             },
 
