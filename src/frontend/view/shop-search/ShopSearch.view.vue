@@ -44,7 +44,7 @@ import SearchComponent from '@/component/SearchComponent.vue';
 import QuestionMarkCircleIcon from '@/component/icon/QuestionMarkCircleIcon.vue';
 import SearchIcon from '@/component/icon/SearchIcon.vue';
 
-import { TescoService } from '@/service/Tesco.service';
+import { shopsApi } from '@/api/shops/Shops.api';
 import { useScrollPosition } from '@/use/ScrollPosition.use';
 
 import { Shop } from '@/model/Shop.model';
@@ -90,7 +90,7 @@ export default defineComponent({
 
                 isSearching.value = true;
 
-                const searchShops = await TescoService.getNearbyShops(searchTerm);
+                const searchShops = await shopsApi.getNearbyShops(searchTerm);
 
                 isSearching.value = false;
 
