@@ -1,0 +1,47 @@
+<template>
+    <div class="h-full">
+        <header class="top-0 right-0 left-0 fixed bg-slate-100 shadow-md shadow-slate-100 p-2 pb-0">
+            <div class="bg-primary shadow-lg p-4 rounded-xl text-text-light">
+                <div class="items-center grid grid-cols-[1fr_auto_1fr] mx-auto max-w-4xl">
+                    <h1 class="font-bold text-2xl">GoCart</h1>
+                    <div></div>
+                    <div class="justify-self-end text-lg">
+                        <ClientOnly>
+                            <ShoppingBasketIcon class="inline-block mr-2 mb-0.5 size-5 align-middle" />
+                            <span class="font-mono align-middle">£{{ totalPrice.toFixed(2) }}</span>
+                        </ClientOnly>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="pt-[72px] pb-[85px] h-full">
+            <slot></slot>
+        </div>
+        <footer class="right-0 bottom-0 left-0 fixed bg-slate-50 shadow-lg border-slate-200 border-t rounded-t-xl">
+            <div class="grid grid-cols-3 mx-auto max-w-4xl text-center">
+                <FooterButtonComponent to="/">
+                    <ListIcon class="mx-auto mb-3 size-5" />
+                    <p>List</p>
+                </FooterButtonComponent>
+                <FooterButtonComponent to="/search">
+                    <SearchIcon class="mx-auto mb-3 size-5" />
+                    <p>Search</p>
+                </FooterButtonComponent>
+                <FooterButtonComponent to="/shop">
+                    <StoreIcon class="mx-auto mb-3 size-5" />
+                    <p>Shop</p>
+                </FooterButtonComponent>
+            </div>
+        </footer>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ListIcon, SearchIcon, StoreIcon, ShoppingBasketIcon } from '@lucide/vue';
+
+import FooterButtonComponent from '~/components/page/FooterButtonComponent.vue';
+
+const shoppingList = useShoppingList();
+
+const totalPrice = computed(() => shoppingList.uncheckedItems.value.reduce((total, x) => total += x.price, 0));
+</script>

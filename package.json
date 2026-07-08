@@ -1,0 +1,32 @@
+{
+    "name": "gocart",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev --host 127.0.0.1",
+        "dev:tunnel": "nuxt dev --host 127.0.0.1 --tunnel",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate": "prisma migrate dev",
+        "typecheck": "nuxt typecheck"
+    },
+    "dependencies": {
+        "@lucide/vue": "^1.23.0",
+        "@nuxt/fonts": "^0.14.0",
+        "@prisma/adapter-pg": "^7.8.0",
+        "@prisma/client": "^7.8.0",
+        "@vueuse/core": "^14.3.0",
+        "better-auth": "^1.6.23",
+        "dayjs": "^1.11.21",
+        "nuxt": "^4.4.8",
+        "zod": "^4.4.3"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.3.2",
+        "prisma": "^7.8.0",
+        "tailwindcss": "^4.3.2"
+    }
+}

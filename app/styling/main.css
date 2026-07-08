@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: oklch(0.52 0.15 253);
+    --color-text-light: var(--color-slate-100);
+}
+
+input[type=number]._hide-buttons::-webkit-outer-spin-button,
+input[type=number]._hide-buttons::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number]._hide-buttons {
+    -moz-appearance:textfield;
+}
