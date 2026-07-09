@@ -5,7 +5,7 @@
                 <MinusIcon class="size-4" />
             </div>
         </div>
-        <input v-model="item.quantity" type="number" class="border-slate-200 border-y focus:outline-none w-16 h-full text-center _hide-buttons">
+        <input v-model="item.quantity" type="number" class="bg-slate-50 border-slate-200 border-y focus:outline-none w-16 h-full text-center _hide-buttons">
         <div @click="increment(1)" class="group place-items-center grid bg-primary p-3 rounded-r-xl text-text-light text-center cursor-pointer">
             <div class="group-active:scale-90">
                 <PlusIcon class="size-4" />
