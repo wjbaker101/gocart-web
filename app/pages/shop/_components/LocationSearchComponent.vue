@@ -50,13 +50,9 @@ async function search() {
 
     isLoading.value = true;
 
-    const response = await $fetch<IMapboxGeocodingResponse>(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchTerm.value)}.json`, {
+    const response = await $fetch<IMapboxGeocodingResponse>('/api/geolocate', {
         query: {
-            access_token: 'pk.eyJ1Ijoid2piYWtlciIsImEiOiJjbXJkeGh1cTMwaGY3MnpxdndjejZyZGxuIn0.6pplaKZLwX9Oi5FLyQgLag',
-            language: 'en',
-            limit: 5,
-            country: 'IE,GB',
-            types: 'address,postcode,place,region,district,locality',
+            searchTerm: searchTerm.value,
         },
     });
 
