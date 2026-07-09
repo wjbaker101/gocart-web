@@ -18,7 +18,7 @@
             <slot></slot>
         </div>
         <footer class="right-0 bottom-0 left-0 fixed bg-slate-50 shadow-lg border-slate-200 border-t rounded-t-xl">
-            <div class="grid grid-cols-3 mx-auto max-w-4xl text-center">
+            <div class="grid grid-cols-4 mx-auto max-w-4xl text-center">
                 <FooterButtonComponent to="/">
                     <ListIcon class="mx-auto mb-3 size-5" />
                     <p>List</p>
@@ -31,13 +31,17 @@
                     <StoreIcon class="mx-auto mb-3 size-5" />
                     <p>Shop</p>
                 </FooterButtonComponent>
+                <FooterButtonComponent to="/settings">
+                    <SettingsIcon class="mx-auto mb-3 size-5" />
+                    <p>Settings</p>
+                </FooterButtonComponent>
             </div>
         </footer>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ListIcon, SearchIcon, StoreIcon, ShoppingBasketIcon } from '@lucide/vue';
+import { ListIcon, SearchIcon, StoreIcon, ShoppingBasketIcon, SettingsIcon } from '@lucide/vue';
 
 import FooterButtonComponent from '~/components/page/FooterButtonComponent.vue';
 
