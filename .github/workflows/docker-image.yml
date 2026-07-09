@@ -14,6 +14,8 @@ jobs:
 
   build-and-push-image:
 
+    environment: Env
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -43,7 +45,6 @@ jobs:
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v7
-        environment: ${{ inputs.environment }}
         with:
           context: .
           push: true
