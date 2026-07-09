@@ -27,6 +27,20 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
         });
     }
 
+    const existingItem = await prisma.shoppingListItem.findFirst({
+        where: {
+            userId: session.user.id,
+            productId: product.id,
+        },
+    });
+
+    if (existingItem !== null) {
+        throw createError({
+            status: 400,
+            statusMessage: 'Could not add product, already in your shopping list.',
+        });
+    }
+
     const item = await prisma.shoppingListItem.create({
         data: {
             reference: crypto.randomUUID(),
