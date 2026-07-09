@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, ArrowBigUpIcon, PlusIcon, MinusIcon } from '@lucide/vue';
+import { CheckIcon, ArrowBigUpIcon } from '@lucide/vue';
 
 import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
 
@@ -30,18 +30,6 @@ const { item } = defineProps<{
 
 async function check() {
     item.isChecked = true;
-
-    await $fetch(`/api/shopping-list/items/${item.reference}`, {
-        method: 'put',
-        body: validateRequest(updateShoppingListItem, {
-            quantity: item.quantity,
-            isChecked: item.isChecked,
-        }),
-    });
-}
-
-async function increment(amount: number) {
-    item.quantity += amount;
 
     await $fetch(`/api/shopping-list/items/${item.reference}`, {
         method: 'put',
