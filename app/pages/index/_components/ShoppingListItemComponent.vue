@@ -5,7 +5,7 @@
         <div>
             <ItemQuantityComponent v-if="!item.isChecked" :item />
         </div>
-        <div class="font-mono font-bold text-right">£{{ item.data.price.toFixed(2) }}</div>
+        <div class="font-mono font-bold text-right">£{{ totalPrice.toFixed(2) }}</div>
         <BaseButtonComponent
             @click="check"
             :class="{
@@ -27,6 +27,8 @@ import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem
 const { item } = defineProps<{
     item: IShoppingListItem;
 }>();
+
+const totalPrice = computed(() => item.data.price * item.quantity);
 
 async function check() {
     item.isChecked = !item.isChecked;

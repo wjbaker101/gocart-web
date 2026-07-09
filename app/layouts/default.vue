@@ -47,5 +47,5 @@ const shoppingList = useShoppingList();
 
 const totalPrice = computed(() => shoppingList.value.items
     .filter(x => !x.isChecked)
-    .reduce((total, x) => total += x.data.price, 0));
+    .reduce((total, x) => total += x.data.price * x.quantity, 0));
 </script>
