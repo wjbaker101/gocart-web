@@ -10,10 +10,14 @@
         <p class="mb-1 text-2xl text-center">£{{ result.price.toFixed(2) }}</p>
         <p class="mb-4 text-slate-500 text-sm text-center italic">(£{{ result.pricePer.amount.toFixed(2) }} per {{ result.pricePer.unit }})</p>
         <div class="mx-auto mb-4 w-fit">
-            <PrimaryButtonComponent @click="addToBasket">
+            <PrimaryButtonComponent v-if="item === null" @click="addToBasket">
                 <ShoppingBasketIcon class="inline-block mr-2 size-4 align-middle" />
                 <span class="align-middle">Add to Basket</span>
             </PrimaryButtonComponent>
+            <template v-else>
+                <ItemQuantityComponent :item class="mb-2" />
+                <p class="text-center">£{{ (item.data.price * item.quantity).toFixed(2) }} total</p>
+            </template>
         </div>
         <div class="items-center gap-4 grid grid-cols-[1fr_auto] bg-slate-50 px-4 py-2 border border-slate-200 rounded-xl">
             <div>More Information</div>
@@ -77,6 +81,8 @@ interface IDetails {
 
 const details = ref<IDetails | null>(null);
 const isDetailsExpanded = ref(false);
+
+const item = computed(() => shoppingList.value.items.find(x => x.data.tpnc === result.tpnc) ?? null);
 
 async function getProduct() {
     const response = await $fetch(`/api/products/by-tpnc/${result.tpnc}`);
