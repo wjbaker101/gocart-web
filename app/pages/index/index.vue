@@ -9,7 +9,7 @@
             </p>
         </div>
     </div>
-    <div class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
+    <div v-else class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
         <div class="items-center grid grid-cols-[1fr_auto] mb-4">
             <h2 class="font-bold">Shopping List</h2>
             <div class="text-sm">
