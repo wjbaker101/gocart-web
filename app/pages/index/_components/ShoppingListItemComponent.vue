@@ -1,5 +1,5 @@
 <template>
-    <div class="items-center gap-4 grid grid-cols-[auto_1fr_auto_auto_auto] max-md:grid-cols-[auto_1fr_1fr] bg-slate-50 shadow-inner/7 p-2 pr-4 rounded-xl text-left">
+    <div class="items-center gap-4 grid grid-cols-[auto_1fr_auto_auto_auto] max-md:grid-cols-[auto_1fr_1fr] bg-slate-50 shadow-inner/5 p-2 pr-4 rounded-xl text-left">
         <img :src="item.data.imageUrl" width="60" height="60" class="place-self-center shadow-[0_0_3px_4px_white]">
         <h3 class="max-md:col-span-2">{{ item.data.name }}</h3>
         <div>
