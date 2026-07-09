@@ -12,7 +12,7 @@
                 </div>
             </div>
         </header>
-        <div class="pt-[72px] pb-[85px] h-full">
+        <div class="grid pt-[72px] pb-[81px] min-h-full">
             <slot></slot>
         </div>
         <footer class="right-0 bottom-0 left-0 fixed bg-slate-50 shadow-lg border-slate-200 border-t rounded-t-xl">
