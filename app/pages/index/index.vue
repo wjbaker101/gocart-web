@@ -31,8 +31,10 @@
                 <EyeIcon v-else class="size-4" />
             </BaseButtonComponent>
         </div>
-        <ExpandableComponent :is-open="!collapseCheckedItems" class="gap-2 grid">
-            <ShoppingListItemComponent v-for="item in checkedItems" :key="item.data.tpnc" :item />
+        <ExpandableComponent :is-open="!collapseCheckedItems">
+            <div class="gap-2 grid">
+                <ShoppingListItemComponent v-for="item in checkedItems" :key="item.data.tpnc" :item />
+            </div>
         </ExpandableComponent>
     </div>
 </template>
