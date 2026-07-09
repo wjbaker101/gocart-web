@@ -8,14 +8,21 @@
                 </div>
             </div>
         </div>
-        <div class="gap-2 grid">
+        <div v-if="results.length > 0" class="gap-2 grid">
             <SearchResultComponent v-for="result in results" :key="result.tpnc" :result />
+        </div>
+        <div v-else class="mt-16">
+            <TextSearchIcon class="mx-auto mb-4 size-16" />
+            <h2 class="mb-4 font-bold text-2xl text-center">Search Products</h2>
+            <p class="text-center">
+                <span class="align-middle">Add to your list or tap a product to learn more.</span>
+            </p>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { SearchIcon } from '@lucide/vue';
+import { ArrowUpIcon, SearchIcon, TextSearchIcon } from '@lucide/vue';
 import { watchDebounced } from '@vueuse/core';
 
 import SearchResultComponent from '~/pages/search/_components/SearchResultComponent.vue';
