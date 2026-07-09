@@ -3,7 +3,13 @@
         <div>
             <div class="relative">
                 <StoreIcon class="size-6" />
-                <div v-if="result.isOpenNow" class="-right-1 -bottom-1 absolute bg-green-500 border-3 border-slate-50 rounded-full size-3.5"></div>
+                <div
+                    :class="{
+                        'bg-green-500': result.isOpenNow,
+                        'bg-red-600': !result.isOpenNow,
+                    }"
+                    class="-right-1 -bottom-1 absolute border-3 border-slate-50 rounded-full size-3.5"
+                ></div>
             </div>
         </div>
         <div>
