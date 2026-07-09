@@ -1,6 +1,6 @@
 import { mapShoppingListItem, type IApiShoppingListItem } from '~~/server/types/ApiShoppingListItem';
 
-import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
+import { updateShoppingListItem } from '~~/shared/schemas/UpdateShoppingListItem';
 
 export interface IGetShoppingListResponse {
     readonly item: IApiShoppingListItem;

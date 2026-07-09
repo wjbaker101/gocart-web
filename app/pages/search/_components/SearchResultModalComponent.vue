@@ -60,7 +60,8 @@ import { ShoppingBasketIcon, ChevronDownIcon, LoaderCircleIcon } from '@lucide/v
 import CenteredModalComponent from '~/components/modals/CenteredModalComponent.vue';
 
 import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
-import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
+
+import { addShoppingListItem } from '~~/shared/schemas/AddShoppingListItem';
 
 const { result } = defineProps<{
     result: ISearchResult;

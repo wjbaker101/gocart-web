@@ -26,8 +26,8 @@ import SearchResultModalComponent from '~/pages/search/_components/SearchResultM
 
 import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
 
-import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
-import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
+import { addShoppingListItem } from '~~/shared/schemas/AddShoppingListItem';
+import { updateShoppingListItem } from '~~/shared/schemas/UpdateShoppingListItem';
 
 const { result } = defineProps<{
     result: ISearchResult;
