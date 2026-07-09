@@ -1,5 +1,3 @@
-import { expectSession } from '~~/server/utils/expectSession';
-
 import { mapShoppingListItem, type IApiShoppingListItem } from '~~/server/types/ApiShoppingListItem';
 
 export interface IGetShoppingListResponse {

@@ -1,6 +1,3 @@
-import { expectSession } from '~~/server/utils/expectSession';
-import { validateRequest } from '~~/server/utils/validateRequest';
-
 import { mapShoppingListItem, type IApiShoppingListItem } from '~~/server/types/ApiShoppingListItem';
 
 import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
