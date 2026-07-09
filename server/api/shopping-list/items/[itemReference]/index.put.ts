@@ -16,6 +16,9 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
             reference: itemReference,
             userId: session.user.id,
         },
+        include: {
+            product: true,
+        },
     });
 
     if (item === null) {
