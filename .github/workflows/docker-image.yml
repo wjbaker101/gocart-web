@@ -40,9 +40,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Setup env file
-        run: echo "${{ secrets.env_file }}" > .env
-
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v7
