@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { CheckIcon, ArrowBigUpIcon } from '@lucide/vue';
 
-import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
+import { updateShoppingListItem } from '~~/shared/schemas/UpdateShoppingListItem';
 
 const { item } = defineProps<{
     item: IShoppingListItem;
