@@ -14,8 +14,6 @@ jobs:
 
   build-and-push-image:
 
-    environment: Env
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -41,6 +39,9 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Setup env file
+        run: echo "${{ secrets.env_file }}" > .env
 
       - name: Build and push Docker image
         id: push
