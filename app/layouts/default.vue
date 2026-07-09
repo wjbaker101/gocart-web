@@ -1,6 +1,6 @@
 <template>
     <div class="h-full">
-        <header class="top-0 right-0 left-0 fixed bg-slate-100 shadow-md shadow-slate-100 p-2 pb-0">
+        <header class="top-0 right-0 left-0 z-10 fixed bg-slate-100 shadow-md shadow-slate-100 p-2 pb-0">
             <div class="bg-primary shadow-lg p-4 rounded-xl text-text-light">
                 <div class="items-center grid grid-cols-[1fr_auto_1fr] mx-auto max-w-4xl">
                     <h1 class="font-bold text-2xl">GoCart</h1>
