@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-flow-col rounded-xl">
+    <div @click.stop class="grid grid-flow-col rounded-xl">
         <div @click="increment(-1)" class="group place-items-center grid bg-primary p-3 rounded-l-xl text-text-light text-center cursor-pointer">
             <div class="group-active:scale-90">
                 <MinusIcon class="size-4" />
@@ -23,15 +23,31 @@ const { item } = defineProps<{
     item: IShoppingListItem;
 }>();
 
+const shoppingList = useShoppingList();
+
 async function increment(amount: number) {
     item.quantity += amount;
 
-    await $fetch(`/api/shopping-list/items/${item.reference}`, {
-        method: 'put',
-        body: validateRequest(updateShoppingListItem, {
-            quantity: item.quantity,
-            isChecked: item.isChecked,
-        }),
-    });
+    if (item.quantity === 0) {
+        const itemReference = item.reference;
+
+        await $fetch(`/api/shopping-list/items/${itemReference}`, {
+            method: 'delete',
+        });
+
+        const index = shoppingList.value.items.findIndex(x => x.reference === itemReference);
+        if (index !== -1) {
+            shoppingList.value.items.splice(index, 1);
+        }
+    }
+    else {
+        await $fetch(`/api/shopping-list/items/${item.reference}`, {
+            method: 'put',
+            body: validateRequest(updateShoppingListItem, {
+                quantity: item.quantity,
+                isChecked: item.isChecked,
+            }),
+        });
+    }
 }
 </script>
