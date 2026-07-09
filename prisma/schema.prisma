@@ -88,6 +88,7 @@ model ShoppingListItem {
     productId BigInt   @map("product_id")
     quantity  Int      @map("quantity")
     listOrder String   @map("list_order")
+    isChecked Boolean  @map("is_checked")
 
     user    User    @relation(fields: [userId], references: [id])
     product Product @relation(fields: [productId], references: [id])
