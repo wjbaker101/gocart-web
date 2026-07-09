@@ -5,9 +5,9 @@
                 <div class="items-center grid grid-cols-[1fr_auto_1fr] mx-auto max-w-4xl">
                     <h1 class="font-bold text-2xl">GoCart</h1>
                     <div></div>
-                    <div class="justify-self-end text-lg">
-                        <ShoppingBasketIcon class="inline-block mr-2 mb-0.5 size-5 align-middle" />
-                        <span class="font-mono align-middle">£{{ totalPrice.toFixed(2) }}</span>
+                    <div class="justify-self-end">
+                        <ShoppingBasketIcon class="inline-block mr-2 mb-0.5 size-4 align-middle" />
+                        <span class="align-middle">£{{ totalPrice.toFixed(2) }}</span>
                     </div>
                 </div>
             </div>

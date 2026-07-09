@@ -5,7 +5,7 @@
         <div>
             <ItemQuantityComponent v-if="item !== null && !item.isChecked" :item />
         </div>
-        <div class="font-mono font-bold">£{{ result.price.toFixed(2) }}</div>
+        <div class="font-bold">£{{ result.price.toFixed(2) }}</div>
         <BaseButtonComponent
             @click.stop="check"
             :class="{
