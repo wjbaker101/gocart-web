@@ -3,22 +3,36 @@
         <img :src="result.imageUrl" width="60" height="60" class="shadow-[0_0_3px_4px_white]">
         <h3>{{ result.name }}</h3>
         <div class="font-mono font-bold">£{{ result.price.toFixed(2) }}</div>
-        <input v-model="isChecked" type="checkbox">
+        <BaseButtonComponent
+            @click.stop="check"
+            :class="{
+                'bg-primary': item !== null,
+            }"
+            class="justify-self-end place-items-center grid border border-primary rounded-md! size-7 text-text-light"
+        >
+            <ArrowBigUpIcon v-if="item !== null && item.isChecked" class="size-4" />
+            <CheckIcon v-else-if="item !== null" class="size-4" />
+        </BaseButtonComponent>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ArrowBigUpIcon, CheckIcon } from '@lucide/vue';
+
 import SearchResultModalComponent from '~/pages/search/_components/SearchResultModalComponent.vue';
 
 import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
+
+import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
 
 const { result } = defineProps<{
     result: ISearchResult;
 }>();
 
 const modal = useModal();
+const shoppingList = useShoppingList();
 
-const isChecked = ref(false);
+const item = computed(() => shoppingList.value.items.find(x => x.data.tpnc === result.tpnc) ?? null);
 
 function open() {
     modal.show({
@@ -29,13 +43,29 @@ function open() {
     });
 }
 
-watch(isChecked, () => {
-    // shoppingList.swapItem({
-    //     tpnc: result.tpnc,
-    //     name: result.name,
-    //     price: result.price,
-    //     imageUrl: result.imageUrl,
-    //     quantity: 1,
-    // });
-});
+async function check() {
+    if (item.value !== null) {
+        const itemReference = item.value.reference;
+
+        await $fetch(`/api/shopping-list/items/${itemReference}`, {
+            method: 'delete',
+        });
+
+        const index = shoppingList.value.items.findIndex(x => x.reference === itemReference);
+        if (index !== -1) {
+            shoppingList.value.items.splice(index, 1);
+        }
+    }
+    else {
+        const response = await $fetch(`/api/shopping-list/items`, {
+            method: 'post',
+            body: validateRequest(addShoppingListItem, {
+                tpnc: result.tpnc,
+                quantity: 1,
+            }),
+        });
+    
+        shoppingList.value.items.push(response.item);
+    }
+}
 </script>
