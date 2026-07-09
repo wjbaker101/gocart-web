@@ -24,6 +24,7 @@ import SearchResultModalComponent from '~/pages/search/_components/SearchResultM
 import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
 
 import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
+import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
 
 const { result } = defineProps<{
     result: ISearchResult;
@@ -44,7 +45,32 @@ function open() {
 }
 
 async function check() {
-    if (item.value !== null) {
+    if (item.value === null) {
+        const response = await $fetch(`/api/shopping-list/items`, {
+            method: 'post',
+            body: validateRequest(addShoppingListItem, {
+                tpnc: result.tpnc,
+                quantity: 1,
+            }),
+        });
+    
+        shoppingList.value.items.push(response.item);
+
+        return;
+    }
+
+    if (item.value.isChecked) {
+        await $fetch(`/api/shopping-list/items/${item.value.reference}`, {
+            method: 'put',
+            body: validateRequest(updateShoppingListItem, {
+                quantity: item.value.quantity,
+                isChecked: false,
+            }),
+        });
+
+        item.value.isChecked = false;
+    }
+    else {
         const itemReference = item.value.reference;
 
         await $fetch(`/api/shopping-list/items/${itemReference}`, {
@@ -55,17 +81,6 @@ async function check() {
         if (index !== -1) {
             shoppingList.value.items.splice(index, 1);
         }
-    }
-    else {
-        const response = await $fetch(`/api/shopping-list/items`, {
-            method: 'post',
-            body: validateRequest(addShoppingListItem, {
-                tpnc: result.tpnc,
-                quantity: 1,
-            }),
-        });
-    
-        shoppingList.value.items.push(response.item);
     }
 }
 </script>
