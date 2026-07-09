@@ -1,0 +1,37 @@
+<template>
+    <div class="grid grid-flow-col rounded-xl">
+        <div @click="increment(-1)" class="group place-items-center grid bg-primary p-3 rounded-l-xl text-text-light text-center cursor-pointer">
+            <div class="group-active:scale-90">
+                <MinusIcon class="size-4" />
+            </div>
+        </div>
+        <input v-model="item.quantity" type="number" class="border-slate-200 border-y focus:outline-none w-16 h-full text-center _hide-buttons">
+        <div @click="increment(1)" class="group place-items-center grid bg-primary p-3 rounded-r-xl text-text-light text-center cursor-pointer">
+            <div class="group-active:scale-90">
+                <PlusIcon class="size-4" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { MinusIcon, PlusIcon } from '@lucide/vue';
+
+import { updateShoppingListItem } from '~~/shared/schemas/updateShoppingListItem';
+
+const { item } = defineProps<{
+    item: IShoppingListItem;
+}>();
+
+async function increment(amount: number) {
+    item.quantity += amount;
+
+    await $fetch(`/api/shopping-list/items/${item.reference}`, {
+        method: 'put',
+        body: validateRequest(updateShoppingListItem, {
+            quantity: item.quantity,
+            isChecked: item.isChecked,
+        }),
+    });
+}
+</script>

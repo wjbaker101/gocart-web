@@ -2,20 +2,8 @@
     <div class="items-center gap-4 grid grid-cols-[auto_1fr_auto_auto_auto] max-md:grid-cols-[auto_1fr_1fr] bg-slate-50 shadow-inner/7 p-2 pr-4 rounded-xl text-left">
         <img :src="item.data.imageUrl" width="60" height="60" class="place-self-center shadow-[0_0_3px_4px_white]">
         <h3 class="max-md:col-span-2">{{ item.data.name }}</h3>
-        <div class="grid grid-flow-col border border-slate-200 rounded-xl">
-            <template v-if="!item.isChecked">
-                <div @click="increment(-1)" class="group place-items-center grid bg-primary p-3 rounded-l-xl text-text-light text-center cursor-pointer">
-                    <div class="group-active:scale-90">
-                        <MinusIcon class="size-4" />
-                    </div>
-                </div>
-                <input v-model="item.quantity" type="number" class="focus:outline-none w-16 h-full text-center _hide-buttons">
-                <div @click="increment(1)" class="group place-items-center grid bg-primary p-3 rounded-r-xl text-text-light text-center cursor-pointer">
-                    <div class="group-active:scale-90">
-                        <PlusIcon class="size-4" />
-                    </div>
-                </div>
-            </template>
+        <div>
+            <ItemQuantityComponent v-if="!item.isChecked" :item />
         </div>
         <div class="font-mono font-bold">£{{ item.data.price.toFixed(2) }}</div>
         <BaseButtonComponent
