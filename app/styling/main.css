@@ -2,6 +2,9 @@
 
 @theme {
     --color-primary: oklch(0.52 0.15 253);
+    
+    --color-secondary: oklch(0.74 0.14 62);
+
     --color-text-light: var(--color-slate-100);
 }
 
@@ -12,5 +15,5 @@ input[type=number]._hide-buttons::-webkit-inner-spin-button {
 }
 
 input[type=number]._hide-buttons {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }

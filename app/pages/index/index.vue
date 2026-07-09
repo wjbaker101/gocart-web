@@ -50,6 +50,10 @@ import { ListChecksIcon, UtensilsIcon, EyeIcon, EyeOffIcon, ShoppingCartIcon, Ar
 
 import ShoppingListItemComponent from '~/pages/index/_components/ShoppingListItemComponent.vue';
 
+definePageMeta({
+    middleware: ['require-auth'],
+});
+
 const shoppingList = useShoppingList();
 
 const uncheckedItems = shoppingList.uncheckedItems;

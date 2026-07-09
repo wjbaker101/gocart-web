@@ -24,6 +24,10 @@ import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
 
 import { productSearchQuery } from '~~/shared/schemas/ProductSearch';
 
+definePageMeta({
+    middleware: ['require-auth'],
+});
+
 const searchTerm = ref('');
 
 const results = ref<Array<ISearchResult>>([]);
