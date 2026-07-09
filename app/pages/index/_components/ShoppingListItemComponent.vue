@@ -29,7 +29,7 @@ const { item } = defineProps<{
 }>();
 
 async function check() {
-    item.isChecked = true;
+    item.isChecked = !item.isChecked;
 
     await $fetch(`/api/shopping-list/items/${item.reference}`, {
         method: 'put',
