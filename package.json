@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "nuxt build",
+        "build": "prisma generate && nuxt build",
         "dev": "nuxt dev --host 127.0.0.1",
         "dev:tunnel": "nuxt dev --host 127.0.0.1 --tunnel",
         "generate": "nuxt generate",
