@@ -1,13 +1,12 @@
 <template>
     <div class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
-        <div class="grid grid-cols-[1fr_auto] shadow-md mb-4 rounded-xl">
-            <input v-model="searchTerm" type="text" placeholder="Apple Strudel" class="bg-slate-50 px-4 py-3 rounded-l-xl outline-none w-full">
-            <div @click="search" class="group place-items-center grid bg-primary px-4 py-2 rounded-r-xl text-text-light cursor-pointer">
-                <div class="group-active:scale-95">
-                    <SearchIcon class="size-4" />
-                </div>
+        <label class="grid grid-cols-[auto_1fr] shadow-md mb-4 rounded-xl">
+            <div class="place-items-center grid bg-slate-100 px-4 py-2 border-slate-200 border-r rounded-l-xl">
+                <Loader2Icon v-if="isLoading" class="size-4 animate-spin" />
+                <SearchIcon v-else class="size-4" />
             </div>
-        </div>
+            <input v-model="searchTerm" type="text" placeholder="Apple Strudel" class="bg-slate-50 px-4 py-3 rounded-r-xl outline-none w-full">
+        </label>
         <div v-if="results.length > 0" class="gap-2 grid">
             <SearchResultComponent v-for="result in results" :key="result.tpnc" :result />
         </div>
@@ -22,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowUpIcon, SearchIcon, TextSearchIcon } from '@lucide/vue';
+import { SearchIcon, TextSearchIcon, Loader2Icon } from '@lucide/vue';
 import { watchDebounced } from '@vueuse/core';
 
 import SearchResultComponent from '~/pages/search/_components/SearchResultComponent.vue';
@@ -36,6 +35,7 @@ definePageMeta({
 });
 
 const searchTerm = ref('');
+const isLoading = ref(false);
 
 const results = ref<Array<ISearchResult>>([]);
 
@@ -47,9 +47,13 @@ async function search() {
         return;
     }
 
+    isLoading.value = true;
+
     const response = await $fetch('/api/products/search', {
         query: query.data,
     });
+
+    isLoading.value = false;
 
     results.value = response.data.search.results.map(x => ({
         tpnc: x.node.tpnc,
