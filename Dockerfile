@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY package.json .
 COPY bun.lock .
-COPY .env .
 
 RUN bun install --frozen-lockfile --ignore-scripts
 
