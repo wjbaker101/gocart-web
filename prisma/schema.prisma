@@ -20,7 +20,7 @@ model User {
 
     sessions          Session[]
     accounts          Account[]
-    shoppingListItems UserShoppingListItem[]
+    shoppingListItems ShoppingListItem[]
 
     @@unique([email])
     @@map("user")
@@ -77,5 +77,34 @@ model Verification {
 
     @@index([identifier])
     @@map("verification")
+    @@schema("gocart")
+}
+
+model ShoppingListItem {
+    id        BigInt   @id @default(autoincrement()) @map("id")
+    reference String   @map("reference") @db.Uuid
+    createdAt DateTime @map("created_at")
+    userId    String   @map("user_id")
+    productId BigInt   @map("product_id")
+    quantity  Int      @map("quantity")
+    listOrder String   @map("list_order")
+
+    user    User    @relation(fields: [userId], references: [id])
+    product Product @relation(fields: [productId], references: [id])
+
+    @@unique([reference])
+    @@map("shopping_list_item")
+    @@schema("gocart")
+}
+
+model Product {
+    id   BigInt @id @default(autoincrement()) @map("id")
+    tpnc String @map("tpnc")
+    data Json   @map("data")
+
+    shoppingListItems ShoppingListItem[]
+
+    @@unique([tpnc])
+    @@map("product")
     @@schema("gocart")
 }
