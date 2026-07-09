@@ -37,6 +37,9 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
             listOrder: 'a',
             isChecked: false,
         },
+        include: {
+            product: true,
+        },
     });
 
     return {

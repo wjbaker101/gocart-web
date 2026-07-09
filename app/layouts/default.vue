@@ -6,10 +6,8 @@
                     <h1 class="font-bold text-2xl">GoCart</h1>
                     <div></div>
                     <div class="justify-self-end text-lg">
-                        <ClientOnly>
-                            <ShoppingBasketIcon class="inline-block mr-2 mb-0.5 size-5 align-middle" />
-                            <span class="font-mono align-middle">£{{ totalPrice.toFixed(2) }}</span>
-                        </ClientOnly>
+                        <ShoppingBasketIcon class="inline-block mr-2 mb-0.5 size-5 align-middle" />
+                        <span class="font-mono align-middle">£{{ totalPrice.toFixed(2) }}</span>
                     </div>
                 </div>
             </div>
@@ -47,5 +45,7 @@ import FooterButtonComponent from '~/components/page/FooterButtonComponent.vue';
 
 const shoppingList = useShoppingList();
 
-const totalPrice = computed(() => shoppingList.uncheckedItems.value.reduce((total, x) => total += x.price, 0));
+const totalPrice = computed(() => shoppingList.value.items
+    .filter(x => !x.isChecked)
+    .reduce((total, x) => total += x.data.price, 0));
 </script>

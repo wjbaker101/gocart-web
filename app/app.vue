@@ -8,18 +8,26 @@
 <script setup lang="ts">
 import ModalComponent from '~/components/modals/ModalComponent.vue';
 
-if (import.meta.client) {
-    init();
-}
+const shoppingList = useShoppingList();
 
-function init() {
-    const cache = localStorage.getItem('useShoppingList');
-    if (cache === null) {
-        return;
+await callOnce(async () => {
+    const session = await authClient.useSession(useFetch);
+
+    if (session.data.value) {
+        const response = await useRequestFetch()('/api/shopping-list');
+        
+        shoppingList.value = {
+            items: response.items.map(x => ({
+                reference: x.reference,
+                createdAt: x.createdAt,
+                quantity: x.quantity,
+                listOrder: x.listOrder,
+                isChecked: x.isChecked,
+                data: x.data,
+            })),
+        };
     }
-
-    useShoppingList().init(JSON.parse(cache));
-}
+});
 </script>
 
 <style lang="css">

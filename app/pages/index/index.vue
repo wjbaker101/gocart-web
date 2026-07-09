@@ -9,28 +9,22 @@
             </p>
         </div>
     </div>
-    <div v-else class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
+    <div class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
         <div class="items-center grid grid-cols-[1fr_auto] mb-4">
             <h2 class="font-bold">Shopping List</h2>
             <div class="text-sm">
-                <ClientOnly>
-                    <UtensilsIcon class="inline-block mr-2 size-4 align-middle" />
-                    <span class="align-middle">{{ uncheckedItems.length }}</span>
-                </ClientOnly>
+                <UtensilsIcon class="inline-block mr-2 size-4 align-middle" />
+                <span class="align-middle">{{ uncheckedItems.length }}</span>
             </div>
         </div>
         <div class="gap-2 grid mb-4">
-            <ClientOnly>
-                <ShoppingListItemComponent v-for="item in uncheckedItems" :key="item.tpnc" :item />
-            </ClientOnly>
+            <ShoppingListItemComponent v-for="item in uncheckedItems" :key="item.data.tpnc" :item />
         </div>
         <div class="items-center gap-4 grid grid-cols-[1fr_auto_auto] mb-4">
             <h2 class="font-bold">Checked Items</h2>
             <div class="text-sm">
-                <ClientOnly>
-                    <ListChecksIcon class="inline-block mr-2 size-4 align-middle" />
-                    <span class="align-middle">{{ checkedItems.length }}</span>
-                </ClientOnly>
+                <ListChecksIcon class="inline-block mr-2 size-4 align-middle" />
+                <span class="align-middle">{{ checkedItems.length }}</span>
             </div>
             <BaseButtonComponent @click="collapseCheckedItems = !collapseCheckedItems">
                 <EyeOffIcon v-if="collapseCheckedItems" class="size-4" />
@@ -38,9 +32,7 @@
             </BaseButtonComponent>
         </div>
         <ExpandableComponent :is-open="!collapseCheckedItems" class="gap-2 grid">
-            <ClientOnly>
-                <ShoppingListItemComponent v-for="item in checkedItems" :key="item.tpnc" :item />
-            </ClientOnly>
+            <ShoppingListItemComponent v-for="item in checkedItems" :key="item.data.tpnc" :item />
         </ExpandableComponent>
     </div>
 </template>
@@ -56,8 +48,8 @@ definePageMeta({
 
 const shoppingList = useShoppingList();
 
-const uncheckedItems = shoppingList.uncheckedItems;
-const checkedItems = shoppingList.checkedItems;
+const uncheckedItems = computed(() => shoppingList.value.items.filter(x => !x.isChecked));
+const checkedItems = computed(() => shoppingList.value.items.filter(x => x.isChecked));
 
 const collapseCheckedItems = ref(false);
 </script>

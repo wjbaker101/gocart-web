@@ -16,7 +16,6 @@ const { result } = defineProps<{
     result: ISearchResult;
 }>();
 
-const shoppingList = useShoppingList();
 const modal = useModal();
 
 const isChecked = ref(false);
@@ -31,12 +30,12 @@ function open() {
 }
 
 watch(isChecked, () => {
-    shoppingList.swapItem({
-        tpnc: result.tpnc,
-        name: result.name,
-        price: result.price,
-        imageUrl: result.imageUrl,
-        quantity: 1,
-    });
+    // shoppingList.swapItem({
+    //     tpnc: result.tpnc,
+    //     name: result.name,
+    //     price: result.price,
+    //     imageUrl: result.imageUrl,
+    //     quantity: 1,
+    // });
 });
 </script>

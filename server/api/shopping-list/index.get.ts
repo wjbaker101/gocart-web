@@ -14,6 +14,9 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
         orderBy: {
             listOrder: 'asc',
         },
+        include: {
+            product: true,
+        },
     });
 
     return {

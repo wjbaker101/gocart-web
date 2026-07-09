@@ -56,6 +56,7 @@ import { ShoppingBasketIcon, ChevronDownIcon, LoaderCircleIcon } from '@lucide/v
 import CenteredModalComponent from '~/components/modals/CenteredModalComponent.vue';
 
 import type { ISearchResult } from '~/pages/search/_logic/ISearchResult';
+import { addShoppingListItem } from '~~/shared/schemas/addShoppingListItem';
 
 const { result } = defineProps<{
     result: ISearchResult;
@@ -91,14 +92,16 @@ async function getProduct() {
     };
 }
 
-function addToBasket() {
-    shoppingList.addItem({
-        tpnc: result.tpnc,
-        name: result.name,
-        price: result.price,
-        imageUrl: result.imageUrl,
-        quantity: 1,
+async function addToBasket() {
+    const response = await $fetch('/api/shopping-list/items', {
+        method: 'post',
+        body: validateRequest(addShoppingListItem, {
+            tpnc: result.tpnc,
+            quantity: 1,
+        }),
     });
+
+    shoppingList.value.items.push(response.item);
 }
 
 modal.onShow(async () => {
