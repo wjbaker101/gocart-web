@@ -28,6 +28,7 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
     await prisma.shoppingListItem.update({
         data: {
             quantity: body.quantity,
+            isChecked: body.isChecked,
         },
         where: {
             reference: item.reference,

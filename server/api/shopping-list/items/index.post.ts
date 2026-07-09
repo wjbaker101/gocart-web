@@ -35,6 +35,7 @@ export default defineEventHandler(async (event): Promise<IGetShoppingListRespons
             productId: product.id,
             quantity: body.quantity,
             listOrder: 'a',
+            isChecked: false,
         },
     });
 

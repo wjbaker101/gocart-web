@@ -5,6 +5,7 @@ export interface IApiShoppingListItem {
     readonly createdAt: number;
     readonly quantity: number;
     readonly listOrder: string;
+    readonly isChecked: boolean;
 }
 
 export function mapShoppingListItem(item: ShoppingListItem): IApiShoppingListItem {
@@ -13,5 +14,6 @@ export function mapShoppingListItem(item: ShoppingListItem): IApiShoppingListIte
         createdAt: item.createdAt.getTime(),
         quantity: item.quantity,
         listOrder: item.listOrder,
+        isChecked: item.isChecked,
     };
 }
