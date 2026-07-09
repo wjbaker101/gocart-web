@@ -79,30 +79,3 @@ model Verification {
     @@map("verification")
     @@schema("gocart")
 }
-
-model UserShoppingListItem {
-    id        BigInt   @id @default(autoincrement()) @map("id")
-    reference String   @map("reference") @db.Uuid
-    createdAt DateTime @map("created_at")
-    userId    String   @map("user_id")
-    productId BigInt   @map("product_id")
-
-    user    User    @relation(fields: [userId], references: [id])
-    product Product @relation(fields: [productId], references: [id])
-
-    @@unique([reference])
-    @@map("shopping_list_item")
-    @@schema("gocart")
-}
-
-model Product {
-    id   BigInt @id @default(autoincrement()) @map("id")
-    tpnc String @map("tpnc")
-    data Json   @map("data")
-
-    shoppingListItems UserShoppingListItem[]
-
-    @@unique([tpnc])
-    @@map("product")
-    @@schema("gocart")
-}
