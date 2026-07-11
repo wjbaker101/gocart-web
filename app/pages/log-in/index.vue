@@ -37,6 +37,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const toast = useToast();
 
 const form = ref({
     email: '',
@@ -50,6 +51,10 @@ async function logIn() {
     });
 
     if (response.error) {
+        toast.pop({
+            type: 'error',
+            message: response.error.message ?? 'Something went wrong, please try again later.',
+        });
         return;
     }
 

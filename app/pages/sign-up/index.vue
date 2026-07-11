@@ -41,6 +41,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const toast = useToast();
 
 const form = ref({
     email: '',
@@ -50,6 +51,10 @@ const form = ref({
 
 async function signUp() {
     if (form.value.password !== form.value.confirmPassword) {
+        toast.pop({
+            type: 'error',
+            message: 'Confirmation password must match password.',
+        });
         return;
     }
 
@@ -60,9 +65,12 @@ async function signUp() {
     });
 
     if (response.error) {
+        toast.pop({
+            type: 'error',
+            message: response.error.message ?? 'Something went wrong, please try again later.',
+        });
         return;
     }
-
 
     await navigateTo(route.query.go?.toString() ?? '/', { external: true });
 }

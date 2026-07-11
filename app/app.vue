@@ -4,6 +4,7 @@
         <NuxtPage></NuxtPage>
     </NuxtLayout>
     <ModalComponent />
+    <ToastComponent />
 </template>
 
 <script setup lang="ts">
