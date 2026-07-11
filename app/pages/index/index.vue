@@ -17,7 +17,7 @@
                 <span class="align-middle">{{ uncheckedItems.length }}</span>
             </div>
         </div>
-        <div class="gap-2 grid mb-4">
+        <div class="mb-4">
             <ShoppingListItemComponent v-for="item in uncheckedItems" :key="item.data.tpnc" :item />
         </div>
         <div class="items-center gap-2 grid grid-cols-[1fr_auto_auto] mb-4">
@@ -32,9 +32,7 @@
             </PrimaryButtonComponent>
         </div>
         <ExpandableComponent :is-open="!collapseCheckedItems">
-            <div class="gap-2 grid">
-                <ShoppingListItemComponent v-for="item in checkedItems" :key="item.data.tpnc" :item />
-            </div>
+            <ShoppingListItemComponent v-for="item in checkedItems" :key="item.data.tpnc" :item />
         </ExpandableComponent>
     </div>
 </template>
