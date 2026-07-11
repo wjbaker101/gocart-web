@@ -5,7 +5,7 @@
             'opacity-100 pointer-events-auto': isVisible,
             'opacity-0 pointer-events-none': !isVisible,
         }"
-        class="fixed inset-0 place-items-center grid grid-cols-1 bg-slate-800/50 p-2 overflow-auto"
+        class="z-20 fixed inset-0 place-items-center grid grid-cols-1 bg-slate-800/50 p-2 overflow-auto"
     >
         <component v-if="component" :is="component" v-bind="props"></component>
     </div>
