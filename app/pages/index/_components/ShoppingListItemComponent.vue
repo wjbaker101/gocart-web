@@ -1,7 +1,12 @@
 <template>
     <div class="items-center gap-4 grid grid-cols-[auto_1fr_auto_4rem_auto] max-md:grid-cols-[auto_1fr_1fr] py-4 border-slate-300 border-t last:border-b border-dashed text-left">
         <img :src="item.data.imageUrl" width="60" height="60" class="place-self-center shadow-sm rounded-xl">
-        <h3 class="max-md:col-span-2">{{ item.data.name }}</h3>
+        <h3
+            :class="{
+                'line-through': item.isChecked,
+            }"
+            class="max-md:col-span-2"
+        >{{ item.data.name }}</h3>
         <div>
             <ItemQuantityComponent v-if="!item.isChecked" :item />
         </div>
