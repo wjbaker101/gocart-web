@@ -12,7 +12,7 @@
     <div v-else class="mx-auto py-4 w-[calc(100%-1rem)] max-w-4xl">
         <div class="items-center grid grid-cols-[1fr_auto] mb-4">
             <h2 class="font-bold">Shopping List</h2>
-            <div class="text-sm">
+            <div class="bg-slate-200 px-2 py-1 border border-slate-300 rounded-full text-sm">
                 <UtensilsIcon class="inline-block mr-2 size-4 align-middle" />
                 <span class="align-middle">{{ uncheckedItems.length }}</span>
             </div>
@@ -20,16 +20,16 @@
         <div class="gap-2 grid mb-4">
             <ShoppingListItemComponent v-for="item in uncheckedItems" :key="item.data.tpnc" :item />
         </div>
-        <div class="items-center gap-4 grid grid-cols-[1fr_auto_auto] mb-4">
+        <div class="items-center gap-2 grid grid-cols-[1fr_auto_auto] mb-4">
             <h2 class="font-bold">Checked Items</h2>
-            <div class="text-sm">
+            <div class="bg-slate-200 px-2 py-1 border border-slate-300 rounded-full text-sm">
                 <ListChecksIcon class="inline-block mr-2 size-4 align-middle" />
                 <span class="align-middle">{{ checkedItems.length }}</span>
             </div>
-            <BaseButtonComponent @click="collapseCheckedItems = !collapseCheckedItems">
+            <PrimaryButtonComponent @click="collapseCheckedItems = !collapseCheckedItems" class="px-2! py-1! rounded-full! h-full">
                 <EyeOffIcon v-if="collapseCheckedItems" class="size-4" />
                 <EyeIcon v-else class="size-4" />
-            </BaseButtonComponent>
+            </PrimaryButtonComponent>
         </div>
         <ExpandableComponent :is-open="!collapseCheckedItems">
             <div class="gap-2 grid">
