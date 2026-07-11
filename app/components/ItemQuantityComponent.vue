@@ -31,22 +31,30 @@ async function increment(amount: number) {
     if (item.quantity === 0) {
         const itemReference = item.reference;
 
-        await $fetch(`/api/shopping-list/items/${itemReference}`, {
-            method: 'delete',
-        });
+        useLoading({
+            request: async () => {
+                await $fetch(`/api/shopping-list/items/${itemReference}`, {
+                    method: 'delete',
+                });
 
-        const index = shoppingList.value.items.findIndex(x => x.reference === itemReference);
-        if (index !== -1) {
-            shoppingList.value.items.splice(index, 1);
-        }
+                const index = shoppingList.value.items.findIndex(x => x.reference === itemReference);
+                if (index !== -1) {
+                    shoppingList.value.items.splice(index, 1);
+                }
+            },
+        });
     }
     else {
-        await $fetch(`/api/shopping-list/items/${item.reference}`, {
-            method: 'put',
-            body: validateRequest(updateShoppingListItem, {
-                quantity: item.quantity,
-                isChecked: item.isChecked,
-            }),
+        useLoading({
+            request: async () => {
+                await $fetch(`/api/shopping-list/items/${item.reference}`, {
+                    method: 'put',
+                    body: validateRequest(updateShoppingListItem, {
+                        quantity: item.quantity,
+                        isChecked: item.isChecked,
+                    }),
+                });
+            },
         });
     }
 }
