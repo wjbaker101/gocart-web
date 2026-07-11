@@ -1,6 +1,6 @@
 <template>
-    <div :key="result.tpnc" @click="open" class="items-center gap-4 grid grid-cols-[auto_1fr_auto_auto_auto] bg-slate-50 shadow-inner/7 p-2 pr-4 rounded-xl cursor-pointer">
-        <img :src="result.imageUrl" width="60" height="60" class="shadow-[0_0_3px_4px_white]">
+    <div :key="result.tpnc" @click="open" class="items-center gap-4 grid grid-cols-[auto_1fr_auto_auto_auto] py-4 border-slate-300 border-t last:border-b border-dashed cursor-pointer">
+        <img :src="result.imageUrl" width="60" height="60" class="shadow-md rounded-xl">
         <h3>{{ result.name }}</h3>
         <div>
             <ItemQuantityComponent v-if="item !== null && !item.isChecked" :item />

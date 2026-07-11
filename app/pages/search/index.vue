@@ -7,7 +7,7 @@
             </div>
             <input v-model="searchTerm" type="text" placeholder="Apple Strudel" class="bg-slate-50 px-4 py-3 rounded-r-xl outline-none w-full">
         </label>
-        <div v-if="results.length > 0" class="gap-2 grid">
+        <div v-if="results.length > 0">
             <SearchResultComponent v-for="result in results" :key="result.tpnc" :result />
         </div>
         <div v-else class="mt-16">
