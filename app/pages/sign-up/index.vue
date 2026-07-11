@@ -5,7 +5,7 @@
                 <h1 class="mb-4 text-4xl">Sign Up</h1>
                 <div class="mb-4">
                     <label class="inline-block mb-1 ml-1 font-bold">Email</label>
-                    <input v-model="form.email" type="email" placeholder="your@email.com" class="block bg-slate-100 shadow-sm px-4 py-2 rounded-xl w-full text-slate-600">
+                    <input v-focus v-model="form.email" type="email" placeholder="your@email.com" class="block bg-slate-100 shadow-sm px-4 py-2 rounded-xl w-full text-slate-600">
                 </div>
                 <div class="mb-4">
                     <label class="inline-block mb-1 ml-1 font-bold">Password</label>
