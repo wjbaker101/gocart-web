@@ -1,12 +1,12 @@
 <template>
     <div @click.stop class="grid grid-flow-col rounded-xl">
-        <div @click="increment(-1)" class="group place-items-center grid bg-primary p-3 rounded-l-xl text-text-light text-center cursor-pointer">
+        <div @click="increment(-1)" class="group place-items-center grid bg-primary p-2.5 rounded-l-xl text-text-light text-center cursor-pointer">
             <div class="group-active:scale-90">
                 <MinusIcon class="size-4" />
             </div>
         </div>
         <input v-model="item.quantity" type="number" class="bg-slate-50 border-slate-200 border-y focus:outline-none w-16 h-full text-center _hide-buttons">
-        <div @click="increment(1)" class="group place-items-center grid bg-primary p-3 rounded-r-xl text-text-light text-center cursor-pointer">
+        <div @click="increment(1)" class="group place-items-center grid bg-primary p-2.5 rounded-r-xl text-text-light text-center cursor-pointer">
             <div class="group-active:scale-90">
                 <PlusIcon class="size-4" />
             </div>
